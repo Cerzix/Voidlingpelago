@@ -4,7 +4,7 @@
 #                   mission_complete <MissionKey> | golden_eggs <MissionKey> | bonus_mutagens <MissionKey>
 #                   wrangler_rank <N> | abyss_depth <N> | death
 #   items.txt     client -> mod, first line "session <seed> <slot>", then "<index> <item id> <item name>" per item
-#   slot.txt      client -> mod, "key=value" lines from slot_data
+#   slot.txt      client -> mod, "key=value" lines from slot_data (lists as "a,b", dicts as "k=v|k=v")
 #   deathlink.txt client -> mod, exists while a DeathLink is waiting to be applied, the mod deletes it
 import asyncio
 import os
@@ -110,6 +110,8 @@ class VoidlingContext(CommonContext):
             for key, value in self.slot_data.items():
                 if isinstance(value, list):
                     value = ",".join(str(v) for v in value)
+                elif isinstance(value, dict):
+                    value = "|".join(f"{k}={v}" for k, v in value.items())
                 f.write(f"{key}={value}\n")
 
     def on_deathlink(self, data: dict):

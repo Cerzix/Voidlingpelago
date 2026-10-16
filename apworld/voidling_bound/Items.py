@@ -18,7 +18,8 @@ class ItemData(NamedTuple):
 
 
 # IDs are part of the network protocol: never renumber or reuse an ID once a version has been released.
-# Retired: 840003 (Sector 4 access), 840011 (Mutation Perk Slot), 840021 (Mutagen Pack), 840022 (Polychrome Crystals)
+# Retired: 840003 (Sector 4 access), 840011 (Mutation Perk Slot), 840013 (Ability Points, not a resource in the game),
+#          840021 (Mutagen Pack), 840022 (Polychrome Crystals)
 item_table: Dict[str, ItemData] = {
     # Progression / Welten-Zugang
     "Planet Access: Solum": ItemData(840001, ItemClassification.progression, "Planet Access"),
@@ -28,8 +29,9 @@ item_table: Dict[str, ItemData] = {
     # Nützliche Upgrades & Katalysatoren
     "DNA Catalyzer Bundle": ItemData(840010, ItemClassification.useful, "Upgrades"),
     "Golden Egg": ItemData(840012, ItemClassification.useful, "Upgrades"),
-    "Ability Points": ItemData(840013, ItemClassification.useful, "Upgrades"),
     "Polychrome Mutagen": ItemData(840014, ItemClassification.useful, "Mutagens"),
+    # Ability upgrades are bought with research points
+    "Research Points (1500)": ItemData(840015, ItemClassification.useful, "Resources"),
 
     # Filler / Ressourcen
     "Research Points (500)": ItemData(840020, ItemClassification.filler, "Resources"),
@@ -55,7 +57,7 @@ item_table: Dict[str, ItemData] = {
 useful_counts: Dict[str, int] = {
     "DNA Catalyzer Bundle": 3,
     "Golden Egg": 3,
-    "Ability Points": 4,
+    "Research Points (1500)": 4,
     "Polychrome Mutagen": 2,
     **{name: 1 for name, data in item_table.items() if name.endswith(" Egg") and data.group == "Eggs"
        and data.classification == ItemClassification.useful},

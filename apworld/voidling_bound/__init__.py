@@ -6,8 +6,8 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch
 
 from .Items import VoidlingBoundItem, get_random_filler_item_name, item_name_groups, item_table, useful_counts
-from .Locations import (ABYSS, AULIS, FINAL_MISSION, PLANETS, SOLUM, VIREO, VoidlingBoundLocation, abyss_depths,
-                        get_active_locations, location_name_groups, location_table)
+from .Locations import (ABYSS, AULIS, FINAL_MISSION, MISSIONS, PLANETS, SOLUM, VIREO, VoidlingBoundLocation,
+                        abyss_depths, get_active_locations, location_name_groups, location_table)
 from .Options import Goal, VoidlingBoundOptions
 
 
@@ -97,4 +97,6 @@ class VoidlingBoundWorld(World):
             **self.options.as_dict("goal", "abyss_goal_depth", "bonus_objectives", "wrangler_rank_checks", "death_link"),
             "abyss_depths": abyss_depths(self),
             "final_mission": FINAL_MISSION,
+            # The mod locks missions whose region isn't reachable yet.
+            "mission_regions": {mission.name: mission.planet for mission in MISSIONS},
         }
