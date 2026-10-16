@@ -14,9 +14,9 @@ exchange = os.path.join(appdata, "Voidlingpelago")
 os.makedirs(exchange)
 
 STUBS = r"""
-Key = { F6 = 117, F7 = 118, F8 = 119, F9 = 120 }
+Key = { F5 = 116, F6 = 117, F7 = 118, F8 = 119, F9 = 120 }
 loops, keybinds, hooks, map_hooks, log_lines = {}, {}, {}, {}, {}
-function LoopAsync(ms, fn) loops[#loops + 1] = fn end
+function LoopInGameThreadWithDelay(ms, fn) loops[#loops + 1] = fn end
 function ExecuteInGameThread(fn) fn() end
 function RegisterKeyBind(key, fn) keybinds[key] = fn end
 function RegisterLoadMapPostHook(fn) map_hooks[#map_hooks + 1] = fn end
@@ -74,7 +74,9 @@ instances.ProgressionSubsystem = { object("Default__ProgressionSubsystem", {}), 
         end
     end },
     GetWranglerLevel = function(self, out) return wrangler_level end,
+    IsDataUnlocked = function(self, asset) return unlocked_genes[asset:GetFName():ToString()] == true end,
 }) }
+unlocked_genes = {}
 instances.AbyssSubsystem = { object("AbyssSubsystem_1", {
     IsInsideAbyss = function() return abyss_level > 0 end,
     GetAbyssLevel = function() return abyss_level end,
@@ -116,9 +118,49 @@ catalyzer = object("DA_Catalyzer_Swift", { ResourceName = fname("Swift Catalyzer
 local catalyzer_cdo = object("Default__DNACatalyzerDefinition", {
     GetRandomCatalyzer = function(self, context, quality, min, max, try_new) return catalyzer end,
 })
+-- Genes: three in the Asset Registry (one of them loaded), one only loaded, plus a species asset
+function FName(text) return fname(text) end
+local function gene_object(path, class, name)
+    local short = path:match("([^%.]+)$")
+    local gene = object(short, {
+        GeneName = fname(name),
+        GetClass = function() return { GetFName = function() return fname(class) end } end,
+        IsCollectible = function() return name ~= "Huge" end,
+    })
+    gene.GetFullName = function() return class .. " " .. path end
+    return gene
+end
+local G = "/Game/Data/Creatures/RL01/Genes/"
+gene_files = {
+    [G .. "Eyes/DA_Gene_Eye_RL01_00.DA_Gene_Eye_RL01_00"] = { "EyeGeneDataAsset", "Starry" },
+    [G .. "Colors/DA_Gene_Color_RL01_03.DA_Gene_Color_RL01_03"] = { "ColorGeneDataAsset", "Crimson" },
+    [G .. "Perks/DA_Gene_Perk_RL01_01.DA_Gene_Perk_RL01_01"] = { "PerkGeneDataAsset", "Thick Skin" },
+}
+loaded_assets = {}
+loaded_assets[G .. "Eyes/DA_Gene_Eye_RL01_00.DA_Gene_Eye_RL01_00"] = true
+function LoadAsset(path) loaded_assets[path] = true end
+instances.EyeGeneDataAsset = { gene_object(G .. "Eyes/DA_Gene_Eye_RL01_00.DA_Gene_Eye_RL01_00", "EyeGeneDataAsset", "Starry") }
+instances.ColorGeneDataAsset = { gene_object(G .. "Colors/DA_Gene_Color_RL01_03.DA_Gene_Color_RL01_03", "ColorGeneDataAsset", "Crimson") }
+instances.SizeGeneDataAsset = { gene_object(G .. "Sizes/DA_Gene_Size_RL01_02.DA_Gene_Size_RL01_02", "SizeGeneDataAsset", "Huge") }
+local species_path = "/Game/Data/Creatures/RL01/DA_Species_RL01.DA_Species_RL01"
+local registry = {
+    GetAssetsByPath = function(self, path, out, recursive, on_disk_only)
+        local all = { species_path }
+        for gene_path in pairs(gene_files) do all[#all + 1] = gene_path end
+        for _, full in ipairs(all) do
+            local package, name = full:match("^(.-)%.([^%.]+)$")
+            out[#out + 1] = { PackageName = fname(package), AssetName = fname(name) }
+        end
+    end,
+}
+local registry_helpers = object("Default__AssetRegistryHelpers", { GetAssetRegistry = function() return registry end })
+
 function StaticFindObject(path)
     if path == "/Script/VoidlingWrangler.EEggType" then return egg_enum end
     if path == "/Script/VoidlingWrangler.Default__DNACatalyzerDefinition" then return catalyzer_cdo end
+    if path == "/Script/AssetRegistry.Default__AssetRegistryHelpers" then return registry_helpers end
+    if gene_files[path] and loaded_assets[path] then return gene_object(path, gene_files[path][1], gene_files[path][2]) end
+    if path == species_path and loaded_assets[path] then return object("DA_Species_RL01", { SpeciesName = fname("Kwipeck") }) end
     return nil
 end
 
@@ -134,6 +176,19 @@ for _, entry in ipairs({
         Name = fname(entry[1]), Type = entry[2], WranglerLevelRequirement = 2,
     }))
 end
+-- An array property that throws on any access, like UE4SS's TArray does for unknown members
+array_touched = false
+local first_activity = instances.ActivityDataAsset[1]
+first_activity.RandomLevels = setmetatable({}, { __index = function() array_touched = true; error("TArray") end })
+local function fake_property(name, kind)
+    return { GetFName = function() return fname(name) end,
+             GetClass = function() return { GetFName = function() return fname(kind) end } end }
+end
+first_activity.GetClass = function() return { ForEachProperty = function(self, cb)
+    cb(fake_property("Name", "TextProperty"))
+    cb(fake_property("RandomLevels", "ArrayProperty"))
+end } end
+
 function requirement(name)
     for _, asset in ipairs(instances.ActivityDataAsset) do
         if asset.Name:ToString() == name then return asset.WranglerLevelRequirement end
@@ -292,10 +347,34 @@ check("species egg added with the class name AddEgg accepts", "0:BP_UrSek_C" in 
 check("golden egg uses the Golden egg type", any(egg.startswith("1:BP_") for egg in eggs))
 check("catalyzer stored as a resource", "Swift Catalyzer x1" in list(lua.globals().stored.values()))
 
+# Genes: unlocked genes are reported once, other unlocked data assets are ignored
+lua.execute('''
+unlocked_genes["DA_Gene_Eye_RL01_00"] = true
+local base = os.time; os.time = function() return base() + 1200 end
+''')
+write("events.txt", "")
+poll()
+check("unlocked gene reported by asset name", (read("events.txt") or "").splitlines() == ["gene DA_Gene_Eye_RL01_00"])
+lua.execute('unlocked_genes["DA_Gene_Color_RL01_03"] = true')
+lua.execute("local base = os.time; os.time = function() return base() + 10 end")
+poll()
+check("newly unlocked gene reported, old one not again",
+      (read("events.txt") or "").splitlines() == ["gene DA_Gene_Eye_RL01_00", "gene DA_Gene_Color_RL01_03"])
+
+# Gene dump (F5)
+lua.globals().keybinds[116]()
+dump = read("genes.txt") or ""
+check("gene dump has registry genes, loaded genes and species names",
+      "/Game/Data/Creatures/RL01/Genes/Perks/DA_Gene_Perk_RL01_01.DA_Gene_Perk_RL01_01\tPerkGeneDataAsset\tThick Skin\tRL01\tKwipeck\ttrue" in dump
+      and "DA_Gene_Size_RL01_02\tSizeGeneDataAsset\tHuge\tRL01\tKwipeck\tfalse" in dump)
+check("gene dump lists every gene once", sum(1 for line in dump.splitlines() if not line.startswith("#")) == 4)
+
 # State dump (F8)
 lua.globals().keybinds[119]()
 state = read("state.txt") or ""
 check("state dump lists completed activities", "Completed activities (via ActivitiesTimeCompletion): FaintSignal, CentennialBloom" in state)
+check("state dump reads text properties and only names arrays",
+      "Name = Faint Signal" in state and "RandomLevels = <ArrayProperty>" in state and not lua.globals().array_touched)
 check("state dump lists wrangler level and abyss depth", "WranglerLevel: 4" in state and "Abyss depth: 7" in state)
 
 print(f"\n{sum(results)}/{len(results)} passed")

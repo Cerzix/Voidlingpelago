@@ -55,6 +55,9 @@ jobs:
           python -m pip install lupa
           python mod/tests/test_mod.py
 
+      - name: Test the gene import tool
+        run: python tools/test_import_genes.py
+
   release:
     needs: [test, mod-test]
     if: startsWith(github.ref, 'refs/tags/v')
@@ -68,10 +71,14 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      # Tags like v2.3.0-beta.1 are test releases of 2.3.0: published as pre-releases with the 2.3.0 notes.
       - name: Check the tag matches the world version
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${VERSION%%-*}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           WORLD_VERSION=$(python -c "import json; print(json.load(open('apworld/voidling_bound/archipelago.json'))['world_version'])")
-          if [ "v$WORLD_VERSION" != "$GITHUB_REF_NAME" ]; then
+          if [ "$VERSION" != "$WORLD_VERSION" ]; then
             echo "::error::Tag $GITHUB_REF_NAME doesn't match world_version $WORLD_VERSION in archipelago.json"
             exit 1
           fi
@@ -81,7 +88,6 @@ jobs:
 
       - name: Extract release notes from CHANGELOG.md
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
           awk -v v="$VERSION" '
             /^## \[/ { if (found) exit; if (index($0, "[" v "]")) { found = 1; next } }
             found && !/^\[[^]]+\]: / { print }
@@ -96,6 +102,7 @@ jobs:
         with:
           name: Voidlingpelago ${{ github.ref_name }}
           body_path: release_notes.md
+          prerelease: ${{ contains(github.ref_name, '-') }}
           files: |
             dist/voidling_bound.apworld
             dist/Voidlingpelago.zip
