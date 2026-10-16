@@ -161,6 +161,7 @@ end
 
 local DATA_ASSET_CLASSES = {
     "ActivityDataAsset", "ActivityTypeDataAsset", "PlanetDataAsset", "ResourceDataAsset", "QuestDataAsset",
+    "SpeciesDataAsset",
 }
 
 local function describe_value(value)
@@ -220,6 +221,10 @@ function M.dump_state()
         dump_container(lines, "ProgressionVariablesCounter", progression.ProgressionVariablesCounter)
     end
     lines[#lines + 1] = "Abyss depth: " .. tostring(tracker.abyss_depth())
+    local egg_types = safe(function() return require("rewards").egg_types() end, nil)
+    local type_names = {}
+    for name, value in pairs(egg_types or {}) do type_names[#type_names + 1] = name .. "=" .. value end
+    lines[#lines + 1] = "EEggType: " .. (#type_names > 0 and table.concat(type_names, ", ") or "not readable")
     lines[#lines + 1] = ""
 
     local inventory = safe(function() return FindFirstOf("PlayerProgression").ResourcesInventory end, nil)

@@ -88,6 +88,7 @@ local function poll_items()
     if not lines or #lines == 0 then return end
     if lines[1] ~= session then
         session = lines[1]
+        hooks.on_session_changed()
         load_applied()
         log("Session " .. session .. ", " .. applied .. " items already applied")
     end
