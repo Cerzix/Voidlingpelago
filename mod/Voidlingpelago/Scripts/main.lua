@@ -2,6 +2,7 @@
 -- Talks to the Voidling Bound Client (apworld/voidling_bound/Client.py) through text files, see the
 -- protocol description at the top of Client.py. Everything game specific is in game_hooks.lua.
 
+local config = require("config")
 local hooks = require("game_hooks")
 
 local EXCHANGE_DIR = (os.getenv("APPDATA") or ".") .. "\\Voidlingpelago\\"
@@ -9,6 +10,16 @@ local POLL_MS = 500
 
 local function log(msg)
     print("[Voidlingpelago] " .. tostring(msg) .. "\n")
+end
+
+local function ensure_exchange_dir()
+    local probe = io.open(EXCHANGE_DIR .. "probe.tmp", "w")
+    if probe then
+        probe:close()
+        os.remove(EXCHANGE_DIR .. "probe.tmp")
+        return
+    end
+    os.execute('mkdir "' .. EXCHANGE_DIR:sub(1, -2) .. '"')
 end
 
 local function read_lines(name)
@@ -123,7 +134,23 @@ end
 
 -- Main loop ----------------------------------------------------------------------------------------
 
+ensure_exchange_dir()
 hooks.init(events, log)
+
+if config.discovery then
+    local discovery = require("discovery")
+    discovery.init(config, EXCHANGE_DIR, log)
+    RegisterLoadMapPostHook(function(engine, world)
+        discovery.on_map_loaded(world:get())
+    end)
+end
+
+if config.debug_events then
+    RegisterKeyBind(config.debug_key, function()
+        events.mission_complete(hooks.mission_key("Faint Signal"))
+    end)
+    log("Debug events enabled: F9 sends a Faint Signal check")
+end
 
 LoopAsync(POLL_MS, function()
     -- File IO is fine off the game thread, touching UObjects is not.

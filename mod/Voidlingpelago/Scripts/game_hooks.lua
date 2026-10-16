@@ -1,10 +1,6 @@
 -- Everything that touches Voidling Bound itself lives here.
--- None of the class or function names are known yet. To find them:
---   1. Install UE4SS, enable the console and GuiConsole in UE4SS-settings.ini.
---   2. Play a mission, then use the Live View tab to search for things like "Mission", "Objective",
---      "Abyss", "Wrangler", "Egg", "Mutagen", "Catalyzer", "ResearchPoints".
---   3. Dump the SDK with Ctrl+H (CXX header dump) or the Lua type dump to read the real function names.
--- Each TODO below says what we need to hook or call.
+-- The game has no published SDK. Use the discovery tools (discovery.lua, F6 scan / F7 trace) to find the
+-- class and function behind each TODO below, then replace the TODO with a RegisterHook call.
 
 local M = {}
 local events, log
@@ -12,35 +8,44 @@ local slot_data = {}
 
 -- Item IDs, must match apworld/voidling_bound/Items.py
 local ITEMS = {
-    SECTOR_2 = 840001, SECTOR_3 = 840002, SECTOR_4 = 840003, ABYSS = 840004,
-    CATALYZERS = 840010, GOLDEN_EGG = 840012, ABILITY_POINTS = 840013,
-    RESEARCH_POINTS = 840020, MUTAGENS = 840021, EGG = 840023,
+    SOLUM = 840001, AULIS = 840002, ABYSS = 840004,
+    CATALYZERS = 840010, GOLDEN_EGG = 840012, ABILITY_POINTS = 840013, POLYCHROME = 840014,
+    RESEARCH_POINTS = 840020, EGG = 840023,
+    ORGANIC = 840030, PYRO = 840031, CRYO = 840032, CYBER = 840033, PLASMA = 840034,
+    -- Species eggs: 840040 Kwipeck, 840041 Kerapin, 840042 Gilick, 840043 Gwigoon,
+    --               840044 Nimiod, 840045 Anami, 840046 Ur-Sek, 840047 Morfang
 }
 
--- Unlocked access is kept here, the mission select hook blocks anything that isn't unlocked.
-local unlocked = { [1] = true }
+-- Vireo is always open, the mission select hook should block missions on planets that aren't unlocked.
+local unlocked = { Vireo = true, Solum = false, Aulis = false }
 local abyss_unlocked = false
+
+-- The client accepts mission names with spaces replaced by underscores, e.g. "Centennial_Bloom".
+-- Use it to translate whatever the game calls a mission into the AP name, or map the game's own IDs in
+-- Client.py MISSION_KEYS and pass them through unchanged.
+function M.mission_key(mission_name)
+    return (mission_name:gsub(" ", "_"))
+end
 
 function M.init(event_api, logger)
     events, log = event_api, logger
 
-    -- TODO: mission completion. Hook the function that runs when a mission is won, e.g.
-    -- RegisterHook("/Script/VoidlingBound.MissionManager:OnMissionCompleted", function(self, ...)
-    --     local key = self:get():GetMissionId():ToString()   -- whatever identifies the level
+    -- TODO: mission completion. Trace finishing a mission and hook the function that fires, e.g.
+    -- RegisterHook("<path from trace.txt>", function(context, ...)
+    --     local key = ...  -- the mission's ID or display name, read from the context or a parameter
     --     events.mission_complete(key)
-    --     if all golden eggs collected  then events.golden_eggs(key) end
-    --     if all bonus mutagens collected then events.bonus_mutagens(key) end
+    --     if all golden eggs were collected  then events.golden_eggs(key) end
+    --     if all bonus mutagens were found   then events.bonus_mutagens(key) end
     -- end)
-    -- Until the real keys are mapped in Client.py MISSION_KEYS, report the AP mission name with spaces
-    -- replaced by underscores, e.g. events.mission_complete("W01:_Crashsite_Survival").
+    -- Missions with collectibles show them as star objectives, so the star state is likely what to read.
 
     -- TODO: Wrangler rank. Hook the rank-up function and call events.wrangler_rank(newRank).
 
-    -- TODO: Abyss. Hook the "level cleared" or "dive deeper" step and call events.abyss_depth(depth).
+    -- TODO: Abyss. Hook "Dive Deeper" (or entering the next Abyss level) and call events.abyss_depth(depth).
 
-    -- TODO: player death, only matters when DeathLink is on. Call events.death() when the whole team falls.
+    -- TODO: player death, only matters with DeathLink. Call events.death() when the run fails.
 
-    -- TODO: planet gating. Hook planet / mission selection and refuse sectors where unlocked[n] is nil,
+    -- TODO: planet gating. Hook planet / mission selection and refuse planets where unlocked[planet] is false,
     -- and the Abyss while abyss_unlocked is false. Show a message telling the player what's missing.
 end
 
@@ -50,19 +55,18 @@ end
 
 -- Return false while items can't be granted, e.g. in the main menu or a loading screen.
 function M.can_receive_items()
-    -- TODO: e.g. return FindFirstOf("VoidlingPlayerController"):IsValid()
+    -- TODO: e.g. check that the player's save/profile object exists
     return true
 end
 
 function M.is_unlock(id)
-    return id >= ITEMS.SECTOR_2 and id <= ITEMS.ABYSS
+    return id == ITEMS.SOLUM or id == ITEMS.AULIS or id == ITEMS.ABYSS
 end
 
 -- Called for every unlock item on every poll, must be idempotent.
 function M.apply_unlock(id)
-    if id == ITEMS.SECTOR_2 then unlocked[2] = true
-    elseif id == ITEMS.SECTOR_3 then unlocked[3] = true
-    elseif id == ITEMS.SECTOR_4 then unlocked[4] = true
+    if id == ITEMS.SOLUM then unlocked.Solum = true
+    elseif id == ITEMS.AULIS then unlocked.Aulis = true
     elseif id == ITEMS.ABYSS then abyss_unlocked = true
     end
 end
@@ -71,8 +75,8 @@ end
 -- Raise an error (error("...")) if it can't be granted right now, it will be retried.
 function M.apply_item(id, name)
     if M.is_unlock(id) then return end
-    -- TODO: grant resources through the player's inventory / save game object:
-    -- Catalyzers, Golden Egg, Ability Points, Research Points (500), Mutagen Pack, Voidling Egg.
+    -- TODO: grant resources through the player's inventory / save game object. Trace picking up a mutagen,
+    -- hatching an egg and finishing a mission to see which functions add research points, mutagens and eggs.
     log("No game handler yet for " .. name .. " (" .. id .. ")")
 end
 
