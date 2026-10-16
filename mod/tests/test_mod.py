@@ -14,7 +14,7 @@ exchange = os.path.join(appdata, "Voidlingpelago")
 os.makedirs(exchange)
 
 STUBS = r"""
-Key = { F6 = 117, F7 = 118, F9 = 120 }
+Key = { F6 = 117, F7 = 118, F8 = 119, F9 = 120 }
 loops, keybinds, hooks, map_hooks, log_lines = {}, {}, {}, {}, {}
 function LoopAsync(ms, fn) loops[#loops + 1] = fn end
 function ExecuteInGameThread(fn) fn() end
@@ -22,7 +22,9 @@ function RegisterKeyBind(key, fn) keybinds[key] = fn end
 function RegisterLoadMapPostHook(fn) map_hooks[#map_hooks + 1] = fn end
 function RegisterHook(path, fn) hooks[path] = fn; return 1, 2 end
 function UnregisterHook(path) hooks[path] = nil end
-function FindFirstOf(name) return nil end
+instances = {}
+function FindAllOf(name) return instances[name] end
+function FindFirstOf(name) return instances[name] and instances[name][1] end
 local real_print = print
 function print(msg) log_lines[#log_lines + 1] = msg end
 
@@ -50,6 +52,47 @@ local objects = {
     fake_class("/Game/UI/WBP_Button.WBP_Button_C", "WBP_Button_C", {}), -- no keyword, must be skipped
 }
 function ForEachUObject(cb) for _, o in ipairs(objects) do cb(o) end end
+
+-- A fake loaded save: progression, resources inventory, resource assets and the cheat manager.
+function object(name, fields)
+    fields.IsValid = function() return true end
+    fields.GetFName = function() return fname(name) end
+    fields.GetFullName = function() return "Object /Engine/Transient." .. name end
+    return fields
+end
+completed, stars, wrangler_level, abyss_level = {}, {}, 0, 0
+instances.PlayerController = { object("PlayerController_1", {}) }
+stored, eggs_added, kills = {}, 0, 0
+instances.ProgressionSubsystem = { object("Default__ProgressionSubsystem", {}), object("ProgressionSubsystem_1", {
+    ActivitiesTimeCompletion = { ForEach = function(self, cb)
+        for _, key in ipairs(completed) do
+            cb({ get = function() return object(key, {
+                Name = fname((key:gsub("^DA_Activity_", ""))),
+                IsStarUnlocked = function(self, context, index) return (stars[key] or {})[index] == true end,
+            }) end },
+               { get = function() return 12.5 end })
+        end
+    end },
+    GetWranglerLevel = function(self, out) return wrangler_level end,
+}) }
+instances.AbyssSubsystem = { object("AbyssSubsystem_1", {
+    IsInsideAbyss = function() return abyss_level > 0 end,
+    GetAbyssLevel = function() return abyss_level end,
+}) }
+local inventory = object("ResourcesInventory_1", {
+    StoreResource = function(self, asset, amount)
+        stored[#stored + 1] = asset.ResourceName:ToString() .. " x" .. amount
+    end,
+})
+instances.PlayerProgression = { object("PlayerProgression_1", { ResourcesInventory = inventory }) }
+instances.ResourceDataAsset = {}
+for _, name in ipairs({ "Research Points", "Organic Mutagen", "Pyro Mutagen", "Polychrome Mutagen" }) do
+    table.insert(instances.ResourceDataAsset, object("DA_" .. name, { ResourceName = fname(name) }))
+end
+instances.VWCheatManager = { object("VWCheatManager_1", {
+    AddRandomEgg = function(self, count) eggs_added = eggs_added + count end,
+    KillPlayerCreature = function() kills = kills + 1 end,
+}) }
 """
 
 lua = lupa.LuaRuntime(unpack_returned_tuples=True)
@@ -86,6 +129,7 @@ check("all 3 items applied", len(received()) == 3)
 check("applied counter persisted", read("applied_session_SEED_1.txt") == "3")
 poll()
 check("items not applied twice", len(received()) == 3)
+check("resources stored in the inventory", list(lua.globals().stored.values()) == ["Organic Mutagen x3", "Research Points x500"])
 
 # Restart: a fresh Lua state must not re-grant items, but must rebuild unlocks
 lua2 = lupa.LuaRuntime(unpack_returned_tuples=True)
@@ -99,14 +143,23 @@ check("after restart only the new item is applied", sum("Received" in line for l
 check("restart reports 3 already applied", any("3 items already applied" in line for line in log2))
 
 # New session resets the counter
-write("items.txt", "session OTHER 2\n0 840031 Pyro Mutagens (3)\n")
+write("items.txt", "session OTHER 2\n0 840031 Pyro Mutagens (3)\n1 840010 DNA Catalyzer Bundle\n2 840023 Voidling Egg\n")
 poll()
-check("new session applies its first item", read("applied_session_OTHER_2.txt") == "1")
+check("new session applies its items", read("applied_session_OTHER_2.txt") == "3")
+check("an item the mod can't grant doesn't block the next one", lua.globals().eggs_added == 1)
 
 # DeathLink file is consumed
 write("deathlink.txt", "Somebody")
 poll()
 check("deathlink file consumed", read("deathlink.txt") is None)
+check("deathlink kills the player creature", lua.globals().kills == 1)
+failure = "/Script/VoidlingWrangler.ActivitySubsystem:TriggerActivityFailure"
+write("events.txt", "")
+lua.globals().hooks[failure]()
+check("the failure caused by a received DeathLink isn't sent back", (read("events.txt") or "") == "")
+lua.execute("local real_time = os.time; os.time = function() return real_time() + 60 end")
+lua.globals().hooks[failure]()
+check("a real mission failure sends a death", (read("events.txt") or "").splitlines() == ["death"])
 
 # Events
 check("mission_key replaces spaces", lua.eval('require("game_hooks").mission_key("Centennial Bloom")') == "Centennial_Bloom")
@@ -132,6 +185,33 @@ trace = read("trace.txt") or ""
 check("trace logs call with self and args", "OnMissionCompleted  self=/Game/Maps/Vireo.Vireo:Manager  args=(42)" in trace)
 check("trace logs map loads", "Map loaded: /Game/Maps/Vireo_01.Vireo_01" in trace)
 check("trace unhooks on stop", completed not in lua.globals().hooks)
+
+# Tracker: reads progress from the fake ProgressionSubsystem / AbyssSubsystem
+lua.execute('completed[1] = "DA_Activity_FaintSignal"; wrangler_level = 3; abyss_level = 7; require("tracker").reset()')
+write("events.txt", "")
+poll()
+events = (read("events.txt") or "").splitlines()
+check("tracker reports completed mission by display name", "mission_complete FaintSignal" in events)
+check("tracker reports wrangler rank and abyss depth", "wrangler_rank 3" in events and "abyss_depth 7" in events)
+check("tracker skips the class default object", len(events) == 3)
+poll()
+check("tracker doesn't repeat events", len((read("events.txt") or "").splitlines()) == 3)
+lua.execute('completed[2] = "DA_Activity_CentennialBloom"; wrangler_level = 4')
+poll()
+events = (read("events.txt") or "").splitlines()
+check("tracker reports new progress only", events[3:] == ["mission_complete CentennialBloom", "wrangler_rank 4"])
+lua.execute('stars["DA_Activity_CentennialBloom"] = { [2] = true }')
+poll()
+events = (read("events.txt") or "").splitlines()
+check("tracker reports a star earned later, once", events[5:] == ["golden_eggs CentennialBloom"])
+poll()
+check("star not reported twice", len((read("events.txt") or "").splitlines()) == 6)
+
+# State dump (F8)
+lua.globals().keybinds[119]()
+state = read("state.txt") or ""
+check("state dump lists completed activities", "Completed activities (via ActivitiesTimeCompletion): FaintSignal, CentennialBloom" in state)
+check("state dump lists wrangler level and abyss depth", "WranglerLevel: 4" in state and "Abyss depth: 7" in state)
 
 print(f"\n{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
