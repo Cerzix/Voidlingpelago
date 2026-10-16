@@ -5,7 +5,8 @@
 local config = require("config")
 local hooks = require("game_hooks")
 
-local EXCHANGE_DIR = (os.getenv("APPDATA") or ".") .. "\\Voidlingpelago\\"
+local SEP = package.config:sub(1, 1) -- "\" on Windows, "/" elsewhere (the CI tests run on Linux)
+local EXCHANGE_DIR = (os.getenv("APPDATA") or ".") .. SEP .. "Voidlingpelago" .. SEP
 local POLL_MS = 500
 
 local function log(msg)
