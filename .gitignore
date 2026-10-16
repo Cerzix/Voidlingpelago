@@ -16,3 +16,9 @@ applied_*.txt
 
 # UE4SS type dumps of the game, the game's data, not ours to publish
 VoidlingWrangler.lua
+genes.txt
+
+# Unreal crash reports
+CrashContext.runtime-xml
+CrashReportClient.ini
+UEMinidump.dmp

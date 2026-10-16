@@ -3,6 +3,33 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.3.0] - 2026-10-17
+
+### Added
+- Gene checks: every gene you unlock sends a check (option `gene_checks`, off by default). The list comes from the
+  full game: 1,042 collectible genes across all nine species (294 Color, 186 Eye, 179 Module, 159 Perk,
+  150 Ability Variant, 74 Pattern). `gene_types` picks which kinds count
+- A gene is in logic once its species' eggs can drop: Kwipeck, Kerapin, Gilick and Gwigoon on Vireo,
+  Nimiod, Anami and Ur-Sek on Solum, Morfang on Aulis (from the wiki's mission rewards). Packuran, the ninth species
+  the wiki doesn't name, counts as Aulis
+- Gene checks only ever hold filler, never progression or useful items: many genes come from random hatches,
+  so a stubborn last gene can't block or hold back anyone
+- F5 gene dump in the mod (`genes.txt`): every gene, module and perk via the Asset Registry, plus loaded ones,
+  with name, type, species and whether it can be collected
+- `tools/import_genes.py` turns the dump into `apworld/voidling_bound/data/genes.json`. Existing genes keep their
+  ID, new ones are appended, genes the game marks as not collectible are skipped, curly quotes are straightened
+- The mod reports unlocked genes with `ProgressionSubsystem:IsDataUnlocked` on the loaded gene assets. The F8
+  state dump shows how many are loaded and unlocked
+
+### Fixed
+- Crash when pressing F5 or F8: the mod's poll ran on its own thread (`LoopAsync`) while the dumps ran on the game
+  thread, and UE4SS's Lua isn't thread safe. Everything now runs on the game thread
+  (`LoopInGameThreadWithDelay`, with `LoopAsync` as fallback for older UE4SS builds)
+- Fewer errors inside UE4SS: the F8 dump reads values by their known type instead of probing them, the
+  unreadable `UnlockedDataAssets` set isn't probed anymore, and the working `GetWranglerLevel` call is remembered.
+  Each such error went through the UE4SS error handler that crashed
+- "Save the Cauldrons" was named "Save the Cauldron" (as on the wiki), so it sent no check. Its ID is unchanged
+
 ## [2.2.0] - 2026-10-17
 
 ### Added
@@ -125,6 +152,7 @@ and the UE4SS type dump of the demo.
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.3.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.0-beta.1
 [2.2.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.2.0
 [2.1.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.1.0
 [2.0.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.1

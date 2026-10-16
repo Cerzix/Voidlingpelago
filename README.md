@@ -26,6 +26,7 @@ The full protocol is described at the top of `apworld/voidling_bound/Client.py`.
 | All golden eggs / all bonus mutagens, on the 9 missions that have them | 18 | `bonus_objectives` |
 | Wrangler rank 2 - N | 0-20 | `wrangler_rank_checks` |
 | Abyss depth every X levels up to the goal depth | varies | `abyss_goal_depth`, `abyss_check_interval` |
+| Every unlocked gene (filler only) | up to 1,042 | `gene_checks` (off by default), `gene_types` |
 
 Mission data comes from the [Voidling Bound wiki](https://voidlingbound.wiki.gg/wiki/Missions).
 Progression items are Planet Access: Solum, Planet Access: Aulis and Abyss Access (entered through the altar on
@@ -55,8 +56,19 @@ and `discovery = true` in `Scripts/config.lua`:
 
 Send both files along with what you did during the trace, one trace per action.
 
+## Updating the gene list
+
+Every unlocked gene is a check, and the list of genes comes from the game itself:
+
+1. In game (save loaded, discovery tools on), press **F5**. The mod writes `%APPDATA%\Voidlingpelago\genes.txt`.
+2. Run `python tools/import_genes.py "%APPDATA%\Voidlingpelago\genes.txt"`.
+3. Commit the changed `apworld/voidling_bound/data/genes.json`.
+
+Genes keep their ID across imports, so a dump from the full game later only adds the new genes.
+
 ## Testing
 
 - World: copy `apworld/voidling_bound` into an Archipelago source checkout's `worlds/` and run
   `python -m pytest worlds/voidling_bound/test test/general`.
 - Mod: `pip install lupa`, then `python mod/tests/test_mod.py` runs the Lua mod against stubbed UE4SS functions.
+- Gene import tool: `python tools/test_import_genes.py`.
