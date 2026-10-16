@@ -1,8 +1,10 @@
 """Builds the release files into dist/:
     voidling_bound.apworld  - apworld/voidling_bound, with the manifest Archipelago expects in packaged apworlds
     Voidlingpelago.zip      - the UE4SS mod, to unzip into the game's ue4ss/Mods/ folder
+    Voidling Bound.yaml     - player options template
 """
 import json
+import shutil
 import zipfile
 from pathlib import Path
 
@@ -39,7 +41,8 @@ def build_mod() -> Path:
 
 def main() -> None:
     DIST.mkdir(exist_ok=True)
-    for output in (build_apworld(), build_mod()):
+    template = Path(shutil.copy(ROOT / "apworld" / "Voidling Bound.yaml", DIST))
+    for output in (build_apworld(), build_mod(), template):
         print(f"Built {output}")
 
 

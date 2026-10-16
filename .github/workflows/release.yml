@@ -106,3 +106,4 @@ jobs:
           files: |
             dist/voidling_bound.apworld
             dist/Voidlingpelago.zip
+            dist/Voidling Bound.yaml

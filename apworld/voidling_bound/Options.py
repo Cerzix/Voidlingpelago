@@ -7,7 +7,7 @@ from Options import Choice, DeathLink, OptionSet, PerGameCommonOptions, Range, T
 class Goal(Choice):
     """
     What you need to do to finish your game.
-    Campaign: beat the final campaign mission.
+    Campaign: beat the final campaign mission, End to the Unknown.
     Abyss Depth: reach the configured depth in the Abyss (requires Abyss Access).
     """
     display_name = "Goal"

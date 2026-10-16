@@ -36,35 +36,32 @@ Aulis). The goal is either End to the Unknown or a target Abyss depth.
 
 - [x] apworld with the real missions, generates and passes Archipelago's generic tests and its own tests
 - [x] client <-> mod file protocol, item delivery that survives restarts, DeathLink plumbing
-- [x] discovery tools in the mod to find the game's classes and functions (F6 scan, F7 trace, F8 state dump)
+- [x] developer tools to find the game's classes and functions (`mod/devtools`, not in the release)
 - [x] missions, golden egg / mutagen stars, Wrangler rank and Abyss depth are read from the game's state
 - [x] research points, mutagens, species / golden / random eggs and DNA Catalyzers are granted
 - [x] missions on locked planets are locked, DeathLink works both ways
 - [ ] everything above needs confirming in the real game, see the latest release notes
 
-## Finding the hooks
+## Developer tools
 
-Voidling Bound runs on Unreal Engine 5.7, so it needs the **experimental** UE4SS build. With the mod installed
-and `discovery = true` in `Scripts/config.lua`:
+The released mod has no debug keys. For development, copy `mod/devtools/discovery.lua` into the installed mod's
+`Scripts` folder; `main.lua` loads it when it's there. Output goes to `%APPDATA%\Voidlingpelago\`.
 
-1. Start a mission and press **F6**. `%APPDATA%\Voidlingpelago\discovery.txt` lists every loaded game class
-   whose name looks relevant (Mission, Objective, Abyss, Egg, Mutagen, Rank, ...) with its functions and properties.
-2. Press **F7** to start a trace, then do exactly one thing: finish the mission, pick up a golden egg, rank up,
-   dive deeper in the Abyss or die. Press **F7** again.
-3. `trace.txt` shows which functions fired at that moment, on which object and with which arguments.
-   Those are the functions to hook in `game_hooks.lua`.
+| Key | What it does |
+|---|---|
+| F5 | `genes.txt`: every gene in the game (Asset Registry plus loaded), for the gene list below |
+| F6 | `discovery.txt`: every loaded game class with a relevant name, with functions, parameters and properties |
+| F7 | starts/stops `trace.txt`: every call to those classes' functions, with object and arguments |
+| F8 | `state.txt`: the player's progress as the game stores it, and every loaded mission, planet, resource and species |
+| F9 | sends a "Faint Signal" check, to test the client connection (only in a test room) |
 
-Send both files along with what you did during the trace, one trace per action.
+### Updating the gene list
 
-## Updating the gene list
-
-Every unlocked gene is a check, and the list of genes comes from the game itself:
-
-1. In game (save loaded, discovery tools on), press **F5**. The mod writes `%APPDATA%\Voidlingpelago\genes.txt`.
+1. In game with a save loaded and the developer tools installed, press **F5**.
 2. Run `python tools/import_genes.py "%APPDATA%\Voidlingpelago\genes.txt"`.
 3. Commit the changed `apworld/voidling_bound/data/genes.json`.
 
-Genes keep their ID across imports, so a dump from the full game later only adds the new genes.
+Genes keep their ID across imports, so a dump from a newer game version only adds the new genes.
 
 ## Testing
 

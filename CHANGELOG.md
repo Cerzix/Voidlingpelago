@@ -21,6 +21,14 @@ All notable changes to this project are documented here. The format follows
 - The mod reports unlocked genes with `ProgressionSubsystem:IsDataUnlocked` on the loaded gene assets. The F8
   state dump shows how many are loaded and unlocked
 
+### Removed
+- The debug keys (F5 gene dump, F6 scan, F7 trace, F8 state dump, F9 test check) and `config.lua` are no longer
+  part of the released mod. They live in `mod/devtools/discovery.lua` for development, see the README
+
+### Changed
+- The setup guide covers the install paths, the YAML options and what to expect in game
+- Releases include a player options template, `Voidling Bound.yaml`
+
 ### Fixed
 - Crash when pressing F5 or F8: the mod's poll ran on its own thread (`LoopAsync`) while the dumps ran on the game
   thread, and UE4SS's Lua isn't thread safe. Everything now runs on the game thread
