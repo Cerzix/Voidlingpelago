@@ -129,7 +129,14 @@ function M.scan()
         lines[#lines + 1] = "== " .. entry.path .. "   extends " .. super
         safe(function()
             entry.class:ForEachFunction(function(fn)
-                lines[#lines + 1] = "   fn   " .. short_name(fn)
+                local params = {}
+                safe(function()
+                    fn:ForEachProperty(function(param)
+                        local kind = safe(function() return param:GetClass():GetFName():ToString() end, "?")
+                        params[#params + 1] = short_name(param) .. ": " .. kind
+                    end)
+                end)
+                lines[#lines + 1] = "   fn   " .. short_name(fn) .. "(" .. table.concat(params, ", ") .. ")"
             end)
         end)
         safe(function()
@@ -147,6 +154,119 @@ function M.scan()
     f:write(table.concat(lines, "\n") .. "\n")
     f:close()
     log("Discovery scan: " .. #classes .. " classes written to " .. out_dir .. "discovery.txt")
+end
+
+-- State dump ---------------------------------------------------------------------------------------
+-- F8: what the game currently knows about the player's progress, to map assets to AP missions and items.
+
+local DATA_ASSET_CLASSES = {
+    "ActivityDataAsset", "ActivityTypeDataAsset", "PlanetDataAsset", "ResourceDataAsset", "QuestDataAsset",
+}
+
+local function describe_value(value)
+    local kind = type(value)
+    if kind == "nil" then return "nil" end
+    if kind == "number" or kind == "boolean" or kind == "string" then return tostring(value) end
+    return safe(function() return value:ToString() end, nil)
+        or safe(function() return object_path(value) end, nil)
+        or kind
+end
+
+local function dump_container(lines, label, container)
+    local entries = {}
+    local ok = pcall(function()
+        container:ForEach(function(a, b)
+            local key = describe_value(safe(function() return a:get() end, a))
+            if b ~= nil then
+                key = key .. " = " .. describe_value(safe(function() return b:get() end, b))
+            end
+            entries[#entries + 1] = key
+        end)
+    end)
+    if not ok then
+        lines[#lines + 1] = "  " .. label .. ": <not iterable with this UE4SS build>"
+        return
+    end
+    lines[#lines + 1] = "  " .. label .. ": " .. #entries .. " entries"
+    for _, entry in ipairs(entries) do lines[#lines + 1] = "    " .. entry end
+end
+
+-- Simple property values of an object, so data assets show their display names, planets, rewards, ...
+local function dump_properties(lines, obj)
+    safe(function()
+        obj:GetClass():ForEachProperty(function(prop)
+            local name = short_name(prop)
+            local value = safe(function() return obj[name] end, nil)
+            lines[#lines + 1] = "      " .. name .. " = " .. describe_value(value)
+        end)
+    end)
+end
+
+function M.dump_state()
+    local tracker = require("tracker")
+    local lines = { "Voidlingpelago state dump, " .. os.date("%Y-%m-%d %H:%M:%S"), "" }
+
+    local progression = tracker.progression()
+    lines[#lines + 1] = "ProgressionSubsystem: " .. (progression and object_path(progression) or "not found")
+    if progression then
+        lines[#lines + 1] = "  WranglerLevel: " .. tostring(tracker.wrangler_level(progression))
+        local done, source = tracker.completed_activities(progression)
+        local names = {}
+        for _, activity in ipairs(done) do names[#names + 1] = activity.name end
+        lines[#lines + 1] = "  Completed activities (via " .. source .. "): " .. table.concat(names, ", ")
+        dump_container(lines, "ActivitiesTimeCompletion", progression.ActivitiesTimeCompletion)
+        dump_container(lines, "UnlockedDataAssets", progression.UnlockedDataAssets)
+        dump_container(lines, "CollectedActors", progression.CollectedActors)
+        dump_container(lines, "ProgressionVariablesCounter", progression.ProgressionVariablesCounter)
+    end
+    lines[#lines + 1] = "Abyss depth: " .. tostring(tracker.abyss_depth())
+    lines[#lines + 1] = ""
+
+    local inventory = safe(function() return FindFirstOf("PlayerProgression").ResourcesInventory end, nil)
+    lines[#lines + 1] = "ResourcesInventory: " .. (inventory and object_path(inventory) or "not found")
+    if inventory then
+        dump_container(lines, "CollectedResources", inventory.CollectedResources)
+        dump_container(lines, "Eggs", inventory.Eggs)
+    end
+    lines[#lines + 1] = ""
+
+    for _, class_name in ipairs(DATA_ASSET_CLASSES) do
+        local objects = safe(function() return FindAllOf(class_name) end, {}) or {}
+        lines[#lines + 1] = "== " .. class_name .. ": " .. #objects .. " loaded"
+        for _, obj in ipairs(objects) do
+            local status = {}
+            if progression then
+                status[#status + 1] = "unlocked=" .. describe_value(safe(function()
+                    return progression:IsDataUnlocked(obj)
+                end, nil))
+                if class_name == "ActivityDataAsset" then
+                    status[#status + 1] = "name=\"" .. tracker.activity_name(obj) .. "\""
+                    status[#status + 1] = "time=" .. describe_value(safe(function()
+                        return progression:GetActivityTimeCompletion(obj)
+                    end, nil))
+                    local stars = {}
+                    for star = 0, 3 do stars[#stars + 1] = describe_value(tracker.is_star_unlocked(obj, star)) end
+                    status[#status + 1] = "stars[0-3]=" .. table.concat(stars, "/")
+                end
+            end
+            if class_name == "ResourceDataAsset" then
+                status[#status + 1] = "name=\"" .. describe_value(safe(function()
+                    return obj.ResourceName:ToString()
+                end, nil)) .. "\""
+            end
+            lines[#lines + 1] = "   " .. object_path(obj) .. "   " .. table.concat(status, " ")
+            dump_properties(lines, obj)
+        end
+    end
+
+    local f = io.open(out_dir .. "state.txt", "w")
+    if not f then
+        log("Could not write state.txt")
+        return
+    end
+    f:write(table.concat(lines, "\n") .. "\n")
+    f:close()
+    log("State dump written to " .. out_dir .. "state.txt")
 end
 
 -- Trace --------------------------------------------------------------------------------------------
@@ -238,7 +358,9 @@ function M.init(config, exchange_dir, logger)
     out_dir, log = exchange_dir, logger
     RegisterKeyBind(config.scan_key, function() ExecuteInGameThread(M.scan) end)
     RegisterKeyBind(config.trace_key, function() ExecuteInGameThread(M.toggle_trace) end)
-    log("Discovery tools enabled: F6 scan, F7 trace")
+    -- Older config.lua files don't have state_key yet.
+    RegisterKeyBind(config.state_key or Key.F8, function() ExecuteInGameThread(M.dump_state) end)
+    log("Discovery tools enabled: F6 scan, F7 trace, F8 state dump")
 end
 
 return M
