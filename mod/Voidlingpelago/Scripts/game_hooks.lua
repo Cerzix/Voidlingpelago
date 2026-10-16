@@ -1,17 +1,16 @@
--- Everything that touches Voidling Bound itself lives here.
--- The game has no published SDK. Use the discovery tools (discovery.lua, F6 scan / F7 trace) to find the
--- class and function behind each TODO below, then replace the TODO with a RegisterHook call.
+-- Everything that touches Voidling Bound itself lives here. Class and function names come from the UE4SS type
+-- dump of the game module (/Script/VoidlingWrangler) and the discovery scans of the demo.
 --
--- Candidates from the reflection names in VoidlingWrangler-Win64-Shipping.exe (module /Script/VoidlingWrangler),
--- which class owns each function still needs a scan to confirm:
---   missions:  AActivity / ACleanseActivity / ASurvivalActivity, UActivitySubsystem, UActivityDataAsset,
---              CompleteActivity, FinishActivity, ConfirmActivitySuccess, GetCurrentActivity, MissionComplete,
---              bIsMainMission, StarObjectiveTexts, IsStarUnlocked, CollectibleClassesForObjective
---   ranks:     GetWranglerLevel, WranglerLevelChanged (delegate)
---   abyss:     UAbyssSubsystem, AbyssDepthCompleted, OnAbyssLevelFinished, GetAbyssLevel, IsInsideAbyss
---   planets:   AGalacticMapManager, GalacticMapTravel, GetAllPlanets, GetCurrentPlanet, OnPlanetChanged
---   rewards:   GiveMutagen, GiveResearchPoint, GiveRewards, AddEgg, AddRandomEgg, HatchEgg, GetRandomCatalyzer
---   failure:   Defeat
+--   progress     tracker.lua reads missions, stars, Wrangler rank and Abyss depth from the game's state
+--   resources    UResourcesInventory:StoreResource(UResourceDataAsset, Quantity)
+--   eggs         UVWCheatManager:AddRandomEgg(Count), enabled by UE4SS's bundled CheatManagerEnablerMod
+--   DeathLink    UActivitySubsystem:TriggerActivityFailure() out, UVWCheatManager:KillPlayerCreature() in
+--
+-- Still open: planet gating (GalacticMapManager / QuestSubsystem:SetPlanetToTravel), golden and species eggs
+-- (UVWCheatManager:AddEgg(EEggType, ClassName, Count) needs the enum values and class names), Catalyzers and
+-- ability points.
+
+local tracker = require("tracker")
 
 local M = {}
 local events, log
@@ -27,13 +26,26 @@ local ITEMS = {
     --               840044 Nimiod, 840045 Anami, 840046 Ur-Sek, 840047 Morfang
 }
 
+-- Resource items: every word must appear in the resource's in-game ResourceName.
+local RESOURCE_ITEMS = {
+    [ITEMS.RESEARCH_POINTS] = { words = { "research" }, amount = 500 },
+    [ITEMS.ORGANIC] = { words = { "organic", "mutagen" }, amount = 3 },
+    [ITEMS.PYRO] = { words = { "pyro", "mutagen" }, amount = 3 },
+    [ITEMS.CRYO] = { words = { "cryo", "mutagen" }, amount = 3 },
+    [ITEMS.CYBER] = { words = { "cyber", "mutagen" }, amount = 3 },
+    [ITEMS.PLASMA] = { words = { "plasma", "mutagen" }, amount = 3 },
+    [ITEMS.POLYCHROME] = { words = { "polychrome" }, amount = 1 },
+}
+
+local FAILURE_FUNCTION = "/Script/VoidlingWrangler.ActivitySubsystem:TriggerActivityFailure"
+
 -- Vireo is always open, the mission select hook should block missions on planets that aren't unlocked.
 local unlocked = { Vireo = true, Solum = false, Aulis = false }
 local abyss_unlocked = false
+-- A DeathLink we apply fails the mission, which must not be sent back out as our own death.
+local ignore_failure_until = 0
 
--- The client accepts mission names with spaces replaced by underscores, e.g. "Centennial_Bloom".
--- Use it to translate whatever the game calls a mission into the AP name, or map the game's own IDs in
--- Client.py MISSION_KEYS and pass them through unchanged.
+-- Turns a mission name into an event key, used by the F9 debug key.
 function M.mission_key(mission_name)
     return (mission_name:gsub(" ", "_"))
 end
@@ -41,33 +53,60 @@ end
 function M.init(event_api, logger)
     events, log = event_api, logger
 
-    -- TODO: mission completion. Trace finishing a mission and hook the function that fires, e.g.
-    -- RegisterHook("<path from trace.txt>", function(context, ...)
-    --     local key = ...  -- the mission's ID or display name, read from the context or a parameter
-    --     events.mission_complete(key)
-    --     if all golden eggs were collected  then events.golden_eggs(key) end
-    --     if all bonus mutagens were found   then events.bonus_mutagens(key) end
-    -- end)
-    -- Missions with collectibles show them as star objectives, so the star state is likely what to read.
+    local ok, err = pcall(RegisterHook, FAILURE_FUNCTION, function()
+        if os.time() >= ignore_failure_until then events.death() end
+    end)
+    if not ok then log("Could not hook mission failure, DeathLink won't send: " .. tostring(err)) end
 
-    -- TODO: Wrangler rank. Hook the rank-up function and call events.wrangler_rank(newRank).
+    -- TODO: planet gating. Quests unlock planets through ProgressionSubsystem:UnlockData(PlanetDataAsset); block
+    -- travel to planets where unlocked[planet] is false (GalacticMapManager / QuestSubsystem:SetPlanetToTravel),
+    -- and the Abyss while abyss_unlocked is false.
+end
 
-    -- TODO: Abyss. Hook "Dive Deeper" (or entering the next Abyss level) and call events.abyss_depth(depth).
-
-    -- TODO: player death, only matters with DeathLink. Call events.death() when the run fails.
-
-    -- TODO: planet gating. Hook planet / mission selection and refuse planets where unlocked[planet] is false,
-    -- and the Abyss while abyss_unlocked is false. Show a message telling the player what's missing.
+-- Called every poll on the game thread.
+function M.poll()
+    tracker.poll(events)
 end
 
 function M.set_slot_data(data)
     slot_data = data
 end
 
--- Return false while items can't be granted, e.g. in the main menu or a loading screen.
+local function resources_inventory()
+    local ok, inventory = pcall(function() return tracker.instance("PlayerProgression").ResourcesInventory end)
+    if ok and inventory and inventory:IsValid() then return inventory end
+    return nil
+end
+
+-- Items are only granted in a loaded save, not in the main menu or while loading.
 function M.can_receive_items()
-    -- TODO: e.g. check that the player's save/profile object exists
-    return true
+    return tracker.progression() ~= nil and resources_inventory() ~= nil
+end
+
+local resource_assets = { list = nil, searched = -math.huge }
+
+local function find_resource(words)
+    if not resource_assets.list or os.time() - resource_assets.searched > 10 then
+        local ok, assets = pcall(FindAllOf, "ResourceDataAsset")
+        resource_assets = { list = (ok and assets) or {}, searched = os.time() }
+    end
+    for _, asset in ipairs(resource_assets.list) do
+        local ok, name = pcall(function() return asset.ResourceName:ToString():lower() end)
+        if ok then
+            local matches = true
+            for _, word in ipairs(words) do
+                if not name:find(word, 1, true) then matches = false end
+            end
+            if matches then return asset end
+        end
+    end
+    return nil
+end
+
+local function cheat_manager()
+    local cheats = tracker.instance("VWCheatManager")
+    if not cheats then error("the cheat manager isn't available, is UE4SS's CheatManagerEnablerMod enabled?") end
+    return cheats
 end
 
 function M.is_unlock(id)
@@ -83,17 +122,31 @@ function M.apply_unlock(id)
 end
 
 -- Grant one item, called exactly once per received item.
--- Raise an error (error("...")) if it can't be granted right now, it will be retried.
+-- Raise an error if it can't be granted right now, it will be retried. Items the mod can't grant yet are
+-- logged and skipped, so they don't hold up the items after them.
 function M.apply_item(id, name)
     if M.is_unlock(id) then return end
-    -- TODO: grant resources through the player's inventory / save game object. Trace picking up a mutagen,
-    -- hatching an egg and finishing a mission to see which functions add research points, mutagens and eggs.
-    log("No game handler yet for " .. name .. " (" .. id .. ")")
+
+    local resource = RESOURCE_ITEMS[id]
+    if resource then
+        local asset = find_resource(resource.words)
+        if not asset then error("resource for " .. name .. " isn't loaded yet") end
+        resources_inventory():StoreResource(asset, resource.amount)
+        return
+    end
+
+    if id == ITEMS.EGG or (id >= 840040 and id <= 840047) then
+        -- Species eggs are random eggs until the AddEgg class names are known.
+        cheat_manager():AddRandomEgg(1)
+        return
+    end
+
+    log("Can't grant " .. name .. " (" .. id .. ") in game yet, skipped")
 end
 
 function M.kill_player()
-    -- TODO: kill or down the player's Voidling.
-    log("DeathLink received, but killing the player isn't implemented yet")
+    ignore_failure_until = os.time() + 10
+    cheat_manager():KillPlayerCreature()
 end
 
 return M

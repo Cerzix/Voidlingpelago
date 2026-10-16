@@ -138,13 +138,13 @@ end
 ensure_exchange_dir()
 hooks.init(events, log)
 
-if config.discovery then
-    local discovery = require("discovery")
-    discovery.init(config, EXCHANGE_DIR, log)
-    RegisterLoadMapPostHook(function(engine, world)
-        discovery.on_map_loaded(world:get())
-    end)
-end
+local discovery = config.discovery and require("discovery")
+if discovery then discovery.init(config, EXCHANGE_DIR, log) end
+
+RegisterLoadMapPostHook(function(engine, world)
+    require("tracker").reset()
+    if discovery then discovery.on_map_loaded(world:get()) end
+end)
 
 if config.debug_events then
     RegisterKeyBind(config.debug_key, function()
@@ -160,6 +160,7 @@ LoopAsync(POLL_MS, function()
             poll_slot_data()
             poll_items()
             poll_deathlink()
+            hooks.poll()
         end)
         if not ok then log("Poll error: " .. tostring(err)) end
     end)
