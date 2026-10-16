@@ -89,10 +89,56 @@ instances.ResourceDataAsset = {}
 for _, name in ipairs({ "Research Points", "Organic Mutagen", "Pyro Mutagen", "Polychrome Mutagen" }) do
     table.insert(instances.ResourceDataAsset, object("DA_" .. name, { ResourceName = fname(name) }))
 end
+-- Eggs: AddEgg only accepts creature class names ("BP_Kwipeck_C"), like the real cheat might.
+eggs = {}
+inventory.EggCount = function(self, include_pending) return #eggs end
 instances.VWCheatManager = { object("VWCheatManager_1", {
-    AddRandomEgg = function(self, count) eggs_added = eggs_added + count end,
+    AddRandomEgg = function(self, count) eggs_added = eggs_added + count; table.insert(eggs, "random") end,
+    AddEgg = function(self, egg_type, class_name, count)
+        if class_name:match("^BP_%a+_C$") then table.insert(eggs, egg_type .. ":" .. class_name) end
+    end,
     KillPlayerCreature = function() kills = kills + 1 end,
 }) }
+instances.SpeciesDataAsset = {}
+for _, name in ipairs({ "Kwipeck", "Ur-Sek" }) do
+    local short = name:gsub("-", "")
+    table.insert(instances.SpeciesDataAsset, object("DA_Species_" .. short, {
+        SpeciesName = fname(name),
+        CreatureClass = fname("/Game/Creatures/BP_" .. short .. ".BP_" .. short .. "_C"),
+    }))
+end
+local egg_enum = object("EEggType", {
+    ForEachName = function(self, cb)
+        cb(fname("EEggType::Normal"), 0); cb(fname("EEggType::Golden"), 1); cb(fname("EEggType::EEggType_MAX"), 2)
+    end,
+})
+catalyzer = object("DA_Catalyzer_Swift", { ResourceName = fname("Swift Catalyzer") })
+local catalyzer_cdo = object("Default__DNACatalyzerDefinition", {
+    GetRandomCatalyzer = function(self, context, quality, min, max, try_new) return catalyzer end,
+})
+function StaticFindObject(path)
+    if path == "/Script/VoidlingWrangler.EEggType" then return egg_enum end
+    if path == "/Script/VoidlingWrangler.Default__DNACatalyzerDefinition" then return catalyzer_cdo end
+    return nil
+end
+
+-- Activities on every planet, for the gating
+local activity_type = object("DA_ActivityType_Cleanse", {})
+local abyss_type = object("DA_ActivityType_AbyssalIncursion", {})
+instances.ActivityDataAsset = {}
+for _, entry in ipairs({
+    { "Faint Signal", activity_type }, { "Search and Rescue", activity_type }, { "Storm Breaker", activity_type },
+    { "Operation: Void Strike", abyss_type }, { "Tutorial Flight", activity_type }, { "Abyss Dive", abyss_type },
+}) do
+    table.insert(instances.ActivityDataAsset, object("DA_Activity_" .. entry[1]:gsub("[^%w]", ""), {
+        Name = fname(entry[1]), Type = entry[2], WranglerLevelRequirement = 2,
+    }))
+end
+function requirement(name)
+    for _, asset in ipairs(instances.ActivityDataAsset) do
+        if asset.Name:ToString() == name then return asset.WranglerLevelRequirement end
+    end
+end
 """
 
 lua = lupa.LuaRuntime(unpack_returned_tuples=True)
@@ -206,6 +252,45 @@ events = (read("events.txt") or "").splitlines()
 check("tracker reports a star earned later, once", events[5:] == ["golden_eggs CentennialBloom"])
 poll()
 check("star not reported twice", len((read("events.txt") or "").splitlines()) == 6)
+
+# Gating: missions on planets without access get Wrangler level requirement 99
+def requirements():
+    return {name: lua.globals().requirement(name) for name in
+            ["Faint Signal", "Search and Rescue", "Storm Breaker", "Operation: Void Strike", "Tutorial Flight", "Abyss Dive"]}
+
+
+write("slot.txt", "goal=0\nmission_regions=Faint Signal=Vireo|Search and Rescue=Solum|Storm Breaker=Aulis|Operation: Void Strike=The Abyss\n")
+write("items.txt", "session GATE 1\n")
+poll()
+check("missions without access are locked, others untouched", requirements() == {
+    "Faint Signal": 2, "Search and Rescue": 99, "Storm Breaker": 99, "Operation: Void Strike": 99,
+    "Tutorial Flight": 2, "Abyss Dive": 99})
+write("items.txt", "session GATE 1\n0 840001 Planet Access: Solum\n0 840004 Abyss Access\n")
+poll()
+check("Solum unlocks, Aulis and the Abyss still need Aulis", requirements() == {
+    "Faint Signal": 2, "Search and Rescue": 2, "Storm Breaker": 99, "Operation: Void Strike": 99,
+    "Tutorial Flight": 2, "Abyss Dive": 99})
+write("items.txt", "session GATE 1\n0 840001 Planet Access: Solum\n1 840004 Abyss Access\n2 840002 Planet Access: Aulis\n")
+poll()
+check("Aulis and the Abyss unlock with all their items", set(requirements().values()) == {2})
+
+# Gating survives an asset reload, which resets the requirement
+lua.execute("""
+gate_locked_again = false
+for _, asset in ipairs(instances.ActivityDataAsset) do asset.WranglerLevelRequirement = 2 end
+""")
+write("items.txt", "session GATE2 1\n")
+lua.execute("local base = os.time; os.time = function() return base() + 600 end")
+poll()
+check("a fresh session locks again, also after a reload", requirements()["Storm Breaker"] == 99)
+
+# Rewards: species egg, golden egg, catalyzer
+write("items.txt", "session REWARD 1\n0 840046 Ur-Sek Egg\n1 840012 Golden Egg\n2 840010 DNA Catalyzer Bundle\n")
+poll()
+eggs = list(lua.globals().eggs.values())
+check("species egg added with the class name AddEgg accepts", "0:BP_UrSek_C" in eggs)
+check("golden egg uses the Golden egg type", any(egg.startswith("1:BP_") for egg in eggs))
+check("catalyzer stored as a resource", "Swift Catalyzer x1" in list(lua.globals().stored.values()))
 
 # State dump (F8)
 lua.globals().keybinds[119]()
