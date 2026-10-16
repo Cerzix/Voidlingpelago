@@ -3,7 +3,19 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
-## [2.3.0] - 2026-10-17
+## [2.3.1] - 2026-10-17
+
+### Fixed
+- Received research points and mutagens never arrived. Resources were looked up by their in-game name, but
+  research points are called "Collectable Plant" in game, so they were never found, and an item that couldn't be
+  granted was retried forever, which held up every item received after it. Resources are now looked up by their
+  asset name (e.g. `DA_Resource_Mutagen_Cryo`), and items stuck since 2.3.0 are granted after updating
+- The mod checks that a received resource shows up in the inventory the HUD shows. If it only landed in the
+  activity storage, it's moved over, and the result is logged either way
+- An item that still can't be granted after 30 seconds is skipped (and logged), so it can't hold up the items
+  received after it
+
+ - 2026-10-17
 
 ### Added
 - Gene checks: every gene you unlock sends a check (option `gene_checks`, off by default). The list comes from the
@@ -165,6 +177,7 @@ and the UE4SS type dump of the demo.
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.3.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.1
 [2.3.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.0-beta.1
 [2.2.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.2.0
 [2.1.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.1.0

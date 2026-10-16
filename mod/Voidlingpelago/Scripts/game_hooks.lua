@@ -28,16 +28,16 @@ local SPECIES_EGGS = {
     [840044] = "Nimiod", [840045] = "Anami", [840046] = "Ur-Sek", [840047] = "Morfang",
 }
 
--- Resource items: every word must appear in the resource's in-game ResourceName.
+-- Resource items, by the game's asset name (the display names differ, research points are "Collectable Plant").
 local RESOURCE_ITEMS = {
-    [ITEMS.RESEARCH_POINTS] = { words = { "research" }, amount = 500 },
-    [ITEMS.RESEARCH_POINTS_LARGE] = { words = { "research" }, amount = 1500 },
-    [ITEMS.ORGANIC] = { words = { "organic", "mutagen" }, amount = 3 },
-    [ITEMS.PYRO] = { words = { "pyro", "mutagen" }, amount = 3 },
-    [ITEMS.CRYO] = { words = { "cryo", "mutagen" }, amount = 3 },
-    [ITEMS.CYBER] = { words = { "cyber", "mutagen" }, amount = 3 },
-    [ITEMS.PLASMA] = { words = { "plasma", "mutagen" }, amount = 3 },
-    [ITEMS.POLYCHROME] = { words = { "polychrome" }, amount = 1 },
+    [ITEMS.RESEARCH_POINTS] = { asset = "DA_Resource_ResearchPoint", amount = 500 },
+    [ITEMS.RESEARCH_POINTS_LARGE] = { asset = "DA_Resource_ResearchPoint", amount = 1500 },
+    [ITEMS.ORGANIC] = { asset = "DA_Resource_Mutagen_Organic", amount = 3 },
+    [ITEMS.PYRO] = { asset = "DA_Resource_Mutagen_Pyro", amount = 3 },
+    [ITEMS.CRYO] = { asset = "DA_Resource_Mutagen_Cryo", amount = 3 },
+    [ITEMS.CYBER] = { asset = "DA_Resource_Mutagen_Cyber", amount = 3 },
+    [ITEMS.PLASMA] = { asset = "DA_Resource_Mutagen_Plasma", amount = 3 },
+    [ITEMS.POLYCHROME] = { asset = "DA_Resource_Mutagen_Polychrome", amount = 1 },
 }
 
 local FAILURE_FUNCTION = "/Script/VoidlingWrangler.ActivitySubsystem:TriggerActivityFailure"
@@ -79,29 +79,6 @@ function M.can_receive_items()
     return tracker.progression() ~= nil and resources_inventory() ~= nil
 end
 
-local resource_assets = { list = nil, searched = -math.huge }
-
-local function find_resource(words)
-    if not resource_assets.list or os.time() - resource_assets.searched > 10 then
-        local ok, assets = pcall(FindAllOf, "ResourceDataAsset")
-        resource_assets = { list = (ok and assets) or {}, searched = os.time() }
-    end
-    for _, asset in ipairs(resource_assets.list) do
-        -- The list is cached, so an asset may have been unloaded since: never use an invalid one.
-        local valid_asset = pcall(function() assert(asset:IsValid()) end)
-        local ok, name = false, nil
-        if valid_asset then ok, name = pcall(function() return asset.ResourceName:ToString():lower() end) end
-        if ok then
-            local matches = true
-            for _, word in ipairs(words) do
-                if not name:find(word, 1, true) then matches = false end
-            end
-            if matches then return asset end
-        end
-    end
-    return nil
-end
-
 local function cheat_manager()
     local cheats = tracker.instance("VWCheatManager")
     if not cheats then error("the cheat manager isn't available, is UE4SS's CheatManagerEnablerMod enabled?") end
@@ -133,9 +110,9 @@ function M.apply_item(id, name)
 
     local resource = RESOURCE_ITEMS[id]
     if resource then
-        local asset = find_resource(resource.words)
-        if not asset then error("resource for " .. name .. " isn't loaded yet") end
-        resources_inventory():StoreResource(asset, resource.amount)
+        local asset = rewards.find_resource(resource.asset)
+        if not asset then error(resource.asset .. " isn't loaded yet") end
+        rewards.give_resource(asset, resource.amount)
         return
     end
 

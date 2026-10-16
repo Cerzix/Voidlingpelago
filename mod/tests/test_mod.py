@@ -83,15 +83,42 @@ instances.AbyssSubsystem = { object("AbyssSubsystem_1", {
     IsInsideAbyss = function() return abyss_level > 0 end,
     GetAbyssLevel = function() return abyss_level end,
 }) }
+-- Resources: StoreResource puts research points into the activity storage (banked by TransferResources),
+-- everything else straight into CollectedResources, which is what the HUD shows.
+collected, storage = {}, {}
 local inventory = object("ResourcesInventory_1", {
     StoreResource = function(self, asset, amount)
         stored[#stored + 1] = asset.ResourceName:ToString() .. " x" .. amount
+        local name = asset:GetFName():ToString()
+        local target = name == "DA_Resource_ResearchPoint" and storage or collected
+        target[name] = (target[name] or 0) + amount
     end,
+    TransferResources = function(self, source, destination)
+        if source == 1 and destination == 0 then
+            for name, amount in pairs(storage) do collected[name] = (collected[name] or 0) + amount end
+            storage = {}
+        end
+    end,
+    CollectedResources = { ForEach = function(self, cb)
+        for name, amount in pairs(collected) do
+            cb({ get = function() return object(name, {}) end }, { get = function() return amount end })
+        end
+    end },
 })
+local inventory_enum = object("EResourcesInventoryType", { ForEachName = function(self, cb)
+    cb(fname("EResourcesInventoryType::Collected"), 0)
+    cb(fname("EResourcesInventoryType::ActivityStorage"), 1)
+    cb(fname("EResourcesInventoryType::ActivityLoot"), 2)
+end })
 instances.PlayerProgression = { object("PlayerProgression_1", { ResourcesInventory = inventory }) }
 instances.ResourceDataAsset = {}
-for _, name in ipairs({ "Research Points", "Organic Mutagen", "Pyro Mutagen", "Polychrome Mutagen" }) do
-    table.insert(instances.ResourceDataAsset, object("DA_" .. name, { ResourceName = fname(name) }))
+resource_by_path = {}
+for asset_name, display in pairs({ DA_Resource_ResearchPoint = "Collectable Plant",
+        DA_Resource_Mutagen_Organic = "Organic Mutagen", DA_Resource_Mutagen_Pyro = "Pyro Mutagen",
+        DA_Resource_Mutagen_Polychrome = "Polychrome" }) do
+    local asset = object(asset_name, { ResourceName = fname(display) })
+    table.insert(instances.ResourceDataAsset, asset)
+    resource_by_path["/Game/Data/Resources/" .. asset_name .. "." .. asset_name] = asset
 end
 -- Eggs: AddEgg only accepts creature class names ("BP_Kwipeck_C"), like the real cheat might.
 eggs = {}
@@ -172,6 +199,8 @@ local registry_helpers = object("Default__AssetRegistryHelpers", { GetAssetRegis
 
 function StaticFindObject(path)
     if path == "/Script/VoidlingWrangler.EEggType" then return egg_enum end
+    if path == "/Script/VoidlingWrangler.EResourcesInventoryType" then return inventory_enum end
+    if resource_by_path[path] then return resource_by_path[path] end
     if path == "/Script/VoidlingWrangler.Default__DNACatalyzerDefinition" then return catalyzer_cdo end
     if path == "/Script/AssetRegistry.Default__AssetRegistryHelpers" then return registry_helpers end
     if gene_files[path] and loaded_assets[path] then return gene_object(path, gene_files[path][1], gene_files[path][2]) end
@@ -247,7 +276,22 @@ check("all 3 items applied", len(received()) == 3)
 check("applied counter persisted", read("applied_session_SEED_1.txt") == "3")
 poll()
 check("items not applied twice", len(received()) == 3)
-check("resources stored in the inventory", list(lua.globals().stored.values()) == ["Organic Mutagen x3", "Research Points x500"])
+check("resources stored by asset name", list(lua.globals().stored.values()) == ["Organic Mutagen x3", "Collectable Plant x500"])
+check("resources end up where the HUD shows them, also through the storage",
+      lua.eval("collected.DA_Resource_Mutagen_Organic") == 3 and lua.eval("collected.DA_Resource_ResearchPoint") == 500)
+
+# An item that can't be applied is retried, and skipped after 30 seconds so the items after it still arrive
+write("items.txt", "session STUCK 1\n0 840033 Cyber Mutagens (3)\n1 840023 Voidling Egg\n")
+eggs_before = lua.globals().eggs_added
+poll()
+check("a failing item holds the queue at first", lua.globals().eggs_added == eggs_before)
+lua.execute("real_time = os.time; os.time = function() return real_time() + 31 end")
+poll()
+check("a failing item is skipped after 30 seconds",
+      lua.globals().eggs_added == eggs_before + 1 and read("applied_session_STUCK_1.txt") == "2")
+lua.execute("os.time = real_time")
+write("items.txt", "session SEED 1\n0 840001 Planet Access: Solum\n1 840030 Organic Mutagens (3)\n2 840020 Research Points (500)\n")
+poll()
 
 # Restart: a fresh Lua state must not re-grant items, but must rebuild unlocks
 lua2 = lupa.LuaRuntime(unpack_returned_tuples=True)
@@ -261,10 +305,11 @@ check("after restart only the new item is applied", sum("Received" in line for l
 check("restart reports 3 already applied", any("3 items already applied" in line for line in log2))
 
 # New session resets the counter
+eggs_before_other = lua.globals().eggs_added
 write("items.txt", "session OTHER 2\n0 840031 Pyro Mutagens (3)\n1 840010 DNA Catalyzer Bundle\n2 840023 Voidling Egg\n")
 poll()
 check("new session applies its items", read("applied_session_OTHER_2.txt") == "3")
-check("an item the mod can't grant doesn't block the next one", lua.globals().eggs_added == 1)
+check("an item the mod can't grant doesn't block the next one", lua.globals().eggs_added == eggs_before_other + 1)
 
 # DeathLink file is consumed
 write("deathlink.txt", "Somebody")

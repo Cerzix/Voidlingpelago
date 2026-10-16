@@ -167,6 +167,81 @@ function M.give_random_egg()
     cheat_manager():AddRandomEgg(1)
 end
 
+-- Resources ---------------------------------------------------------------------------------------
+-- Resources are found by asset name, not display text: research points are called "Collectable Plant" in game.
+
+local RESOURCES_PATH = "/Game/Data/Resources/"
+local inventory_types = nil
+
+-- The amount the HUD shows: ResourcesInventory.CollectedResources (TMap<UResourceDataAsset, int32>).
+function M.collected_amount(inv, asset)
+    local wanted = tracker.name_of(asset)
+    local amount = 0
+    pcall(function()
+        inv.CollectedResources:ForEach(function(key, value)
+            if tracker.name_of(key:get()) == wanted then amount = value:get() end
+        end)
+    end)
+    return amount
+end
+
+-- EResourcesInventoryType names to values, read from the game like EEggType.
+local function read_inventory_types()
+    if inventory_types then return inventory_types end
+    local enum = StaticFindObject("/Script/VoidlingWrangler.EResourcesInventoryType")
+    if not enum or not enum:IsValid() then return nil end
+    local types = {}
+    pcall(function() enum:ForEachName(function(name, value) types[name:ToString()] = value end) end)
+    if next(types) == nil then return nil end
+    inventory_types = types
+    return types
+end
+
+local function inventory_type(word)
+    for name, value in pairs(read_inventory_types() or {}) do
+        if name:lower():find(word, 1, true) then return value end
+    end
+    return nil
+end
+
+function M.find_resource(asset_name)
+    local asset = StaticFindObject(RESOURCES_PATH .. asset_name .. "." .. asset_name)
+    if asset and asset:IsValid() then return asset end
+    local ok, assets = pcall(FindAllOf, "ResourceDataAsset")
+    for _, candidate in ipairs((ok and assets) or {}) do
+        if tracker.name_of(candidate) == asset_name then return candidate end
+    end
+    return nil
+end
+
+-- Adds amount of a resource where the HUD shows it. Raises an error only before anything was stored, so a retry
+-- can never give the item twice.
+function M.give_resource(asset, amount)
+    local inv = inventory()
+    local name = tracker.name_of(asset)
+    local before = M.collected_amount(inv, asset)
+    inv:StoreResource(asset, amount)
+    local after = M.collected_amount(inv, asset)
+    if after >= before + amount then
+        log(string.format("Added %d %s (%d -> %d)", amount, name, before, after))
+        return
+    end
+    -- StoreResource may only put it into the activity storage, which the game banks at the end of a mission.
+    local storage, collected = inventory_type("storage"), inventory_type("collect")
+    if storage and collected then
+        pcall(function() inv:TransferResources(storage, collected) end)
+        after = M.collected_amount(inv, asset)
+    end
+    if after >= before + amount then
+        log(string.format("Added %d %s through the storage (%d -> %d)", amount, name, before, after))
+    else
+        local types = {}
+        for type_name, value in pairs(read_inventory_types() or {}) do types[#types + 1] = type_name .. "=" .. value end
+        log(string.format("Stored %d %s, but it doesn't show up yet (%d -> %d, inventory types: %s)",
+            amount, name, before, after, table.concat(types, ", ")))
+    end
+end
+
 -- Returns true if a catalyzer was stored.
 function M.give_catalyzer()
     local inv = inventory()
@@ -179,11 +254,8 @@ function M.give_catalyzer()
         local definition = catalyzer
         local has_definition, inner = pcall(function() return catalyzer.Definition end)
         if has_definition and inner then definition = inner end
-        local stored = pcall(function() inv:StoreResource(definition, 1) end)
-        if stored then
-            log("Stored catalyzer " .. tracker.name_of(definition))
-            return true
-        end
+        local stored = pcall(M.give_resource, definition, 1)
+        if stored then return true end
     end
     log("Couldn't create a DNA Catalyzer (" .. tostring(catalyzer) .. "), skipped")
     return false

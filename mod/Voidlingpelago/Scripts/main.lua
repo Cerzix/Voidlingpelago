@@ -83,6 +83,9 @@ local function save_applied()
     write_text(applied_file(), tostring(applied))
 end
 
+local STUCK_SECONDS = 30
+local stuck = nil -- { index, since } of an item that keeps failing
+
 local function poll_items()
     local lines = read_lines("items.txt")
     if not lines or #lines == 0 then return end
@@ -102,13 +105,25 @@ local function poll_items()
         end
         if index and index >= applied and can_receive then
             local ok, err = pcall(hooks.apply_item, id, name)
-            if not ok then
+            if ok then
+                applied = index + 1
+                save_applied()
+                stuck = nil
+                log("Received " .. name)
+            elseif not stuck or stuck.index ~= index then
+                stuck = { index = index, since = os.time() }
                 log("Applying " .. name .. " failed, will retry: " .. tostring(err))
                 return
+            elseif os.time() - stuck.since >= STUCK_SECONDS then
+                -- One item that can't be granted must never hold up everything received after it.
+                log("Skipped " .. name .. ", it still couldn't be applied after " .. STUCK_SECONDS .. " seconds: "
+                    .. tostring(err))
+                applied = index + 1
+                save_applied()
+                stuck = nil
+            else
+                return
             end
-            applied = index + 1
-            save_applied()
-            log("Received " .. name)
         end
     end
 end
