@@ -3,6 +3,30 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- **Breaking:** the placeholder missions are replaced by the game's real 27 missions from the Voidling Bound wiki,
+  across Vireo (10), Solum (8), Aulis (7 plus End to the Unknown) and the Abyss (Operation: Void Strike).
+  Location IDs changed, so seeds generated with 1.0.0 can't be played with this version
+- **Breaking:** the four sectors are replaced by the three real planets. Planet Access: Solum and
+  Planet Access: Aulis replace the Sector 2-4 items, and the Abyss is entered from Aulis
+- The campaign goal is now End to the Unknown
+- Golden egg and bonus mutagen checks only exist for the 9 missions that have those objectives (18 checks)
+- Mutagen filler is split into the real types (Organic, Pyro, Cryo, Cyber, Plasma), with Polychrome Mutagen as
+  a useful item
+
+### Added
+- One egg item for each of the eight known Voidling species
+- Location groups per planet
+- Discovery tools in the mod: F6 dumps relevant game classes with their functions and properties, and F7 traces
+  which of those functions fire. They exist to find the game hooks
+- `config.lua` for the mod, with an optional F9 key that sends a test check
+- Lua mod tests against stubbed UE4SS functions, run in CI
+
+### Fixed
+- The client no longer crashes when the mod reports a bonus objective for a mission that has none
+
 ## [1.0.0] - 2026-10-16
 
 ### Added

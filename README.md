@@ -22,23 +22,39 @@ The full protocol is described at the top of `apworld/voidling_bound/Client.py`.
 
 | Check | Count | Option |
 |---|---|---|
-| Mission completed | 11 | always |
-| All golden eggs / all bonus mutagens in a mission | 2 per mission | `bonus_objectives` |
+| Mission completed (Vireo 10, Solum 8, Aulis 7, End to the Unknown, Operation: Void Strike) | 27 | always |
+| All golden eggs / all bonus mutagens, on the 9 missions that have them | 18 | `bonus_objectives` |
 | Wrangler rank 2 - N | 0-20 | `wrangler_rank_checks` |
 | Abyss depth every X levels up to the goal depth | varies | `abyss_goal_depth`, `abyss_check_interval` |
 
-Progression items are the planet access unlocks for Sectors 2-4 and Abyss Access. Goal is either the final
-campaign mission or a target Abyss depth.
+Mission data comes from the [Voidling Bound wiki](https://voidlingbound.wiki.gg/wiki/Missions).
+Progression items are Planet Access: Solum, Planet Access: Aulis and Abyss Access (entered through the altar on
+Aulis). The goal is either End to the Unknown or a target Abyss depth.
 
 ## Status
 
-- [x] apworld generates and passes Archipelago's generic tests and its own tests
+- [x] apworld with the real missions, generates and passes Archipelago's generic tests and its own tests
 - [x] client <-> mod file protocol, item delivery that survives restarts, DeathLink plumbing
-- [ ] **real mission names** - the names in `Locations.py` are placeholders (search for `TODO-verify`)
-- [ ] **game hooks** - every `TODO` in `mod/Voidlingpelago/Scripts/game_hooks.lua` needs the real class and
-      function names, which have to be dumped from the game with UE4SS
+- [x] discovery tools in the mod to find the game's classes and functions
+- [ ] **game hooks** - every `TODO` in `mod/Voidlingpelago/Scripts/game_hooks.lua` needs a function found with
+      the discovery tools
+
+## Finding the hooks
+
+Voidling Bound runs on Unreal Engine 5.7, so it needs the **experimental** UE4SS build. With the mod installed
+and `discovery = true` in `Scripts/config.lua`:
+
+1. Start a mission and press **F6**. `%APPDATA%\Voidlingpelago\discovery.txt` lists every loaded game class
+   whose name looks relevant (Mission, Objective, Abyss, Egg, Mutagen, Rank, ...) with its functions and properties.
+2. Press **F7** to start a trace, then do exactly one thing: finish the mission, pick up a golden egg, rank up,
+   dive deeper in the Abyss or die. Press **F7** again.
+3. `trace.txt` shows which functions fired at that moment, on which object and with which arguments.
+   Those are the functions to hook in `game_hooks.lua`.
+
+Send both files along with what you did during the trace, one trace per action.
 
 ## Testing
 
-Copy `apworld/voidling_bound` into an Archipelago source checkout's `worlds/` and run
-`python -m pytest worlds/voidling_bound/test test/general`.
+- World: copy `apworld/voidling_bound` into an Archipelago source checkout's `worlds/` and run
+  `python -m pytest worlds/voidling_bound/test test/general`.
+- Mod: `pip install lupa`, then `python mod/tests/test_mod.py` runs the Lua mod against stubbed UE4SS functions.
