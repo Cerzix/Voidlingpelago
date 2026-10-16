@@ -1,0 +1,87 @@
+name: Test and release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  AP_VERSION: "0.6.8"
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out Archipelago ${{ env.AP_VERSION }}
+        uses: actions/checkout@v4
+        with:
+          repository: ArchipelagoMW/Archipelago
+          ref: ${{ env.AP_VERSION }}
+          path: Archipelago
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Archipelago dependencies
+        working-directory: Archipelago
+        run: |
+          python -m pip install --upgrade pip -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+
+      - name: Add the world to Archipelago
+        run: cp -r apworld/voidling_bound Archipelago/worlds/voidling_bound
+
+      - name: Run world and generic tests
+        working-directory: Archipelago
+        run: python -m pytest -q worlds/voidling_bound/test test/general
+
+  release:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Check the tag matches the world version
+        run: |
+          WORLD_VERSION=$(python -c "import json; print(json.load(open('apworld/voidling_bound/archipelago.json'))['world_version'])")
+          if [ "v$WORLD_VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match world_version $WORLD_VERSION in archipelago.json"
+            exit 1
+          fi
+
+      - name: Build release files
+        run: python build_release.py
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v v="$VERSION" '
+            /^## \[/ { if (found) exit; if (index($0, "[" v "]")) { found = 1; next } }
+            found && !/^\[[^]]+\]: / { print }
+          ' CHANGELOG.md > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "::error::No CHANGELOG.md entry for $VERSION"
+            exit 1
+          fi
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Voidlingpelago ${{ github.ref_name }}
+          body_path: release_notes.md
+          files: |
+            dist/voidling_bound.apworld
+            dist/Voidlingpelago.zip
