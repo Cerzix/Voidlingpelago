@@ -3,3 +3,16 @@ __pycache__/
 dist/
 .idea/
 .vscode/
+
+# Files the mod and client exchange, copied here for debugging
+discovery.txt
+trace*.txt
+state*.txt
+events.txt
+items.txt
+slot.txt
+deathlink.txt
+applied_*.txt
+
+# UE4SS type dumps of the game, the game's data, not ours to publish
+VoidlingWrangler.lua

@@ -35,9 +35,10 @@ Aulis). The goal is either End to the Unknown or a target Abyss depth.
 
 - [x] apworld with the real missions, generates and passes Archipelago's generic tests and its own tests
 - [x] client <-> mod file protocol, item delivery that survives restarts, DeathLink plumbing
-- [x] discovery tools in the mod to find the game's classes and functions
-- [ ] **game hooks** - every `TODO` in `mod/Voidlingpelago/Scripts/game_hooks.lua` needs a function found with
-      the discovery tools
+- [x] discovery tools in the mod to find the game's classes and functions (F6 scan, F7 trace, F8 state dump)
+- [x] missions, golden egg / mutagen stars, Wrangler rank and Abyss depth are read from the game's state
+- [x] research points, mutagens and eggs are granted, DeathLink works both ways
+- [ ] planet gating, golden and species eggs, Catalyzers, ability points
 
 ## Finding the hooks
 

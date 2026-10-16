@@ -3,6 +3,39 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.1.0] - 2026-10-16
+
+The first version that does something in game. Class and function names come from the discovery scans
+and the UE4SS type dump of the demo.
+
+### Added
+- The mod detects progress by reading the game's own state instead of hooks (`tracker.lua`), so nothing is
+  missed while the client is closed and progress made before connecting is sent on connect:
+  - completed missions from `ProgressionSubsystem.ActivitiesTimeCompletion`, by their in-game name
+  - golden egg and bonus mutagen checks from the missions' star objectives (`IsStarUnlocked`). The star order
+    (1 = mutagens, 2 = golden eggs) is taken from the wiki and still needs confirming in game
+  - Wrangler rank from `GetWranglerLevel` and Abyss depth from `AbyssSubsystem`
+- Received research points and mutagens (Organic, Pyro, Cryo, Cyber, Plasma, Polychrome) are added to the
+  inventory with `ResourcesInventory:StoreResource`
+- Received Voidling eggs are added with the game's cheat manager (`AddRandomEgg`). Species eggs are random
+  eggs for now
+- DeathLink: a failed mission sends a death, a received death kills the player's creature
+  (`KillPlayerCreature`). Needs UE4SS's bundled CheatManagerEnablerMod, which is on by default
+- The client matches mission names and activity asset names (e.g. `DA_Activity_CentennialBloom`) to missions.
+  Activities that aren't locations are logged once and ignored
+- F8 state dump (`state.txt`): progression, completed missions with their star states, unlocked data assets,
+  collected actors, resources, and every loaded activity, planet, resource and quest asset
+- The F6 scan lists function parameters
+
+### Fixed
+- The client never stored the seed name, so every multiworld used the session "None" and a new seed could
+  skip items that an older seed had already applied
+
+### Known limitations
+- Planets and the Abyss aren't locked yet, so Planet Access items have no effect in game
+- Golden eggs, species eggs, DNA Catalyzers and ability points can't be granted yet and are skipped
+- Items that can't be granted are skipped instead of holding up the queue
+
 ## [2.0.1] - 2026-10-16
 
 ### Fixed
@@ -70,6 +103,7 @@ All notable changes to this project are documented here. The format follows
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.1.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.1.0
 [2.0.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.1
 [2.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.0
 [1.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v1.0.0
