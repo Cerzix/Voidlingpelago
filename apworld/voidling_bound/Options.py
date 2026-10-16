@@ -1,7 +1,7 @@
 # worlds/voidling_bound/Options.py
 from dataclasses import dataclass
 
-from Options import Choice, DeathLink, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DeathLink, OptionSet, PerGameCommonOptions, Range, Toggle
 
 
 class Goal(Choice):
@@ -46,6 +46,26 @@ class WranglerRankChecks(Range):
     default = 10
 
 
+class GeneChecks(Toggle):
+    """
+    Every gene you unlock (by hatching, breeding or evolving) sends a check. That adds up to 1,042 checks.
+    Gene checks only ever hold filler, never progression or useful items: many genes come from random hatches,
+    so a hard-to-get gene never blocks or holds back anyone's game.
+    """
+    display_name = "Gene Checks"
+    default = 0
+
+
+class GeneTypes(OptionSet):
+    """
+    Which kinds of genes send checks when Gene Checks is on. Modules are the cosmetic body parts (rare, superior,
+    exotic and mutated). Size and Element genes can't be collected in the game, so they add no checks.
+    """
+    display_name = "Gene Types"
+    valid_keys = {"Color", "Eye", "Pattern", "Perk", "Ability Variant", "Module", "Size", "Element"}
+    default = frozenset(valid_keys)
+
+
 @dataclass
 class VoidlingBoundOptions(PerGameCommonOptions):
     goal: Goal
@@ -53,4 +73,6 @@ class VoidlingBoundOptions(PerGameCommonOptions):
     abyss_check_interval: AbyssCheckInterval
     bonus_objectives: BonusObjectives
     wrangler_rank_checks: WranglerRankChecks
+    gene_checks: GeneChecks
+    gene_types: GeneTypes
     death_link: DeathLink

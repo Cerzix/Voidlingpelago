@@ -49,3 +49,14 @@ class TestBonusObjectives(VoidlingBoundTestBase):
 class TestMinimalLocations(VoidlingBoundTestBase):
     options = {"bonus_objectives": False, "wrangler_rank_checks": 0, "abyss_goal_depth": 5,
                "abyss_check_interval": 10}
+
+
+class TestAllGenes(VoidlingBoundTestBase):
+    """The real gene list: over a thousand filler-only locations must still fill."""
+    options = {"gene_checks": True}
+
+    def test_every_collectible_gene_is_a_location(self) -> None:
+        from ..Genes import GENES
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertTrue(GENES)
+        self.assertTrue(all(gene.name in names for gene in GENES))

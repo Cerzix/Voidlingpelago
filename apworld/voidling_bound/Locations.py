@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, Dict, List, NamedTuple
 
 from BaseClasses import Location
 
+from .Genes import GENES, GENE_TYPES, gene_region
+
 if TYPE_CHECKING:
     from . import VoidlingBoundWorld
 
@@ -36,7 +38,7 @@ MAX_WRANGLER_RANK = 21
 # Operation: Void Strike is the Abyssal Incursion that opens up after slaying an Overlord in the Abyss.
 MISSIONS: List[Mission] = [
     Mission("Faint Signal", VIREO, 0, 0),
-    Mission("Save the Cauldron", VIREO, 0, 0),
+    Mission("Save the Cauldrons", VIREO, 0, 0),
     Mission("Stranded Lead", VIREO, 0, 0),
     Mission("Centennial Bloom", VIREO, 1, 6),
     Mission("Secret Stronghold", VIREO, 2, 4),
@@ -99,6 +101,9 @@ for _rank in range(2, MAX_WRANGLER_RANK + 1):
     location_table[wrangler_rank_name(_rank)] = LocationData(843000 + _rank, wrangler_rank_region(_rank))
 for _depth in range(1, MAX_ABYSS_DEPTH + 1):
     location_table[abyss_depth_name(_depth)] = LocationData(844000 + _depth, ABYSS)
+# Genes use 845000+, assigned by tools/import_genes.py
+for _gene in GENES:
+    location_table[_gene.name] = LocationData(_gene.code, gene_region(_gene))
 
 
 def abyss_depths(world: "VoidlingBoundWorld") -> List[int]:
@@ -118,6 +123,8 @@ def get_active_locations(world: "VoidlingBoundWorld") -> Dict[str, LocationData]
                 names += [golden_eggs_name(mission.name), bonus_mutagens_name(mission.name)]
     names += [wrangler_rank_name(rank) for rank in range(2, world.options.wrangler_rank_checks.value + 2)]
     names += [abyss_depth_name(depth) for depth in abyss_depths(world)]
+    if world.options.gene_checks:
+        names += [gene.name for gene in GENES if gene.type in world.options.gene_types.value]
     return {name: location_table[name] for name in names}
 
 
@@ -127,4 +134,9 @@ location_name_groups: Dict[str, set] = {
     "Wrangler Ranks": {name for name in location_table if name.startswith("Wrangler Rank")},
     "Abyss Depths": {name for name in location_table if name.startswith("Abyss: Reach Depth")},
     **{planet: {name for name, data in location_table.items() if data.region == planet} for planet in PLANETS},
+    **({"Genes": {gene.name for gene in GENES}} if GENES else {}),
+    **{f"{gene_type} Genes": {gene.name for gene in GENES if gene.type == gene_type}
+       for gene_type in GENE_TYPES if any(gene.type == gene_type for gene in GENES)},
+    **{f"{species} Genes": {gene.name for gene in GENES if gene.species == species}
+       for species in {gene.species for gene in GENES}},
 }

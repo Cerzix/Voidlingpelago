@@ -2,7 +2,7 @@
 # Bridges the Archipelago server and the UE4SS Lua mod through plain text files in the exchange folder:
 #   events.txt    mod -> client, one event per line, append only:
 #                   mission_complete <MissionKey> | golden_eggs <MissionKey> | bonus_mutagens <MissionKey>
-#                   wrangler_rank <N> | abyss_depth <N> | death
+#                   wrangler_rank <N> | abyss_depth <N> | gene <GeneAssetName> | death
 #   items.txt     client -> mod, first line "session <seed> <slot>", then "<index> <item id> <item name>" per item
 #   slot.txt      client -> mod, "key=value" lines from slot_data (lists as "a,b", dicts as "k=v|k=v")
 #   deathlink.txt client -> mod, exists while a DeathLink is waiting to be applied, the mod deletes it
@@ -15,6 +15,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
     logger, server_loop
 from NetUtils import ClientStatus
 
+from .Genes import GENES_BY_ASSET
 from .Locations import MAX_ABYSS_DEPTH, MAX_WRANGLER_RANK, MISSIONS, abyss_depth_name, bonus_mutagens_name, \
     golden_eggs_name, location_table, wrangler_rank_name
 
@@ -158,6 +159,10 @@ class VoidlingContext(CommonContext):
             return {wrangler_rank_name(rank) for rank in range(2, min(int(arg), MAX_WRANGLER_RANK) + 1)}
         if kind == "abyss_depth" and arg.isdigit():
             return {abyss_depth_name(depth) for depth in range(1, min(int(arg), MAX_ABYSS_DEPTH) + 1)}
+        if kind == "gene":
+            # Genes that aren't in data/genes.json yet (e.g. new in the full game) simply aren't locations.
+            gene = GENES_BY_ASSET.get(arg)
+            return {gene.name} if gene else set()
         if kind == "death":
             if "DeathLink" in self.tags:
                 Utils.async_start(self.send_death("died in Voidling Bound."))
