@@ -16,31 +16,54 @@ class LocationData(NamedTuple):
     region: str
 
 
-SECTORS = ["Sector 1", "Sector 2", "Sector 3", "Sector 4"]
-ABYSS = "Abyss"
+class Mission(NamedTuple):
+    name: str
+    planet: str
+    golden_eggs: int  # 0 means the mission has no star collectibles
+    mutagens: int
+
+
+VIREO = "Vireo"
+SOLUM = "Solum"
+AULIS = "Aulis"
+ABYSS = "The Abyss"
+PLANETS = [VIREO, SOLUM, AULIS]
 MAX_ABYSS_DEPTH = 50
 MAX_WRANGLER_RANK = 21
 
-# TODO-verify: these mission names are placeholders and NOT the real in-game names.
-# Replace them with the real missions once they've been read from the game (UE4SS object dump / FModel).
-# Only the names change, keep the IDs. The client maps the mod's internal mission keys to these names.
-# (mission name, sector, ID)
-MISSIONS: List[tuple] = [
-    ("Tutorial: Island Cleared", "Sector 1", 841001),
-    ("W01: Crashsite Survival", "Sector 1", 841002),
-    ("W01: Clifftop Cleansing", "Sector 1", 841003),
-    ("W02: Crater Survival", "Sector 2", 841004),
-    ("W02: Frozen Lake Cleansing", "Sector 2", 841005),
-    ("W02: Magma Caves Cleansing", "Sector 2", 841006),
-    ("W03: Canyon Cleansing", "Sector 3", 841007),
-    ("W03: Oasis Survival", "Sector 3", 841008),
-    ("W03: Stormlands Night Cleansing", "Sector 3", 841009),
-    ("W04: Breach Cleansing", "Sector 4", 841010),
-    ("W04: Abyss Incursion", "Sector 4", 841011),
+# Mission list from the Voidling Bound wiki (voidlingbound.wiki.gg/wiki/Missions), in game order.
+# End to the Unknown takes place in the Abyss but is entered through the altar on Aulis, so it belongs to Aulis.
+# Operation: Void Strike is the Abyssal Incursion that opens up after slaying an Overlord in the Abyss.
+MISSIONS: List[Mission] = [
+    Mission("Faint Signal", VIREO, 0, 0),
+    Mission("Save the Cauldron", VIREO, 0, 0),
+    Mission("Stranded Lead", VIREO, 0, 0),
+    Mission("Centennial Bloom", VIREO, 1, 6),
+    Mission("Secret Stronghold", VIREO, 2, 4),
+    Mission("On the Precipice", VIREO, 0, 0),
+    Mission("Last Stand", VIREO, 0, 0),
+    Mission("On Night Watch", VIREO, 0, 0),
+    Mission("Genetic Pursuit", VIREO, 0, 0),
+    Mission("Back to Square One", VIREO, 0, 0),
+    Mission("Search and Rescue", SOLUM, 2, 4),
+    Mission("Reclaim Sanctuary", SOLUM, 0, 0),
+    Mission("Cleaning the Eyrie", SOLUM, 2, 5),
+    Mission("Subterranean Expedition", SOLUM, 1, 4),
+    Mission("Ruin Delver", SOLUM, 0, 0),
+    Mission("Drawing Fire", SOLUM, 0, 0),
+    Mission("Survive the Storm", SOLUM, 0, 0),
+    Mission("Safe Passage", SOLUM, 0, 0),
+    Mission("Stay on Track", AULIS, 0, 0),
+    Mission("Storm Breaker", AULIS, 1, 3),
+    Mission("Navigate the Maze", AULIS, 2, 5),
+    Mission("Pull the Plug", AULIS, 1, 4),
+    Mission("Machine Non Grata", AULIS, 0, 0),
+    Mission("On the Brink of Ruin", AULIS, 0, 0),
+    Mission("Calm Before the Storm", AULIS, 0, 0),
+    Mission("End to the Unknown", AULIS, 2, 4),
+    Mission("Operation: Void Strike", ABYSS, 0, 0),
 ]
-FINAL_MISSION = MISSIONS[-1][0]
-# Missions without collectibles don't get bonus objective checks.
-NO_BONUS_OBJECTIVES = {"Tutorial: Island Cleared"}
+FINAL_MISSION = "End to the Unknown"
 
 
 def golden_eggs_name(mission: str) -> str:
@@ -60,17 +83,18 @@ def abyss_depth_name(depth: int) -> str:
 
 
 def wrangler_rank_region(rank: int) -> str:
-    # Ranks 2-6 are expected in Sector 1, 7-11 in Sector 2, and so on.
-    return SECTORS[min((rank - 2) // 5, len(SECTORS) - 1)]
+    # Ranks 2-8 are expected on Vireo, 9-15 on Solum and the rest on Aulis.
+    return PLANETS[min((rank - 2) // 7, len(PLANETS) - 1)]
 
 
 # Every location that can ever exist, so IDs are stable regardless of options.
+# IDs changed in 1.1.0 when the placeholder missions were replaced, 1.0.0 seeds are not compatible.
 location_table: Dict[str, LocationData] = {}
-for _index, (_mission, _sector, _code) in enumerate(MISSIONS):
-    location_table[_mission] = LocationData(_code, _sector)
-    if _mission not in NO_BONUS_OBJECTIVES:
-        location_table[golden_eggs_name(_mission)] = LocationData(842000 + _index, _sector)
-        location_table[bonus_mutagens_name(_mission)] = LocationData(842100 + _index, _sector)
+for _index, _mission in enumerate(MISSIONS):
+    location_table[_mission.name] = LocationData(841001 + _index, _mission.planet)
+    if _mission.golden_eggs:
+        location_table[golden_eggs_name(_mission.name)] = LocationData(842001 + _index, _mission.planet)
+        location_table[bonus_mutagens_name(_mission.name)] = LocationData(842101 + _index, _mission.planet)
 for _rank in range(2, MAX_WRANGLER_RANK + 1):
     location_table[wrangler_rank_name(_rank)] = LocationData(843000 + _rank, wrangler_rank_region(_rank))
 for _depth in range(1, MAX_ABYSS_DEPTH + 1):
@@ -87,19 +111,20 @@ def abyss_depths(world: "VoidlingBoundWorld") -> List[int]:
 
 
 def get_active_locations(world: "VoidlingBoundWorld") -> Dict[str, LocationData]:
-    names = [mission for mission, _, _ in MISSIONS]
+    names = [mission.name for mission in MISSIONS]
     if world.options.bonus_objectives:
-        for mission, _, _ in MISSIONS:
-            if mission not in NO_BONUS_OBJECTIVES:
-                names += [golden_eggs_name(mission), bonus_mutagens_name(mission)]
+        for mission in MISSIONS:
+            if mission.golden_eggs:
+                names += [golden_eggs_name(mission.name), bonus_mutagens_name(mission.name)]
     names += [wrangler_rank_name(rank) for rank in range(2, world.options.wrangler_rank_checks.value + 2)]
     names += [abyss_depth_name(depth) for depth in abyss_depths(world)]
     return {name: location_table[name] for name in names}
 
 
 location_name_groups: Dict[str, set] = {
-    "Missions": {mission for mission, _, _ in MISSIONS},
+    "Missions": {mission.name for mission in MISSIONS},
     "Bonus Objectives": {name for name in location_table if name.endswith(("Golden Eggs", "Bonus Mutagens"))},
     "Wrangler Ranks": {name for name in location_table if name.startswith("Wrangler Rank")},
-    "Abyss": {name for name, data in location_table.items() if data.region == ABYSS},
+    "Abyss Depths": {name for name in location_table if name.startswith("Abyss: Reach Depth")},
+    **{planet: {name for name, data in location_table.items() if data.region == planet} for planet in PLANETS},
 }

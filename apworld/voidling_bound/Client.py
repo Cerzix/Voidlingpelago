@@ -21,12 +21,12 @@ from .Locations import MAX_ABYSS_DEPTH, MAX_WRANGLER_RANK, MISSIONS, abyss_depth
 GAME = "Voidling Bound"
 POLL_INTERVAL = 0.5
 
-# TODO-verify: the mod reports missions by their internal key (e.g. the level asset name).
-# Fill this with the real keys once they're known. Until then the mod can report the AP mission name directly,
-# with spaces replaced by underscores, which also resolves through MISSION_BY_KEY below.
+# The mod reports missions by a key without spaces: the mission name with spaces replaced by underscores
+# (e.g. "Centennial_Bloom"). Once the game's internal mission IDs are known (mod discovery dump), map them
+# here so the mod can pass them through unchanged.
 MISSION_KEYS: Dict[str, str] = {}
 MISSION_BY_KEY: Dict[str, str] = {
-    **{mission.replace(" ", "_"): mission for mission, _, _ in MISSIONS},
+    **{mission.name.replace(" ", "_"): mission.name for mission in MISSIONS},
     **MISSION_KEYS,
 }
 
@@ -151,10 +151,10 @@ class VoidlingContext(CommonContext):
         new_locations = set()
         for event in events:
             for name in self.locations_for_event(event):
-                loc_id = location_table[name].code
-                # Locations that are disabled by options simply don't exist in this slot.
-                if loc_id in self.missing_locations:
-                    new_locations.add(loc_id)
+                # Locations that are disabled by options, or bonus objectives a mission doesn't have,
+                # simply don't exist in this slot.
+                if name in location_table and location_table[name].code in self.missing_locations:
+                    new_locations.add(location_table[name].code)
         if new_locations:
             await self.check_locations(new_locations)
         self.write_items()

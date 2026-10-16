@@ -4,7 +4,7 @@
 
 - [Voidling Bound](https://store.steampowered.com/search/?term=Voidling%20Bound) (Steam or Epic)
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.4 or newer
-- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases) (the experimental build if the release doesn't load)
+- [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases), the **experimental** build (the game runs on Unreal Engine 5.7)
 - `voidling_bound.apworld` and the `Voidlingpelago` mod folder from this project
 
 ## Installation

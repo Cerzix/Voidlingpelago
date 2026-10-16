@@ -6,8 +6,8 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, launch
 
 from .Items import VoidlingBoundItem, get_random_filler_item_name, item_name_groups, item_table, useful_counts
-from .Locations import (ABYSS, FINAL_MISSION, SECTORS, VoidlingBoundLocation, abyss_depths, get_active_locations,
-                        location_name_groups, location_table)
+from .Locations import (ABYSS, AULIS, FINAL_MISSION, PLANETS, SOLUM, VIREO, VoidlingBoundLocation, abyss_depths,
+                        get_active_locations, location_name_groups, location_table)
 from .Options import Goal, VoidlingBoundOptions
 
 
@@ -56,21 +56,21 @@ class VoidlingBoundWorld(World):
 
     def create_regions(self) -> None:
         menu = Region("Menu", self.player, self.multiworld)
-        regions = {name: Region(name, self.player, self.multiworld) for name in SECTORS + [ABYSS]}
+        regions = {name: Region(name, self.player, self.multiworld) for name in PLANETS + [ABYSS]}
         self.multiworld.regions += [menu, *regions.values()]
 
         for name, data in get_active_locations(self).items():
             region = regions[data.region]
             region.locations.append(VoidlingBoundLocation(self.player, name, data.code, region))
 
-        menu.connect(regions["Sector 1"])
-        regions["Sector 1"].connect(regions["Sector 2"], rule=lambda state: state.has("Planet Access: Sector 2 (W02)", self.player))
-        regions["Sector 2"].connect(regions["Sector 3"], rule=lambda state: state.has("Planet Access: Sector 3 (W03)", self.player))
-        regions["Sector 3"].connect(regions["Sector 4"], rule=lambda state: state.has("Planet Access: Sector 4 (W04)", self.player))
-        regions["Sector 4"].connect(regions[ABYSS], rule=lambda state: state.has("Abyss Access", self.player))
+        menu.connect(regions[VIREO])
+        regions[VIREO].connect(regions[SOLUM], rule=lambda state: state.has("Planet Access: Solum", self.player))
+        regions[SOLUM].connect(regions[AULIS], rule=lambda state: state.has("Planet Access: Aulis", self.player))
+        # The Abyss is entered through the altar on Aulis.
+        regions[AULIS].connect(regions[ABYSS], rule=lambda state: state.has("Abyss Access", self.player))
 
         # The goal is an event, so it never holds a real item and the server releases nothing on it.
-        goal_region = regions[ABYSS] if self.options.goal == Goal.option_abyss_depth else regions["Sector 4"]
+        goal_region = regions[ABYSS] if self.options.goal == Goal.option_abyss_depth else regions[AULIS]
         victory = VoidlingBoundLocation(self.player, "Victory", None, goal_region)
         victory.place_locked_item(VoidlingBoundItem("Victory", ItemClassification.progression, None, self.player))
         goal_region.locations.append(victory)
