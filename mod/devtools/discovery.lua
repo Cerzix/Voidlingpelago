@@ -1,3 +1,6 @@
+-- Developer tools, not part of the released mod. To use them, copy this file into the mod's Scripts folder
+-- (ue4ss/Mods/Voidlingpelago/Scripts/), main.lua loads it when it's there. Output goes to %APPDATA%\Voidlingpelago.
+--
 -- Developer tools to find what game_hooks.lua has to hook, since Voidling Bound ships without an SDK.
 --
 -- Scan (F6): lists every loaded game class whose name matches KEYWORDS, with its functions and properties,
@@ -529,14 +532,16 @@ function M.on_map_loaded(world)
     trace_line("Map loaded: " .. path)
 end
 
-function M.init(config, exchange_dir, logger)
+-- F9 sends a "Faint Signal completed" event to test the client connection. It sends a real check to the
+-- multiworld, so only use it in a test room.
+function M.init(exchange_dir, logger, events)
     out_dir, log = exchange_dir, logger
-    RegisterKeyBind(config.scan_key, function() ExecuteInGameThread(M.scan) end)
-    RegisterKeyBind(config.trace_key, function() ExecuteInGameThread(M.toggle_trace) end)
-    -- Older config.lua files don't have state_key yet.
-    RegisterKeyBind(config.state_key or Key.F8, function() ExecuteInGameThread(M.dump_state) end)
-    RegisterKeyBind(config.gene_key or Key.F5, function() ExecuteInGameThread(M.dump_genes) end)
-    log("Discovery tools enabled: F5 gene dump, F6 scan, F7 trace, F8 state dump")
+    RegisterKeyBind(Key.F5, function() ExecuteInGameThread(M.dump_genes) end)
+    RegisterKeyBind(Key.F6, function() ExecuteInGameThread(M.scan) end)
+    RegisterKeyBind(Key.F7, function() ExecuteInGameThread(M.toggle_trace) end)
+    RegisterKeyBind(Key.F8, function() ExecuteInGameThread(M.dump_state) end)
+    RegisterKeyBind(Key.F9, function() events.mission_complete("Faint Signal") end)
+    log("Developer tools loaded: F5 gene dump, F6 scan, F7 trace, F8 state dump, F9 test check")
 end
 
 return M

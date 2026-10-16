@@ -12,7 +12,7 @@
 local M = {}
 
 -- Star objective order as the wiki lists it: complete, find mutagens, find golden egg(s), finish in time.
--- Verify with the F8 state dump after a mission where only some stars were earned.
+-- Not confirmed in game yet: the developer tools' state dump shows the stars after a mission with only some.
 M.STAR_MUTAGENS = 1
 M.STAR_GOLDEN_EGGS = 2
 

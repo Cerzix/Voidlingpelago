@@ -8,6 +8,8 @@ import tempfile
 import lupa
 
 SCRIPTS = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..", "Voidlingpelago", "Scripts")
+# The developer tools aren't part of the released mod, the tests load them from here like a dev install would.
+DEVTOOLS = os.path.join(os.path.dirname(__file__), "..", "devtools")
 appdata = tempfile.mkdtemp()
 os.environ["APPDATA"] = appdata
 exchange = os.path.join(appdata, "Voidlingpelago")
@@ -213,7 +215,7 @@ end
 
 lua = lupa.LuaRuntime(unpack_returned_tuples=True)
 lua.execute(STUBS)
-lua.execute(f'package.path = [[{SCRIPTS}]] .. "/?.lua;" .. package.path')
+lua.execute(f'package.path = [[{SCRIPTS}]] .. "/?.lua;" .. [[{DEVTOOLS}]] .. "/?.lua;" .. package.path')
 lua.execute(open(os.path.join(SCRIPTS, "main.lua"), encoding="utf-8").read())
 poll = lua.globals().loops[1]
 results = []
@@ -250,7 +252,7 @@ check("resources stored in the inventory", list(lua.globals().stored.values()) =
 # Restart: a fresh Lua state must not re-grant items, but must rebuild unlocks
 lua2 = lupa.LuaRuntime(unpack_returned_tuples=True)
 lua2.execute(STUBS)
-lua2.execute(f'package.path = [[{SCRIPTS}]] .. "/?.lua;" .. package.path')
+lua2.execute(f'package.path = [[{SCRIPTS}]] .. "/?.lua;" .. [[{DEVTOOLS}]] .. "/?.lua;" .. package.path')
 lua2.execute(open(os.path.join(SCRIPTS, "main.lua"), encoding="utf-8").read())
 write("items.txt", read("items.txt") + "3 840004 Abyss Access\n")
 lua2.globals().loops[1]()
@@ -278,7 +280,6 @@ lua.globals().hooks[failure]()
 check("a real mission failure sends a death", (read("events.txt") or "").splitlines() == ["death"])
 
 # Events
-check("mission_key replaces spaces", lua.eval('require("game_hooks").mission_key("Centennial Bloom")') == "Centennial_Bloom")
 
 # Discovery scan
 lua.globals().keybinds[117]()
@@ -392,6 +393,14 @@ check("state dump lists completed activities", "Completed activities (via Activi
 check("state dump reads text properties and only names arrays",
       "Name = Faint Signal" in state and "RandomLevels = <ArrayProperty>" in state and not lua.globals().array_touched)
 check("state dump lists wrangler level and abyss depth", "WranglerLevel: 4" in state and "Abyss depth: 7" in state)
+
+# The released mod has no developer tools: without discovery.lua no debug keys exist
+plain = lupa.LuaRuntime(unpack_returned_tuples=True)
+plain.execute(STUBS)
+plain.execute(f'package.path = [[{SCRIPTS}]] .. "/?.lua;" .. package.path')
+plain.execute(open(os.path.join(SCRIPTS, "main.lua"), encoding="utf-8").read())
+check("released mod registers no debug keys", len(list(plain.globals().keybinds.keys())) == 0)
+check("dev install has F5 to F9", sorted(lua.globals().keybinds.keys()) == [116, 117, 118, 119, 120])
 
 print(f"\n{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

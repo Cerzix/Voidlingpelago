@@ -2,7 +2,6 @@
 -- Talks to the Voidling Bound Client (apworld/voidling_bound/Client.py) through text files, see the
 -- protocol description at the top of Client.py. Everything game specific is in game_hooks.lua.
 
-local config = require("config")
 local hooks = require("game_hooks")
 
 local SEP = package.config:sub(1, 1) -- "\" on Windows, "/" elsewhere (the CI tests run on Linux)
@@ -140,20 +139,17 @@ end
 ensure_exchange_dir()
 hooks.init(events, log)
 
-local discovery = config.discovery and require("discovery")
-if discovery then discovery.init(config, EXCHANGE_DIR, log) end
+-- Developer tools (mod/devtools in the repository) only load when discovery.lua was copied next to this file.
+local discovery = nil
+if package.searchpath("discovery", package.path) then
+    discovery = require("discovery")
+    discovery.init(EXCHANGE_DIR, log, events)
+end
 
 RegisterLoadMapPostHook(function(engine, world)
     require("tracker").reset()
     if discovery then discovery.on_map_loaded(world:get()) end
 end)
-
-if config.debug_events then
-    RegisterKeyBind(config.debug_key, function()
-        events.mission_complete(hooks.mission_key("Faint Signal"))
-    end)
-    log("Debug events enabled: F9 sends a Faint Signal check")
-end
 
 local function poll()
     local ok, err = pcall(function()
@@ -166,7 +162,7 @@ local function poll()
 end
 
 -- All Lua must run on the game thread: UE4SS's Lua state isn't thread safe, and a LoopAsync thread running next
--- to a long F5/F8 dump on the game thread corrupted it and crashed the game. LoopInGameThreadWithDelay (UE4SS
+-- to a long developer tools dump on the game thread corrupted it and crashed the game. LoopInGameThreadWithDelay (UE4SS
 -- 3.0.1 experimental and newer) runs the timer itself on the game thread, LoopAsync is the fallback for older builds.
 if LoopInGameThreadWithDelay then
     LoopInGameThreadWithDelay(POLL_MS, poll)

@@ -62,7 +62,7 @@ local function read_egg_types()
     return types
 end
 
--- For the F8 state dump.
+-- For the developer tools' state dump.
 function M.egg_types()
     return read_egg_types()
 end

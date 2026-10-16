@@ -45,11 +45,6 @@ local FAILURE_FUNCTION = "/Script/VoidlingWrangler.ActivitySubsystem:TriggerActi
 -- A DeathLink we apply fails the mission, which must not be sent back out as our own death.
 local ignore_failure_until = 0
 
--- Turns a mission name into an event key, used by the F9 debug key.
-function M.mission_key(mission_name)
-    return (mission_name:gsub(" ", "_"))
-end
-
 function M.init(event_api, logger)
     events, log = event_api, logger
 
