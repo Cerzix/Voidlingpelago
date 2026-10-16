@@ -11,10 +11,13 @@
 
 local M = {}
 
+-- The game calls missions "Activities" internally (AActivity, ACleanseActivity, ASurvivalActivity,
+-- UActivitySubsystem), and the planet select is the AGalacticMapManager. Names found in the game's exe.
 local KEYWORDS = {
-    "Mission", "Objective", "Abyss", "Wrangler", "Rank", "Egg", "Mutagen", "Research", "Catalyzer", "Reward",
-    "Quest", "Planet", "Voidling", "Lesion", "Cleans", "Survival", "Star", "Collect", "Unlock", "Progress",
-    "Save", "Inventory", "Currency", "Hatch", "Death", "Revive", "Health",
+    "Activity", "Mission", "Objective", "Abyss", "Wrangler", "Rank", "Egg", "Mutagen", "Research", "Catalyzer",
+    "Reward", "Quest", "Planet", "Galactic", "Voidling", "Lesion", "Corruption", "Cleans", "Survival", "Star",
+    "Collect", "Unlock", "Progress", "Save", "Inventory", "Currency", "Resource", "Shop", "Hatch", "Breeding",
+    "GameFlow", "Creature", "Squad", "Defeat", "Death", "Revive", "Health", "VW",
 }
 
 -- Engine and plugin modules, their classes are never what we're looking for.

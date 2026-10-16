@@ -3,6 +3,16 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-10-16
+
+### Fixed
+- The discovery tools now find the classes that matter. The game calls missions "Activities" internally
+  (AActivity, ACleanseActivity, ASurvivalActivity, UActivitySubsystem), and the old keywords missed them, the
+  galactic map (planet select), corruption, hatchery, breeding, shop and the VW game mode and controller
+
+### Added
+- `game_hooks.lua` lists the hook candidates found in the game's reflection data for each TODO
+
 ## [2.0.0] - 2026-10-16
 
 ### Changed
@@ -60,5 +70,6 @@ All notable changes to this project are documented here. The format follows
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.0.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.1
 [2.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.0
 [1.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v1.0.0

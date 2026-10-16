@@ -1,6 +1,17 @@
 -- Everything that touches Voidling Bound itself lives here.
 -- The game has no published SDK. Use the discovery tools (discovery.lua, F6 scan / F7 trace) to find the
 -- class and function behind each TODO below, then replace the TODO with a RegisterHook call.
+--
+-- Candidates from the reflection names in VoidlingWrangler-Win64-Shipping.exe (module /Script/VoidlingWrangler),
+-- which class owns each function still needs a scan to confirm:
+--   missions:  AActivity / ACleanseActivity / ASurvivalActivity, UActivitySubsystem, UActivityDataAsset,
+--              CompleteActivity, FinishActivity, ConfirmActivitySuccess, GetCurrentActivity, MissionComplete,
+--              bIsMainMission, StarObjectiveTexts, IsStarUnlocked, CollectibleClassesForObjective
+--   ranks:     GetWranglerLevel, WranglerLevelChanged (delegate)
+--   abyss:     UAbyssSubsystem, AbyssDepthCompleted, OnAbyssLevelFinished, GetAbyssLevel, IsInsideAbyss
+--   planets:   AGalacticMapManager, GalacticMapTravel, GetAllPlanets, GetCurrentPlanet, OnPlanetChanged
+--   rewards:   GiveMutagen, GiveResearchPoint, GiveRewards, AddEgg, AddRandomEgg, HatchEgg, GetRandomCatalyzer
+--   failure:   Defeat
 
 local M = {}
 local events, log
