@@ -21,14 +21,31 @@ from .Locations import MAX_ABYSS_DEPTH, MAX_WRANGLER_RANK, MISSIONS, abyss_depth
 GAME = "Voidling Bound"
 POLL_INTERVAL = 0.5
 
-# The mod reports missions by a key without spaces: the mission name with spaces replaced by underscores
-# (e.g. "Centennial_Bloom"). Once the game's internal mission IDs are known (mod discovery dump), map them
-# here so the mod can pass them through unchanged.
+# The mod reports missions by the game's activity asset name. The game names its data assets after their
+# title (e.g. the quest "Cracking the Future" is DA_Quest_CrackingtheFuture_Demo), so asset names are matched
+# to missions by comparing letters and digits only. Assets that don't follow that pattern go in MISSION_KEYS.
 MISSION_KEYS: Dict[str, str] = {}
-MISSION_BY_KEY: Dict[str, str] = {
-    **{mission.name.replace(" ", "_"): mission.name for mission in MISSIONS},
-    **MISSION_KEYS,
-}
+ASSET_PREFIXES = ("da_activity_", "da_mission_", "da_")
+ASSET_SUFFIXES = ("_demo",)
+
+
+def normalize_key(key: str) -> str:
+    key = key.lower()
+    for prefix in ASSET_PREFIXES:
+        if key.startswith(prefix):
+            key = key[len(prefix):]
+            break
+    for suffix in ASSET_SUFFIXES:
+        if key.endswith(suffix):
+            key = key[:-len(suffix)]
+    return "".join(char for char in key if char.isalnum())
+
+
+MISSION_BY_NORMALIZED_KEY: Dict[str, str] = {normalize_key(mission.name): mission.name for mission in MISSIONS}
+
+
+def mission_for_key(key: str) -> Optional[str]:
+    return MISSION_KEYS.get(key) or MISSION_BY_NORMALIZED_KEY.get(normalize_key(key))
 
 
 def default_exchange_dir() -> str:
@@ -54,6 +71,7 @@ class VoidlingContext(CommonContext):
         self.events_read = 0
         self.items_written = -1
         self.goal_sent = False
+        self.unknown_mission_keys: Set[str] = set()
         os.makedirs(self.exchange_dir, exist_ok=True)
 
     def path(self, name: str) -> str:
@@ -66,7 +84,10 @@ class VoidlingContext(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
-        if cmd == "Connected":
+        if cmd == "RoomInfo":
+            # CommonContext doesn't keep the seed name, but the session key the mod relies on needs it.
+            self.seed_name = args["seed_name"]
+        elif cmd == "Connected":
             self.slot_data = args.get("slot_data", {})
             self.events_read = 0
             self.items_written = -1
@@ -122,9 +143,12 @@ class VoidlingContext(CommonContext):
     def locations_for_event(self, event: str) -> Set[str]:
         kind, _, arg = event.partition(" ")
         if kind in ("mission_complete", "golden_eggs", "bonus_mutagens"):
-            mission = MISSION_BY_KEY.get(arg)
+            mission = mission_for_key(arg)
             if mission is None:
-                logger.warning(f"Unknown mission key from the mod: {arg}")
+                # Tutorial and demo-only activities aren't locations, so this is informational.
+                if arg not in self.unknown_mission_keys:
+                    self.unknown_mission_keys.add(arg)
+                    logger.info(f"Activity {arg} isn't an Archipelago location (add it to MISSION_KEYS if it should be)")
                 return set()
             return {{"mission_complete": mission, "golden_eggs": golden_eggs_name(mission),
                      "bonus_mutagens": bonus_mutagens_name(mission)}[kind]}
