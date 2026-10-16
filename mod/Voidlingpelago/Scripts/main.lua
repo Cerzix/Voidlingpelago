@@ -60,6 +60,7 @@ local events = {
     bonus_mutagens = function(mission_key) send_event("bonus_mutagens " .. mission_key) end,
     wrangler_rank = function(rank) send_event("wrangler_rank " .. math.floor(rank)) end,
     abyss_depth = function(depth) send_event("abyss_depth " .. math.floor(depth)) end,
+    gene = function(asset_name) send_event("gene " .. asset_name) end,
     death = function() send_event("death") end,
 }
 
@@ -154,18 +155,26 @@ if config.debug_events then
     log("Debug events enabled: F9 sends a Faint Signal check")
 end
 
-LoopAsync(POLL_MS, function()
-    -- File IO is fine off the game thread, touching UObjects is not.
-    ExecuteInGameThread(function()
-        local ok, err = pcall(function()
-            poll_slot_data()
-            poll_items()
-            poll_deathlink()
-            hooks.poll()
-        end)
-        if not ok then log("Poll error: " .. tostring(err)) end
+local function poll()
+    local ok, err = pcall(function()
+        poll_slot_data()
+        poll_items()
+        poll_deathlink()
+        hooks.poll()
     end)
-    return false -- keep looping
-end)
+    if not ok then log("Poll error: " .. tostring(err)) end
+end
+
+-- All Lua must run on the game thread: UE4SS's Lua state isn't thread safe, and a LoopAsync thread running next
+-- to a long F5/F8 dump on the game thread corrupted it and crashed the game. LoopInGameThreadWithDelay (UE4SS
+-- 3.0.1 experimental and newer) runs the timer itself on the game thread, LoopAsync is the fallback for older builds.
+if LoopInGameThreadWithDelay then
+    LoopInGameThreadWithDelay(POLL_MS, poll)
+else
+    LoopAsync(POLL_MS, function()
+        ExecuteInGameThread(poll)
+        return false -- keep looping
+    end)
+end
 
 log("Loaded, exchange folder: " .. EXCHANGE_DIR)

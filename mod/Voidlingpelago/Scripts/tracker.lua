@@ -16,8 +16,17 @@ local M = {}
 M.STAR_MUTAGENS = 1
 M.STAR_GOLDEN_EGGS = 2
 
+M.GENE_CLASSES = {
+    "GeneDataAsset", "ColorGeneDataAsset", "EyeGeneDataAsset", "PatternGeneDataAsset", "SizeGeneDataAsset",
+    "ElementGeneDataAsset", "PerkGeneDataAsset", "AbilityVariantGeneDataAsset", "CosmeticModuleDataAsset",
+}
+local GENE_POLL_SECONDS = 3
+local GENE_LIST_SECONDS = 60
+
 local reported_missions = {}
 local reported_stars = {}
+local reported_genes = {}
+local last_gene_poll = -math.huge
 local reported_rank = 0
 local reported_depth = 0
 
@@ -126,13 +135,24 @@ function M.is_star_unlocked(asset, index)
 end
 
 -- GetWranglerLevel has an out parameter (NextLevelRatio), UE4SS fills a table passed in its place.
+local wrangler_calls = {
+    function(progression) return progression:GetWranglerLevel({}) end,
+    function(progression) return progression:GetWranglerLevel() end,
+}
+local wrangler_call = nil -- the variant that worked, so failing calls (which throw) happen at most once
+
 function M.wrangler_level(progression)
-    for _, call in ipairs({
-        function() return progression:GetWranglerLevel({}) end,
-        function() return progression:GetWranglerLevel() end,
-    }) do
-        local ok, level = pcall(call)
+    if wrangler_call then
+        local ok, level = pcall(wrangler_call, progression)
         if ok and type(level) == "number" then return level end
+        return nil
+    end
+    for _, call in ipairs(wrangler_calls) do
+        local ok, level = pcall(call, progression)
+        if ok and type(level) == "number" then
+            wrangler_call = call
+            return level
+        end
     end
     return nil
 end
@@ -146,6 +166,38 @@ function M.abyss_depth()
     end)
     if ok and type(depth) == "number" then return depth end
     return nil
+end
+
+-- All loaded gene assets (also modules and perks), searched again at most every GENE_LIST_SECONDS.
+-- ProgressionSubsystem.UnlockedDataAssets would list unlocked genes directly, but its soft pointers can't be read
+-- with UE4SS 3.0.1, and probing them throws an error per entry, which can crash UE4SS's error handler.
+function M.gene_assets()
+    if cache.genes and os.time() - cache.genes.searched < GENE_LIST_SECONDS then return cache.genes.list end
+    local list, seen = {}, {}
+    for _, class_name in ipairs(M.GENE_CLASSES) do
+        local found, assets = pcall(FindAllOf, class_name)
+        for _, asset in ipairs((found and assets) or {}) do
+            local name = M.name_of(asset)
+            if not seen[name] and not name:find("^Default__") then
+                seen[name] = true
+                list[#list + 1] = { asset = asset, name = name }
+            end
+        end
+    end
+    cache.genes = { list = list, searched = os.time() }
+    return list
+end
+
+-- Asset names of the unlocked genes, leaving out the ones in skip.
+function M.unlocked_genes(progression, skip)
+    local genes = {}
+    for _, gene in ipairs(M.gene_assets()) do
+        if not (skip and skip[gene.name]) then
+            local checked, unlocked = pcall(function() return progression:IsDataUnlocked(gene.asset) end)
+            if checked and unlocked == true then genes[#genes + 1] = gene.name end
+        end
+    end
+    return genes
 end
 
 -- Called from the poll loop on the game thread.
@@ -173,6 +225,14 @@ function M.poll(events)
     if level and level > reported_rank then
         reported_rank = level
         events.wrangler_rank(level)
+    end
+
+    if os.time() - last_gene_poll >= GENE_POLL_SECONDS then
+        last_gene_poll = os.time()
+        for _, gene in ipairs(M.unlocked_genes(progression, reported_genes)) do
+            reported_genes[gene] = true
+            events.gene(gene)
+        end
     end
 
     local depth = M.abyss_depth()

@@ -7,6 +7,8 @@ return {
     scan_key = Key.F6,
     trace_key = Key.F7,
     state_key = Key.F8,
+    -- F5 writes genes.txt, every gene in the game, for tools/import_genes.py.
+    gene_key = Key.F5,
 
     -- F9 sends a "Faint Signal completed" event, to test the client connection without the real hooks.
     -- This sends a real check to the multiworld, so only enable it in a test room.

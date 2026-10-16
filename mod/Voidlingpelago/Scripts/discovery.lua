@@ -164,41 +164,68 @@ local DATA_ASSET_CLASSES = {
     "SpeciesDataAsset",
 }
 
-local function describe_value(value)
-    local kind = type(value)
-    if kind == "nil" then return "nil" end
-    if kind == "number" or kind == "boolean" or kind == "string" then return tostring(value) end
-    return safe(function() return value:ToString() end, nil)
-        or safe(function() return object_path(value) end, nil)
-        or kind
+-- Values are only read in ways their type supports. Calling a method a UE4SS value doesn't have (say :ToString() on
+-- an array) throws an error, and UE4SS's error handler has crashed the game on such errors, even inside pcall.
+local READERS = {
+    plain = function(value) return tostring(value) end,
+    object = function(value) return object_path(value) end,
+    text = function(value) return value:ToString() end, -- FString, FName, FText
+}
+
+local function describe_value(value, kind)
+    local lua_type = type(value)
+    if lua_type == "nil" then return "nil" end
+    if lua_type == "number" or lua_type == "boolean" or lua_type == "string" then return tostring(value) end
+    local reader = READERS[kind or "object"]
+    if not reader then return "<" .. kind .. ">" end
+    return safe(function() return reader(value) end, "?")
 end
 
-local function dump_container(lines, label, container)
-    local entries = {}
+-- kinds: how to read keys (and values for maps), "count" only counts the entries.
+local function dump_container(lines, label, container, key_kind, value_kind)
+    local entries, count = {}, 0
     local ok = pcall(function()
         container:ForEach(function(a, b)
-            local key = describe_value(safe(function() return a:get() end, a))
-            if b ~= nil then
-                key = key .. " = " .. describe_value(safe(function() return b:get() end, b))
+            count = count + 1
+            if key_kind ~= "count" then
+                local key = describe_value(safe(function() return a:get() end, a), key_kind)
+                if b ~= nil and value_kind then
+                    key = key .. " = " .. describe_value(safe(function() return b:get() end, b), value_kind)
+                end
+                entries[#entries + 1] = key
             end
-            entries[#entries + 1] = key
         end)
     end)
     if not ok then
         lines[#lines + 1] = "  " .. label .. ": <not iterable with this UE4SS build>"
         return
     end
-    lines[#lines + 1] = "  " .. label .. ": " .. #entries .. " entries"
+    lines[#lines + 1] = "  " .. label .. ": " .. count .. " entries"
     for _, entry in ipairs(entries) do lines[#lines + 1] = "    " .. entry end
 end
+
+-- Property type -> how to read it. Containers and structs are only named, not read.
+local PROPERTY_KINDS = {
+    BoolProperty = "plain", IntProperty = "plain", Int64Property = "plain", FloatProperty = "plain",
+    DoubleProperty = "plain", ByteProperty = "plain", EnumProperty = "plain", UInt32Property = "plain",
+    StrProperty = "text", NameProperty = "text", TextProperty = "text",
+    ObjectProperty = "object", ClassProperty = "object",
+}
 
 -- Simple property values of an object, so data assets show their display names, planets, rewards, ...
 local function dump_properties(lines, obj)
     safe(function()
         obj:GetClass():ForEachProperty(function(prop)
             local name = short_name(prop)
-            local value = safe(function() return obj[name] end, nil)
-            lines[#lines + 1] = "      " .. name .. " = " .. describe_value(value)
+            local prop_type = safe(function() return prop:GetClass():GetFName():ToString() end, "?")
+            local kind = PROPERTY_KINDS[prop_type]
+            local shown
+            if kind then
+                shown = describe_value(safe(function() return obj[name] end, nil), kind)
+            else
+                shown = "<" .. prop_type .. ">"
+            end
+            lines[#lines + 1] = "      " .. name .. " = " .. shown
         end)
     end)
 end
@@ -215,10 +242,13 @@ function M.dump_state()
         local names = {}
         for _, activity in ipairs(done) do names[#names + 1] = activity.name end
         lines[#lines + 1] = "  Completed activities (via " .. source .. "): " .. table.concat(names, ", ")
-        dump_container(lines, "ActivitiesTimeCompletion", progression.ActivitiesTimeCompletion)
-        dump_container(lines, "UnlockedDataAssets", progression.UnlockedDataAssets)
-        dump_container(lines, "CollectedActors", progression.CollectedActors)
-        dump_container(lines, "ProgressionVariablesCounter", progression.ProgressionVariablesCounter)
+        local genes = tracker.unlocked_genes(progression)
+        lines[#lines + 1] = "  Loaded gene assets: " .. #tracker.gene_assets() .. ", unlocked: " .. #genes .. "  "
+            .. table.concat(genes, ", ")
+        dump_container(lines, "ActivitiesTimeCompletion", progression.ActivitiesTimeCompletion, "object", "plain")
+        dump_container(lines, "UnlockedDataAssets", progression.UnlockedDataAssets, "count")
+        dump_container(lines, "CollectedActors", progression.CollectedActors, "count")
+        dump_container(lines, "ProgressionVariablesCounter", progression.ProgressionVariablesCounter, "text", "plain")
     end
     lines[#lines + 1] = "Abyss depth: " .. tostring(tracker.abyss_depth())
     local egg_types = safe(function() return require("rewards").egg_types() end, nil)
@@ -230,8 +260,8 @@ function M.dump_state()
     local inventory = safe(function() return FindFirstOf("PlayerProgression").ResourcesInventory end, nil)
     lines[#lines + 1] = "ResourcesInventory: " .. (inventory and object_path(inventory) or "not found")
     if inventory then
-        dump_container(lines, "CollectedResources", inventory.CollectedResources)
-        dump_container(lines, "Eggs", inventory.Eggs)
+        dump_container(lines, "CollectedResources", inventory.CollectedResources, "object", "plain")
+        dump_container(lines, "Eggs", inventory.Eggs, "count")
     end
     lines[#lines + 1] = ""
 
@@ -272,6 +302,125 @@ function M.dump_state()
     f:write(table.concat(lines, "\n") .. "\n")
     f:close()
     log("State dump written to " .. out_dir .. "state.txt")
+end
+
+-- Gene dump ----------------------------------------------------------------------------------------
+-- F5: every gene in the game, for tools/import_genes.py. The Asset Registry knows all assets, also the ones
+-- that aren't loaded; genes that are only found there get loaded to read their name. Loaded genes are added
+-- too, in case the Asset Registry can't be queried from Lua.
+
+local CREATURES_PATH = "/Game/Data/Creatures"
+
+local function registry_assets()
+    local found = {}
+    local ok, err = pcall(function()
+        local helpers = StaticFindObject("/Script/AssetRegistry.Default__AssetRegistryHelpers")
+        local registry = helpers:GetAssetRegistry()
+        local out = {}
+        registry:GetAssetsByPath(FName(CREATURES_PATH), out, true, false)
+        for _, data in pairs(out) do
+            local asset = safe(function() return data:get() end, data)
+            local package = asset.PackageName:ToString()
+            local name = asset.AssetName:ToString()
+            found[#found + 1] = package .. "." .. name
+        end
+    end)
+    if not ok then log("Asset Registry query failed: " .. tostring(err)) end
+    return found
+end
+
+-- Data assets in a species' Genes, Perk or Perks folder: colors, eyes, patterns, ability variants, modules, perks.
+-- Textures and materials live there too, which is why only "DA_" assets count and the dump checks the gene name.
+local function is_gene_path(path, name)
+    if not name:find("^DA_") then return false end
+    return path:find("/Genes/", 1, true) ~= nil or path:find("/Perks?/") ~= nil
+end
+
+local function species_code(path)
+    return path:match(CREATURES_PATH .. "/([^/]+)/") or ""
+end
+
+local function load_object(path)
+    local obj = StaticFindObject(path)
+    if obj and obj:IsValid() then return obj end
+    pcall(LoadAsset, path)
+    obj = StaticFindObject(path)
+    if obj and obj:IsValid() then return obj end
+    return nil
+end
+
+function M.dump_genes()
+    local tracker = require("tracker")
+    local genes = {} -- path -> object or false (not loadable)
+    local species_names = {} -- species code -> display name
+
+    local registry = registry_assets()
+    local from_registry = 0
+    for _, path in ipairs(registry) do
+        local name = path:match("([^%.]+)$")
+        if is_gene_path(path, name) then
+            genes[path] = false
+            from_registry = from_registry + 1
+        elseif name:find("Species") then
+            local species = load_object(path)
+            local display = species and safe(function() return species.SpeciesName:ToString() end, nil)
+            if display and display ~= "" then species_names[species_code(path)] = display end
+        end
+    end
+
+    local from_loaded = 0
+    for _, class_name in ipairs(tracker.GENE_CLASSES) do
+        for _, obj in ipairs(safe(function() return FindAllOf(class_name) end, {}) or {}) do
+            local path = object_path(obj)
+            if not short_name(obj):find("^Default__") and not genes[path] then
+                if genes[path] == nil then from_loaded = from_loaded + 1 end
+                genes[path] = obj
+            end
+        end
+    end
+    for _, obj in ipairs(safe(function() return FindAllOf("SpeciesDataAsset") end, {}) or {}) do
+        local display = safe(function() return obj.SpeciesName:ToString() end, nil)
+        local code = species_code(object_path(obj))
+        if display and display ~= "" and code ~= "" then species_names[code] = display end
+    end
+
+    local lines = { "# Voidlingpelago gene dump, " .. os.date("%Y-%m-%d %H:%M:%S")
+        .. ", Asset Registry: " .. from_registry .. ", only loaded: " .. from_loaded,
+        "# asset path\tgene class\tgene name\tspecies code\tspecies name\tcollectible" }
+    local paths = {}
+    for path in pairs(genes) do paths[#paths + 1] = path end
+    table.sort(paths)
+    local unreadable, skipped = 0, 0
+    for _, path in ipairs(paths) do
+        local obj = genes[path] or load_object(path)
+        local class_name, gene_name, collectible = "", "", ""
+        if obj then
+            class_name = safe(function() return short_name(obj:GetClass()) end, "")
+            gene_name = safe(function() return obj.GeneName:ToString() end, "")
+            -- Genes that can't be collected would be impossible checks, the import skips them.
+            local can_collect = safe(function() return obj:IsCollectible() end, nil)
+            collectible = type(can_collect) == "boolean" and tostring(can_collect) or ""
+        else
+            unreadable = unreadable + 1
+        end
+        local code = species_code(path)
+        -- A loaded asset without a gene name isn't a gene, just a data asset that lives in a Genes folder.
+        if not obj or gene_name ~= "" then
+            lines[#lines + 1] = table.concat({ path, class_name, gene_name, code, species_names[code] or "", collectible }, "\t")
+        else
+            skipped = skipped + 1
+        end
+    end
+
+    local f = io.open(out_dir .. "genes.txt", "w")
+    if not f then
+        log("Could not write genes.txt")
+        return
+    end
+    f:write(table.concat(lines, "\n") .. "\n")
+    f:close()
+    log(string.format("Gene dump: %d genes (%d from the Asset Registry, %d only loaded, %d unreadable, %d not genes) in %sgenes.txt",
+        #paths - skipped, from_registry, from_loaded, unreadable, skipped, out_dir))
 end
 
 -- Trace --------------------------------------------------------------------------------------------
@@ -365,7 +514,8 @@ function M.init(config, exchange_dir, logger)
     RegisterKeyBind(config.trace_key, function() ExecuteInGameThread(M.toggle_trace) end)
     -- Older config.lua files don't have state_key yet.
     RegisterKeyBind(config.state_key or Key.F8, function() ExecuteInGameThread(M.dump_state) end)
-    log("Discovery tools enabled: F6 scan, F7 trace, F8 state dump")
+    RegisterKeyBind(config.gene_key or Key.F5, function() ExecuteInGameThread(M.dump_genes) end)
+    log("Discovery tools enabled: F5 gene dump, F6 scan, F7 trace, F8 state dump")
 end
 
 return M
