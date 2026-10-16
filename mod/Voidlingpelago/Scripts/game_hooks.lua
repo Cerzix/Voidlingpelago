@@ -92,7 +92,10 @@ local function find_resource(words)
         resource_assets = { list = (ok and assets) or {}, searched = os.time() }
     end
     for _, asset in ipairs(resource_assets.list) do
-        local ok, name = pcall(function() return asset.ResourceName:ToString():lower() end)
+        -- The list is cached, so an asset may have been unloaded since: never use an invalid one.
+        local valid_asset = pcall(function() assert(asset:IsValid()) end)
+        local ok, name = false, nil
+        if valid_asset then ok, name = pcall(function() return asset.ResourceName:ToString():lower() end) end
         if ok then
             local matches = true
             for _, word in ipairs(words) do

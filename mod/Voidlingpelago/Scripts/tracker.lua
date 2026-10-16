@@ -118,7 +118,8 @@ function M.completed_activities(progression)
         cache.activities = { list = (found and assets) or {}, searched = os.time() }
     end
     for _, asset in ipairs(cache.activities.list) do
-        local done, time = pcall(function() return progression:GetActivityTimeCompletion(asset) end)
+        local done, time = false, nil
+        if valid(asset) then done, time = pcall(function() return progression:GetActivityTimeCompletion(asset) end) end
         if done and type(time) == "number" and time > 0 then
             activities[#activities + 1] = { asset = asset, name = M.activity_name(asset) }
         end
@@ -172,7 +173,18 @@ end
 -- ProgressionSubsystem.UnlockedDataAssets would list unlocked genes directly, but its soft pointers can't be read
 -- with UE4SS 3.0.1, and probing them throws an error per entry, which can crash UE4SS's error handler.
 function M.gene_assets()
-    if cache.genes and os.time() - cache.genes.searched < GENE_LIST_SECONDS then return cache.genes.list end
+    if cache.genes and os.time() - cache.genes.searched < GENE_LIST_SECONDS then
+        -- An unloaded or collected asset leaves a dangling object behind, and calling a game function on it
+        -- crashes. If any cached gene went invalid, search again.
+        local all_valid = true
+        for _, gene in ipairs(cache.genes.list) do
+            if not valid(gene.asset) then
+                all_valid = false
+                break
+            end
+        end
+        if all_valid then return cache.genes.list end
+    end
     local list, seen = {}, {}
     for _, class_name in ipairs(M.GENE_CLASSES) do
         local found, assets = pcall(FindAllOf, class_name)
@@ -192,7 +204,7 @@ end
 function M.unlocked_genes(progression, skip)
     local genes = {}
     for _, gene in ipairs(M.gene_assets()) do
-        if not (skip and skip[gene.name]) then
+        if not (skip and skip[gene.name]) and valid(gene.asset) then
             local checked, unlocked = pcall(function() return progression:IsDataUnlocked(gene.asset) end)
             if checked and unlocked == true then genes[#genes + 1] = gene.name end
         end

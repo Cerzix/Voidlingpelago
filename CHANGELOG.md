@@ -29,6 +29,11 @@ All notable changes to this project are documented here. The format follows
   unreadable `UnlockedDataAssets` set isn't probed anymore, and the working `GetWranglerLevel` call is remembered.
   Each such error went through the UE4SS error handler that crashed
 - "Save the Cauldrons" was named "Save the Cauldron" (as on the wiki), so it sent no check. Its ID is unchanged
+- F5 crashed the full game every time (beta 2): the dump called gene functions on objects that weren't genes,
+  such as the ability variant Blueprints in the gene folders, which crashes inside the game where Lua can't catch
+  it. The dump now only takes the game's gene name patterns and checks every object's class first. Cached game
+  objects (genes, resources, activities) are checked for validity before use, and F5 logs its progress to
+  UE4SS.log
 
 ## [2.2.0] - 2026-10-17
 

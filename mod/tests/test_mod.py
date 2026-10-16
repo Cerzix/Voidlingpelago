@@ -126,6 +126,8 @@ local function gene_object(path, class, name)
         GeneName = fname(name),
         GetClass = function() return { GetFName = function() return fname(class) end } end,
         IsCollectible = function() return name ~= "Huge" end,
+        IsClass = function() return false end,
+        IsA = function(self, class_path) return class_path == "/Script/VoidlingWrangler.GeneDataAsset" end,
     })
     gene.GetFullName = function() return class .. " " .. path end
     return gene
@@ -136,6 +138,16 @@ gene_files = {
     [G .. "Colors/DA_Gene_Color_RL01_03.DA_Gene_Color_RL01_03"] = { "ColorGeneDataAsset", "Crimson" },
     [G .. "Perks/DA_Gene_Perk_RL01_01.DA_Gene_Perk_RL01_01"] = { "PerkGeneDataAsset", "Thick Skin" },
 }
+-- Traps: a Blueprint and a module path that resolves to a non-gene object. Calling gene functions on them is
+-- what crashed the real game.
+gene_call_on_wrong_object = false
+local not_a_gene_path = G .. "Modules/RareModules/DA_RL01_RareModule_00.DA_RL01_RareModule_00"
+local not_a_gene = object("DA_RL01_RareModule_00", {
+    IsClass = function() return false end,
+    IsA = function() return false end,
+    IsCollectible = function() gene_call_on_wrong_object = true end,
+})
+not_a_gene.GeneName = setmetatable({}, { __index = function() gene_call_on_wrong_object = true end })
 loaded_assets = {}
 loaded_assets[G .. "Eyes/DA_Gene_Eye_RL01_00.DA_Gene_Eye_RL01_00"] = true
 function LoadAsset(path) loaded_assets[path] = true end
@@ -145,7 +157,8 @@ instances.SizeGeneDataAsset = { gene_object(G .. "Sizes/DA_Gene_Size_RL01_02.DA_
 local species_path = "/Game/Data/Creatures/RL01/DA_Species_RL01.DA_Species_RL01"
 local registry = {
     GetAssetsByPath = function(self, path, out, recursive, on_disk_only)
-        local all = { species_path }
+        local all = { species_path, not_a_gene_path,
+                      G .. "AbilityVariants/DA_AV_RL01_A1.DA_AV_RL01_A1" }
         for gene_path in pairs(gene_files) do all[#all + 1] = gene_path end
         for _, full in ipairs(all) do
             local package, name = full:match("^(.-)%.([^%.]+)$")
@@ -160,6 +173,8 @@ function StaticFindObject(path)
     if path == "/Script/VoidlingWrangler.Default__DNACatalyzerDefinition" then return catalyzer_cdo end
     if path == "/Script/AssetRegistry.Default__AssetRegistryHelpers" then return registry_helpers end
     if gene_files[path] and loaded_assets[path] then return gene_object(path, gene_files[path][1], gene_files[path][2]) end
+    if path == not_a_gene_path then return not_a_gene end
+    if path:find("DA_AV_RL01_A1", 1, true) then gene_call_on_wrong_object = true end
     if path == species_path and loaded_assets[path] then return object("DA_Species_RL01", { SpeciesName = fname("Kwipeck") }) end
     return nil
 end
@@ -367,6 +382,7 @@ dump = read("genes.txt") or ""
 check("gene dump has registry genes, loaded genes and species names",
       "/Game/Data/Creatures/RL01/Genes/Perks/DA_Gene_Perk_RL01_01.DA_Gene_Perk_RL01_01\tPerkGeneDataAsset\tThick Skin\tRL01\tKwipeck\ttrue" in dump
       and "DA_Gene_Size_RL01_02\tSizeGeneDataAsset\tHuge\tRL01\tKwipeck\tfalse" in dump)
+check("gene dump never calls gene functions on non-gene objects", not lua.globals().gene_call_on_wrong_object)
 check("gene dump lists every gene once", sum(1 for line in dump.splitlines() if not line.startswith("#")) == 4)
 
 # State dump (F8)

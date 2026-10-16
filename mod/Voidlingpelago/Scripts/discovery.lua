@@ -331,9 +331,23 @@ end
 
 -- Data assets in a species' Genes, Perk or Perks folder: colors, eyes, patterns, ability variants, modules, perks.
 -- Textures and materials live there too, which is why only "DA_" assets count and the dump checks the gene name.
+-- Only the asset name patterns the game uses for genes: DA_Gene_*, DA_Perk_* and DA_<species>_<tier>Module_NN.
+-- Other DA_ assets live in those folders too (e.g. the DA_AV_* ability variant Blueprints), and calling gene
+-- functions on them crashed the game.
 local function is_gene_path(path, name)
-    if not name:find("^DA_") then return false end
-    return path:find("/Genes/", 1, true) ~= nil or path:find("/Perks?/") ~= nil
+    if not (path:find("/Genes/", 1, true) or path:find("/Perks?/")) then return false end
+    return name:find("^DA_Gene_") ~= nil or name:find("^DA_Perk_") ~= nil or name:find("^DA_.*Module_%d+$") ~= nil
+end
+
+-- Game functions must only be called on real gene instances: a class, a default object or an object of another
+-- type makes the game read garbage, which crashes natively and can't be caught.
+local GENE_CLASS_PATH = "/Script/VoidlingWrangler.GeneDataAsset"
+
+local function is_gene_object(obj)
+    if not obj or not safe(function() return obj:IsValid() end, false) then return false end
+    if safe(function() return obj:IsClass() end, true) then return false end
+    if short_name(obj):find("^Default__") then return false end
+    return safe(function() return obj:IsA(GENE_CLASS_PATH) end, false) == true
 end
 
 local function species_code(path)
@@ -351,6 +365,7 @@ end
 
 function M.dump_genes()
     local tracker = require("tracker")
+    log("Gene dump started")
     local genes = {} -- path -> object or false (not loadable)
     local species_names = {} -- species code -> display name
 
@@ -368,11 +383,12 @@ function M.dump_genes()
         end
     end
 
+    log("Gene dump: " .. from_registry .. " genes in the Asset Registry, now adding loaded genes")
     local from_loaded = 0
     for _, class_name in ipairs(tracker.GENE_CLASSES) do
         for _, obj in ipairs(safe(function() return FindAllOf(class_name) end, {}) or {}) do
             local path = object_path(obj)
-            if not short_name(obj):find("^Default__") and not genes[path] then
+            if not genes[path] and is_gene_object(obj) then
                 if genes[path] == nil then from_loaded = from_loaded + 1 end
                 genes[path] = obj
             end
@@ -390,9 +406,12 @@ function M.dump_genes()
     local paths = {}
     for path in pairs(genes) do paths[#paths + 1] = path end
     table.sort(paths)
+    log("Gene dump: reading " .. #paths .. " genes")
     local unreadable, skipped = 0, 0
     for _, path in ipairs(paths) do
         local obj = genes[path] or load_object(path)
+        local not_a_gene = obj ~= nil and not is_gene_object(obj)
+        if not_a_gene then obj = nil end
         local class_name, gene_name, collectible = "", "", ""
         if obj then
             class_name = safe(function() return short_name(obj:GetClass()) end, "")
@@ -400,12 +419,12 @@ function M.dump_genes()
             -- Genes that can't be collected would be impossible checks, the import skips them.
             local can_collect = safe(function() return obj:IsCollectible() end, nil)
             collectible = type(can_collect) == "boolean" and tostring(can_collect) or ""
-        else
+        elseif not not_a_gene then
             unreadable = unreadable + 1
         end
         local code = species_code(path)
         -- A loaded asset without a gene name isn't a gene, just a data asset that lives in a Genes folder.
-        if not obj or gene_name ~= "" then
+        if not not_a_gene and (not obj or gene_name ~= "") then
             lines[#lines + 1] = table.concat({ path, class_name, gene_name, code, species_names[code] or "", collectible }, "\t")
         else
             skipped = skipped + 1
@@ -421,6 +440,8 @@ function M.dump_genes()
     f:close()
     log(string.format("Gene dump: %d genes (%d from the Asset Registry, %d only loaded, %d unreadable, %d not genes) in %sgenes.txt",
         #paths - skipped, from_registry, from_loaded, unreadable, skipped, out_dir))
+    -- Loading assets can let the garbage collector free objects the tracker still holds on to.
+    tracker.reset()
 end
 
 -- Trace --------------------------------------------------------------------------------------------
