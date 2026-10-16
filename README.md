@@ -37,8 +37,9 @@ Aulis). The goal is either End to the Unknown or a target Abyss depth.
 - [x] client <-> mod file protocol, item delivery that survives restarts, DeathLink plumbing
 - [x] discovery tools in the mod to find the game's classes and functions (F6 scan, F7 trace, F8 state dump)
 - [x] missions, golden egg / mutagen stars, Wrangler rank and Abyss depth are read from the game's state
-- [x] research points, mutagens and eggs are granted, DeathLink works both ways
-- [ ] planet gating, golden and species eggs, Catalyzers, ability points
+- [x] research points, mutagens, species / golden / random eggs and DNA Catalyzers are granted
+- [x] missions on locked planets are locked, DeathLink works both ways
+- [ ] everything above needs confirming in the real game, see the latest release notes
 
 ## Finding the hooks
 

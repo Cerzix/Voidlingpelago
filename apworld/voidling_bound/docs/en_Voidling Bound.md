@@ -4,7 +4,10 @@
 
 Access to Solum, Aulis and the Abyss is locked behind items. Completing missions, collecting every golden egg
 or bonus mutagen in a mission, ranking up as a Wrangler and reaching new Abyss depths send checks, and the items
-you get back are planet unlocks, Catalyzers, golden eggs, ability points, research points, mutagens and eggs.
+you get back are planet unlocks, DNA Catalyzers, golden and species eggs, research points and mutagens.
+
+Missions on a planet you haven't unlocked yet show a Wrangler level requirement of 99. The real requirement
+comes back as soon as the planet's access item arrives.
 
 ## What is the goal?
 

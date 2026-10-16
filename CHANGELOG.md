@@ -3,6 +3,28 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.2.0] - 2026-10-17
+
+### Added
+- Planet gating: missions on Solum, Aulis and in the Abyss stay locked until their Planet Access / Abyss
+  Access items arrive. Locked missions show a Wrangler level requirement of 99 in the mission select; the
+  real requirement comes back with the item. Only the loaded game data is changed, never the save. Which
+  mission belongs to which planet comes from the apworld (slot data `mission_regions`), so the game follows the
+  generator's logic
+- Species eggs give an egg of that species and Golden Egg gives a golden egg (`UVWCheatManager:AddEgg`). The
+  egg type is read from the game's `EEggType` enum and the class name format is found by checking the egg count,
+  with a random egg as fallback
+- DNA Catalyzer Bundle gives a random catalyzer (`UDNACatalyzerDefinition:GetRandomCatalyzer`)
+- New useful item Research Points (1500)
+- The F8 state dump lists species assets and the egg types
+
+### Changed
+- Ability Points are removed, the game has no such resource: ability upgrades are bought with research points.
+  Research Points (1500) takes their place in the item pool
+
+### Fixed
+- Planet unlocks from a previous seed carried over when connecting to another seed without restarting the game
+
 ## [2.1.0] - 2026-10-16
 
 The first version that does something in game. Class and function names come from the discovery scans
@@ -103,6 +125,7 @@ and the UE4SS type dump of the demo.
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.2.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.2.0
 [2.1.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.1.0
 [2.0.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.1
 [2.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.0
