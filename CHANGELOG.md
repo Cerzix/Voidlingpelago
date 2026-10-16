@@ -3,7 +3,7 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [2.0.0] - 2026-10-16
 
 ### Changed
 - **Breaking:** the placeholder missions are replaced by the game's real 27 missions from the Voidling Bound wiki,
@@ -26,6 +26,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 - The client no longer crashes when the mod reports a bonus objective for a mission that has none
+- The mod builds the exchange folder path with the platform's separator, which fixes the Linux CI tests
+
+### Known limitations
+- The in-game hooks in `game_hooks.lua` are still stubs: missions, ranks, Abyss depth, planet gating, resource
+  rewards and DeathLink kills aren't connected to the game yet. Use the F6/F7 discovery tools to find them
+- What you can test in game: the mod loading, the client connection, the discovery dumps, and with
+  `debug_events = true` in `config.lua` the F9 test check that travels all the way to the server
 
 ## [1.0.0] - 2026-10-16
 
@@ -53,4 +60,5 @@ All notable changes to this project are documented here. The format follows
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.0.0
 [1.0.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v1.0.0
