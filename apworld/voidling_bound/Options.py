@@ -46,6 +46,16 @@ class WranglerRankChecks(Range):
     default = 10
 
 
+class VariantChecks(Toggle):
+    """
+    Every Voidling variant you unlock (by hatching or evolving) sends a check, about 30 per species.
+    Variant checks only ever hold filler, never progression or useful items, so a variant that's hard to get never
+    blocks or holds back anyone's game.
+    """
+    display_name = "Variant Checks"
+    default = 1
+
+
 class GeneChecks(Toggle):
     """
     Every gene you unlock (by hatching, breeding or evolving) sends a check. That adds up to 1,042 checks.
@@ -73,6 +83,7 @@ class VoidlingBoundOptions(PerGameCommonOptions):
     abyss_check_interval: AbyssCheckInterval
     bonus_objectives: BonusObjectives
     wrangler_rank_checks: WranglerRankChecks
+    variant_checks: VariantChecks
     gene_checks: GeneChecks
     gene_types: GeneTypes
     death_link: DeathLink

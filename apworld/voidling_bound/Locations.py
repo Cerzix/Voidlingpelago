@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING, Dict, List, NamedTuple
 
 from BaseClasses import Location
 
-from .Genes import GENES, GENE_TYPES, gene_region
+from .Genes import GENES, GENE_TYPES, SPECIES_REGIONS, gene_region
+from .Variants import VARIANTS
 
 if TYPE_CHECKING:
     from . import VoidlingBoundWorld
@@ -104,6 +105,10 @@ for _depth in range(1, MAX_ABYSS_DEPTH + 1):
 # Genes use 845000+, assigned by tools/import_genes.py
 for _gene in GENES:
     location_table[_gene.name] = LocationData(_gene.code, gene_region(_gene))
+# Variants use 847000+, assigned by tools/import_variants.py. Like genes, a variant is reachable once its
+# species' eggs can drop.
+for _variant in VARIANTS:
+    location_table[_variant.name] = LocationData(_variant.code, SPECIES_REGIONS.get(_variant.species, AULIS))
 
 
 def abyss_depths(world: "VoidlingBoundWorld") -> List[int]:
@@ -123,6 +128,8 @@ def get_active_locations(world: "VoidlingBoundWorld") -> Dict[str, LocationData]
                 names += [golden_eggs_name(mission.name), bonus_mutagens_name(mission.name)]
     names += [wrangler_rank_name(rank) for rank in range(2, world.options.wrangler_rank_checks.value + 2)]
     names += [abyss_depth_name(depth) for depth in abyss_depths(world)]
+    if world.options.variant_checks:
+        names += [variant.name for variant in VARIANTS]
     if world.options.gene_checks:
         names += [gene.name for gene in GENES if gene.type in world.options.gene_types.value]
     return {name: location_table[name] for name in names}
@@ -135,6 +142,9 @@ location_name_groups: Dict[str, set] = {
     "Abyss Depths": {name for name in location_table if name.startswith("Abyss: Reach Depth")},
     **{planet: {name for name, data in location_table.items() if data.region == planet} for planet in PLANETS},
     **({"Genes": {gene.name for gene in GENES}} if GENES else {}),
+    **({"Variants": {variant.name for variant in VARIANTS}} if VARIANTS else {}),
+    **{f"{species} Variants": {variant.name for variant in VARIANTS if variant.species == species}
+       for species in {variant.species for variant in VARIANTS}},
     **{f"{gene_type} Genes": {gene.name for gene in GENES if gene.type == gene_type}
        for gene_type in GENE_TYPES if any(gene.type == gene_type for gene in GENES)},
     **{f"{species} Genes": {gene.name for gene in GENES if gene.species == species}

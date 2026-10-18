@@ -9,6 +9,7 @@ from .Items import VoidlingBoundItem, get_random_filler_item_name, item_name_gro
 from .Locations import (ABYSS, AULIS, FINAL_MISSION, MISSIONS, PLANETS, SOLUM, VIREO, VoidlingBoundLocation,
                         abyss_depths, get_active_locations, location_name_groups, location_table)
 from .Genes import GENES_BY_NAME
+from .Variants import VARIANTS_BY_NAME
 from .Options import Goal, VoidlingBoundOptions
 
 
@@ -63,8 +64,9 @@ class VoidlingBoundWorld(World):
         for name, data in get_active_locations(self).items():
             region = regions[data.region]
             location = VoidlingBoundLocation(self.player, name, data.code, region)
-            # Many genes come from random hatches, so gene checks only hold filler (Archipelago's excluded locations).
-            if name in GENES_BY_NAME:
+            # Genes and variants come from hatching, partly at random, so their checks only hold filler
+            # (Archipelago's excluded locations).
+            if name in GENES_BY_NAME or name in VARIANTS_BY_NAME:
                 location.progress_type = LocationProgressType.EXCLUDED
             region.locations.append(location)
 
@@ -99,8 +101,8 @@ class VoidlingBoundWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
-            **self.options.as_dict("goal", "abyss_goal_depth", "bonus_objectives", "wrangler_rank_checks", "gene_checks",
-                                   "death_link"),
+            **self.options.as_dict("goal", "abyss_goal_depth", "bonus_objectives", "wrangler_rank_checks",
+                                   "variant_checks", "gene_checks", "death_link"),
             "abyss_depths": abyss_depths(self),
             "final_mission": FINAL_MISSION,
             # The mod locks missions whose region isn't reachable yet.

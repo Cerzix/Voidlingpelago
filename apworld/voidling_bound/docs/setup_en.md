@@ -29,6 +29,8 @@ Besides the usual settings, Voidling Bound has these options:
 - `bonus_objectives`: checks for collecting all golden eggs and all bonus mutagens in a mission
 - `wrangler_rank_checks`: how many Wrangler rank-ups send a check
 - `abyss_goal_depth`, `abyss_check_interval`: Abyss depth checks
+- `variant_checks` (on by default): every Voidling variant you unlock (hatching or evolving) is a check, about 30
+  per species. These checks only ever hold filler, so a variant you can't get yet never blocks anyone
 - `gene_checks` (off by default): every gene you unlock is a check, up to 1,042. These checks only ever hold
   filler, so a gene that won't hatch never blocks anyone. `gene_types` picks which kinds count
 - `death_link`
@@ -44,8 +46,8 @@ Besides the usual settings, Voidling Bound has these options:
 
 - Missions on Solum, Aulis and in the Abyss stay locked until you receive their Planet Access or Abyss Access item.
   A locked mission shows a **Wrangler level requirement of 99**, the real requirement comes back with the item.
-- Completing missions, earning their golden egg and mutagen stars, ranking up, reaching new Abyss depths and, with
-  `gene_checks`, unlocking genes all send checks.
+- Completing missions, earning their golden egg and mutagen stars, ranking up, reaching new Abyss depths, unlocking
+  Voidling variants and, with `gene_checks`, unlocking genes all send checks.
 - Received research points and mutagens go straight into your inventory, eggs into your egg storage, DNA
   Catalyzers into your catalyzers.
 - With DeathLink, failing a mission sends a death, and a received death kills your active Voidling.

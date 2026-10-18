@@ -2,7 +2,7 @@
 # Bridges the Archipelago server and the UE4SS Lua mod through plain text files in the exchange folder:
 #   events.txt    mod -> client, one event per line, append only:
 #                   mission_complete <MissionKey> | golden_eggs <MissionKey> | bonus_mutagens <MissionKey>
-#                   wrangler_rank <N> | abyss_depth <N> | gene <GeneAssetName> | death
+#                   wrangler_rank <N> | abyss_depth <N> | gene <GeneAssetName> | variant <EvolutionAssetName> | death
 #   items.txt     client -> mod, first line "session <seed> <slot>", then "<index> <item id> <item name>" per item
 #   slot.txt      client -> mod, "key=value" lines from slot_data (lists as "a,b", dicts as "k=v|k=v")
 #   deathlink.txt client -> mod, exists while a DeathLink is waiting to be applied, the mod deletes it
@@ -16,6 +16,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus
 
 from .Genes import GENES_BY_ASSET
+from .Variants import VARIANTS_BY_ASSET
 from .Locations import MAX_ABYSS_DEPTH, MAX_WRANGLER_RANK, MISSIONS, abyss_depth_name, bonus_mutagens_name, \
     golden_eggs_name, location_table, wrangler_rank_name
 
@@ -163,6 +164,9 @@ class VoidlingContext(CommonContext):
             # Genes that aren't in data/genes.json yet (e.g. new in the full game) simply aren't locations.
             gene = GENES_BY_ASSET.get(arg)
             return {gene.name} if gene else set()
+        if kind == "variant":
+            variant = VARIANTS_BY_ASSET.get(arg)
+            return {variant.name} if variant else set()
         if kind == "death":
             if "DeathLink" in self.tags:
                 Utils.async_start(self.send_death("died in Voidling Bound."))
