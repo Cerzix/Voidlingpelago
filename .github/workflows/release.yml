@@ -56,7 +56,9 @@ jobs:
           python mod/tests/test_mod.py
 
       - name: Test the gene import tool
-        run: python tools/test_import_genes.py
+        run: |
+          python tools/test_import_genes.py
+          python tools/test_import_variants.py
 
   release:
     needs: [test, mod-test]
@@ -84,7 +86,10 @@ jobs:
           fi
 
       - name: Build release files
-        run: python build_release.py
+        run: |
+          python build_release.py
+          # Pre-releases are for testers, they also get the developer tools
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then cp mod/devtools/discovery.lua dist/; fi
 
       - name: Extract release notes from CHANGELOG.md
         run: |
@@ -107,3 +112,4 @@ jobs:
             dist/voidling_bound.apworld
             dist/Voidlingpelago.zip
             dist/Voidling Bound.yaml
+            dist/discovery.lua

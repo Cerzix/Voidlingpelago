@@ -26,6 +26,7 @@ The full protocol is described at the top of `apworld/voidling_bound/Client.py`.
 | All golden eggs / all bonus mutagens, on the 9 missions that have them | 18 | `bonus_objectives` |
 | Wrangler rank 2 - N | 0-20 | `wrangler_rank_checks` |
 | Abyss depth every X levels up to the goal depth | varies | `abyss_goal_depth`, `abyss_check_interval` |
+| Every unlocked Voidling variant (filler only) | about 30 per species | `variant_checks` (on by default) |
 | Every unlocked gene (filler only) | up to 1,042 | `gene_checks` (off by default), `gene_types` |
 
 Mission data comes from the [Voidling Bound wiki](https://voidlingbound.wiki.gg/wiki/Missions).
@@ -49,23 +50,24 @@ The released mod has no debug keys. For development, copy `mod/devtools/discover
 
 | Key | What it does |
 |---|---|
-| F5 | `genes.txt`: every gene in the game (Asset Registry plus loaded), for the gene list below |
+| F5 | `genes.txt` and `variants.txt`: every gene and every variant in the game, for the lists below |
 | F6 | `discovery.txt`: every loaded game class with a relevant name, with functions, parameters and properties |
 | F7 | starts/stops `trace.txt`: every call to those classes' functions, with object and arguments |
 | F8 | `state.txt`: the player's progress as the game stores it, and every loaded mission, planet, resource and species |
 | F9 | sends a "Faint Signal" check, to test the client connection (only in a test room) |
 
-### Updating the gene list
+### Updating the gene and variant lists
 
 1. In game with a save loaded and the developer tools installed, press **F5**.
-2. Run `python tools/import_genes.py "%APPDATA%\Voidlingpelago\genes.txt"`.
-3. Commit the changed `apworld/voidling_bound/data/genes.json`.
+2. Run `python tools/import_genes.py "%APPDATA%\Voidlingpelago\genes.txt"` and
+   `python tools/import_variants.py "%APPDATA%\Voidlingpelago\variants.txt"`.
+3. Commit the changed `apworld/voidling_bound/data/genes.json` and `variants.json`.
 
-Genes keep their ID across imports, so a dump from a newer game version only adds the new genes.
+Genes and variants keep their ID across imports, so a dump from a newer game version only adds the new ones.
 
 ## Testing
 
 - World: copy `apworld/voidling_bound` into an Archipelago source checkout's `worlds/` and run
   `python -m pytest worlds/voidling_bound/test test/general`.
 - Mod: `pip install lupa`, then `python mod/tests/test_mod.py` runs the Lua mod against stubbed UE4SS functions.
-- Gene import tool: `python tools/test_import_genes.py`.
+- Import tools: `python tools/test_import_genes.py` and `python tools/test_import_variants.py`.

@@ -3,6 +3,22 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [2.4.0] - 2026-10-18
+
+### Added
+- Variant checks: every Voidling variant you unlock (hatching or evolving) is a check, about 30 per species
+  (option `variant_checks`, on by default). Variants are the game's evolutions, which it unlocks like genes, so the
+  mod reports them with `IsDataUnlocked`. Like genes they only hold filler and are in logic once their species'
+  eggs can drop. A smaller alternative to the 1,042 gene checks, which stay available as an option
+- The developer tools' F5 also writes `variants.txt` with the game's creature names, and
+  `tools/import_variants.py` turns it into `data/variants.json` with stable IDs from 847001
+
+- Pre-releases include the developer tools (`discovery.lua`) for testers
+
+### Known limitations
+- `variants.json` is still empty: variant checks exist once a variant dump from the full game has been imported.
+  To make one, put `discovery.lua` from the pre-release into the mod's `Scripts` folder, load a save and press F5
+
 ## [2.3.1] - 2026-10-17
 
 ### Fixed
@@ -177,6 +193,7 @@ and the UE4SS type dump of the demo.
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
+[2.4.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.4.0-beta.1
 [2.3.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.1
 [2.3.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.0-beta.1
 [2.2.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.2.0
