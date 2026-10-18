@@ -46,30 +46,28 @@ class WranglerRankChecks(Range):
     default = 10
 
 
-class VariantChecks(Toggle):
+class CollectionChecks(Choice):
     """
-    Every Voidling variant you unlock (by hatching or evolving) sends a check, about 30 per species.
-    Variant checks only ever hold filler, never progression or useful items, so a variant that's hard to get never
-    blocks or holds back anyone's game.
+    Which collection sends checks. These checks only ever hold filler, never progression or useful items, so a
+    variant or gene that's hard to get never blocks or holds back anyone's game.
+    Variants: every Voidling variant you unlock (hatching or evolving), 294 checks, about 30 per species.
+    Genes: every gene you unlock (colors, eyes, patterns, perks, ability variants, modules), 1,042 checks.
+    Both: variants and genes.
+    Off: no collection checks.
     """
-    display_name = "Variant Checks"
+    display_name = "Collection Checks"
+    option_off = 0
+    option_variants = 1
+    option_genes = 2
+    option_both = 3
     default = 1
-
-
-class GeneChecks(Toggle):
-    """
-    Every gene you unlock (by hatching, breeding or evolving) sends a check. That adds up to 1,042 checks.
-    Gene checks only ever hold filler, never progression or useful items: many genes come from random hatches,
-    so a hard-to-get gene never blocks or holds back anyone's game.
-    """
-    display_name = "Gene Checks"
-    default = 0
 
 
 class GeneTypes(OptionSet):
     """
-    Which kinds of genes send checks when Gene Checks is on. Modules are the cosmetic body parts (rare, superior,
-    exotic and mutated). Size and Element genes can't be collected in the game, so they add no checks.
+    Which kinds of genes send checks when Collection Checks includes genes. Modules are the cosmetic body parts
+    (rare, superior, exotic and mutated). Size and Element genes can't be collected in the game, so they add no
+    checks.
     """
     display_name = "Gene Types"
     valid_keys = {"Color", "Eye", "Pattern", "Perk", "Ability Variant", "Module", "Size", "Element"}
@@ -83,7 +81,6 @@ class VoidlingBoundOptions(PerGameCommonOptions):
     abyss_check_interval: AbyssCheckInterval
     bonus_objectives: BonusObjectives
     wrangler_rank_checks: WranglerRankChecks
-    variant_checks: VariantChecks
-    gene_checks: GeneChecks
+    collection_checks: CollectionChecks
     gene_types: GeneTypes
     death_link: DeathLink

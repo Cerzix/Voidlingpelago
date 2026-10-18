@@ -102,7 +102,7 @@ class VoidlingBoundWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             **self.options.as_dict("goal", "abyss_goal_depth", "bonus_objectives", "wrangler_rank_checks",
-                                   "variant_checks", "gene_checks", "death_link"),
+                                   "collection_checks", "death_link"),
             "abyss_depths": abyss_depths(self),
             "final_mission": FINAL_MISSION,
             # The mod locks missions whose region isn't reachable yet.

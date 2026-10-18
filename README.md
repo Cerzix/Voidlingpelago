@@ -26,8 +26,8 @@ The full protocol is described at the top of `apworld/voidling_bound/Client.py`.
 | All golden eggs / all bonus mutagens, on the 9 missions that have them | 18 | `bonus_objectives` |
 | Wrangler rank 2 - N | 0-20 | `wrangler_rank_checks` |
 | Abyss depth every X levels up to the goal depth | varies | `abyss_goal_depth`, `abyss_check_interval` |
-| Every unlocked Voidling variant (filler only) | about 30 per species | `variant_checks` (on by default) |
-| Every unlocked gene (filler only) | up to 1,042 | `gene_checks` (off by default), `gene_types` |
+| Every unlocked Voidling variant (filler only) | 294 | `collection_checks: variants` (default) or `both` |
+| Every unlocked gene (filler only) | up to 1,042 | `collection_checks: genes` or `both`, `gene_types` |
 
 Mission data comes from the [Voidling Bound wiki](https://voidlingbound.wiki.gg/wiki/Missions).
 Progression items are Planet Access: Solum, Planet Access: Aulis and Abyss Access (entered through the altar on

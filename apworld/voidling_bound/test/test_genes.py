@@ -17,7 +17,7 @@ TEST_GENES = [
 
 
 class GeneTestBase(VoidlingBoundTestBase):
-    options = {"gene_checks": True}
+    options = {"collection_checks": "genes"}
 
     def setUp(self) -> None:
         table = {gene.name: Locations.LocationData(gene.code, gene_region(gene)) for gene in TEST_GENES}
@@ -55,7 +55,7 @@ class TestGenesDefault(GeneTestBase):
 
 
 class TestGeneTypes(GeneTestBase):
-    options = {"gene_checks": True, "gene_types": ["Eye", "Color"]}
+    options = {"collection_checks": "genes", "gene_types": ["Eye", "Color"]}
 
     def test_only_selected_types(self) -> None:
         self.assertEqual(set(self.gene_locations()), {"Kwipeck Eye Gene: Starry", "Morfang Color Gene: Ember"})

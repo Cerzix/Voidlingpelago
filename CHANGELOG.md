@@ -6,18 +6,18 @@ All notable changes to this project are documented here. The format follows
 ## [2.4.0] - 2026-10-18
 
 ### Added
-- Variant checks: every Voidling variant you unlock (hatching or evolving) is a check, about 30 per species
-  (option `variant_checks`, on by default). Variants are the game's evolutions, which it unlocks like genes, so the
-  mod reports them with `IsDataUnlocked`. Like genes they only hold filler and are in logic once their species'
-  eggs can drop. A smaller alternative to the 1,042 gene checks, which stay available as an option
+- Variant checks: every Voidling variant you unlock (hatching or evolving) is a check. The list comes from the full
+  game: 294 variants, 32 to 34 per species, each species' evolution tree plus its unique golden egg variants.
+  Variants are the game's evolutions, which it unlocks like genes, so the mod reports them with `IsDataUnlocked`.
+  Like genes they only hold filler and are in logic once their species' eggs can drop
 - The developer tools' F5 also writes `variants.txt` with the game's creature names, and
   `tools/import_variants.py` turns it into `data/variants.json` with stable IDs from 847001
-
 - Pre-releases include the developer tools (`discovery.lua`) for testers
 
-### Known limitations
-- `variants.json` is still empty: variant checks exist once a variant dump from the full game has been imported.
-  To make one, put `discovery.lua` from the pre-release into the mod's `Scripts` folder, load a save and press F5
+### Changed
+- **Breaking for YAMLs:** the `gene_checks` toggle is replaced by `collection_checks`, which picks the collection
+  that sends checks: `variants` (default, 294 checks), `genes` (1,042 checks, as `gene_checks` did), `both` or
+  `off`. `gene_types` still picks the gene kinds
 
 ## [2.3.1] - 2026-10-17
 

@@ -128,9 +128,10 @@ def get_active_locations(world: "VoidlingBoundWorld") -> Dict[str, LocationData]
                 names += [golden_eggs_name(mission.name), bonus_mutagens_name(mission.name)]
     names += [wrangler_rank_name(rank) for rank in range(2, world.options.wrangler_rank_checks.value + 2)]
     names += [abyss_depth_name(depth) for depth in abyss_depths(world)]
-    if world.options.variant_checks:
+    collection = world.options.collection_checks
+    if collection in (collection.option_variants, collection.option_both):
         names += [variant.name for variant in VARIANTS]
-    if world.options.gene_checks:
+    if collection in (collection.option_genes, collection.option_both):
         names += [gene.name for gene in GENES if gene.type in world.options.gene_types.value]
     return {name: location_table[name] for name in names}
 
