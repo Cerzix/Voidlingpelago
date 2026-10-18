@@ -60,6 +60,7 @@ local events = {
     wrangler_rank = function(rank) send_event("wrangler_rank " .. math.floor(rank)) end,
     abyss_depth = function(depth) send_event("abyss_depth " .. math.floor(depth)) end,
     gene = function(asset_name) send_event("gene " .. asset_name) end,
+    variant = function(asset_name) send_event("variant " .. asset_name) end,
     death = function() send_event("death") end,
 }
 

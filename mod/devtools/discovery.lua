@@ -366,6 +366,70 @@ local function load_object(path)
     return nil
 end
 
+-- Variants: the game's evolutions (UEvolutionDataAsset), written to variants.txt for tools/import_variants.py.
+local EVOLUTION_CLASS_PATH = "/Script/VoidlingWrangler.EvolutionDataAsset"
+local SPECIES_CLASS_PATH = "/Script/VoidlingWrangler.SpeciesDataAsset"
+
+local function is_object_of(obj, class_path)
+    if not obj or not safe(function() return obj:IsValid() end, false) then return false end
+    if safe(function() return obj:IsClass() end, true) then return false end
+    if short_name(obj):find("^Default__") then return false end
+    return safe(function() return obj:IsA(class_path) end, false) == true
+end
+
+local function text_of(value)
+    if type(value) == "string" then return value end
+    return safe(function() return value:ToString() end, "")
+end
+
+local function dump_variants(registry)
+    local variants = {} -- path -> object or false (not loaded yet)
+    local from_registry = 0
+    for _, path in ipairs(registry) do
+        local name = path:match("([^%.]+)$")
+        if path:find("/Evolutions/", 1, true) and name:find("^DA_Evolution_") then
+            variants[path] = false
+            from_registry = from_registry + 1
+        end
+    end
+    for _, obj in ipairs(safe(function() return FindAllOf("EvolutionDataAsset") end, {}) or {}) do
+        if is_object_of(obj, EVOLUTION_CLASS_PATH) then variants[object_path(obj)] = obj end
+    end
+
+    local paths = {}
+    for path in pairs(variants) do paths[#paths + 1] = path end
+    table.sort(paths)
+    log("Variant dump: reading " .. #paths .. " variants (" .. from_registry .. " from the Asset Registry)")
+    local lines = { "# Voidlingpelago variant dump, " .. os.date("%Y-%m-%d %H:%M:%S"),
+        "# asset path\tevolution name\tcreature name\tspecies code\tspecies name\trarity\tcost" }
+    local written = 0
+    for _, path in ipairs(paths) do
+        local obj = variants[path] or load_object(path)
+        if is_object_of(obj, EVOLUTION_CLASS_PATH) then
+            local evolution_name = safe(function() return obj.EvolutionName:ToString() end, "")
+            local species = safe(function() return obj.ParentSpecies end, nil)
+            local species_name, creature_name = "", ""
+            if is_object_of(species, SPECIES_CLASS_PATH) then
+                species_name = safe(function() return species.SpeciesName:ToString() end, "")
+                creature_name = text_of(safe(function() return species:GetCreatureName(obj) end, ""))
+            end
+            local rarity = safe(function() return obj.Rarity end, "")
+            local cost = safe(function() return obj.Cost end, "")
+            lines[#lines + 1] = table.concat({ path, evolution_name, creature_name, species_code(path), species_name,
+                tostring(rarity), tostring(cost) }, "\t")
+            written = written + 1
+        end
+    end
+    local f = io.open(out_dir .. "variants.txt", "w")
+    if not f then
+        log("Could not write variants.txt")
+        return
+    end
+    f:write(table.concat(lines, "\n") .. "\n")
+    f:close()
+    log("Variant dump: " .. written .. " variants in " .. out_dir .. "variants.txt")
+end
+
 function M.dump_genes()
     local tracker = require("tracker")
     log("Gene dump started")
@@ -443,6 +507,7 @@ function M.dump_genes()
     f:close()
     log(string.format("Gene dump: %d genes (%d from the Asset Registry, %d only loaded, %d unreadable, %d not genes) in %sgenes.txt",
         #paths - skipped, from_registry, from_loaded, unreadable, skipped, out_dir))
+    dump_variants(registry)
     -- Loading assets can let the garbage collector free objects the tracker still holds on to.
     tracker.reset()
 end
@@ -541,7 +606,7 @@ function M.init(exchange_dir, logger, events)
     RegisterKeyBind(Key.F7, function() ExecuteInGameThread(M.toggle_trace) end)
     RegisterKeyBind(Key.F8, function() ExecuteInGameThread(M.dump_state) end)
     RegisterKeyBind(Key.F9, function() events.mission_complete("Faint Signal") end)
-    log("Developer tools loaded: F5 gene dump, F6 scan, F7 trace, F8 state dump, F9 test check")
+    log("Developer tools loaded: F5 gene and variant dump, F6 scan, F7 trace, F8 state dump, F9 test check")
 end
 
 return M

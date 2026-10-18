@@ -20,12 +20,14 @@ M.GENE_CLASSES = {
     "GeneDataAsset", "ColorGeneDataAsset", "EyeGeneDataAsset", "PatternGeneDataAsset", "SizeGeneDataAsset",
     "ElementGeneDataAsset", "PerkGeneDataAsset", "AbilityVariantGeneDataAsset", "CosmeticModuleDataAsset",
 }
+M.VARIANT_CLASSES = { "EvolutionDataAsset" }
 local GENE_POLL_SECONDS = 3
 local GENE_LIST_SECONDS = 60
 
 local reported_missions = {}
 local reported_stars = {}
 local reported_genes = {}
+local reported_variants = {}
 local last_gene_poll = -math.huge
 local reported_rank = 0
 local reported_depth = 0
@@ -169,24 +171,25 @@ function M.abyss_depth()
     return nil
 end
 
--- All loaded gene assets (also modules and perks), searched again at most every GENE_LIST_SECONDS.
--- ProgressionSubsystem.UnlockedDataAssets would list unlocked genes directly, but its soft pointers can't be read
+-- All loaded assets of the given classes, cached under key and searched again at most every GENE_LIST_SECONDS.
+-- ProgressionSubsystem.UnlockedDataAssets would list unlocked assets directly, but its soft pointers can't be read
 -- with UE4SS 3.0.1, and probing them throws an error per entry, which can crash UE4SS's error handler.
-function M.gene_assets()
-    if cache.genes and os.time() - cache.genes.searched < GENE_LIST_SECONDS then
+local function loaded_assets(key, classes)
+    local cached = cache[key]
+    if cached and os.time() - cached.searched < GENE_LIST_SECONDS then
         -- An unloaded or collected asset leaves a dangling object behind, and calling a game function on it
-        -- crashes. If any cached gene went invalid, search again.
+        -- crashes. If any cached asset went invalid, search again.
         local all_valid = true
-        for _, gene in ipairs(cache.genes.list) do
-            if not valid(gene.asset) then
+        for _, entry in ipairs(cached.list) do
+            if not valid(entry.asset) then
                 all_valid = false
                 break
             end
         end
-        if all_valid then return cache.genes.list end
+        if all_valid then return cached.list end
     end
     local list, seen = {}, {}
-    for _, class_name in ipairs(M.GENE_CLASSES) do
+    for _, class_name in ipairs(classes) do
         local found, assets = pcall(FindAllOf, class_name)
         for _, asset in ipairs((found and assets) or {}) do
             local name = M.name_of(asset)
@@ -196,20 +199,38 @@ function M.gene_assets()
             end
         end
     end
-    cache.genes = { list = list, searched = os.time() }
+    cache[key] = { list = list, searched = os.time() }
     return list
 end
 
--- Asset names of the unlocked genes, leaving out the ones in skip.
-function M.unlocked_genes(progression, skip)
-    local genes = {}
-    for _, gene in ipairs(M.gene_assets()) do
-        if not (skip and skip[gene.name]) and valid(gene.asset) then
-            local checked, unlocked = pcall(function() return progression:IsDataUnlocked(gene.asset) end)
-            if checked and unlocked == true then genes[#genes + 1] = gene.name end
+-- Asset names of the unlocked entries, leaving out the ones in skip.
+local function unlocked_of(progression, list, skip)
+    local unlocked_names = {}
+    for _, entry in ipairs(list) do
+        if not (skip and skip[entry.name]) and valid(entry.asset) then
+            local checked, unlocked = pcall(function() return progression:IsDataUnlocked(entry.asset) end)
+            if checked and unlocked == true then unlocked_names[#unlocked_names + 1] = entry.name end
         end
     end
-    return genes
+    return unlocked_names
+end
+
+-- Genes (also modules and perks)
+function M.gene_assets()
+    return loaded_assets("genes", M.GENE_CLASSES)
+end
+
+function M.unlocked_genes(progression, skip)
+    return unlocked_of(progression, M.gene_assets(), skip)
+end
+
+-- Variants: the game's evolutions, unlocked like genes when a variant is hatched or evolved
+function M.variant_assets()
+    return loaded_assets("variants", M.VARIANT_CLASSES)
+end
+
+function M.unlocked_variants(progression, skip)
+    return unlocked_of(progression, M.variant_assets(), skip)
 end
 
 -- Called from the poll loop on the game thread.
@@ -244,6 +265,10 @@ function M.poll(events)
         for _, gene in ipairs(M.unlocked_genes(progression, reported_genes)) do
             reported_genes[gene] = true
             events.gene(gene)
+        end
+        for _, variant in ipairs(M.unlocked_variants(progression, reported_variants)) do
+            reported_variants[variant] = true
+            events.variant(variant)
         end
     end
 
