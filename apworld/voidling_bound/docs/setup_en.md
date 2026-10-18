@@ -31,7 +31,7 @@ Besides the usual settings, Voidling Bound has these options:
 - `abyss_goal_depth`, `abyss_check_interval`: Abyss depth checks
 - `collection_checks`: which collection sends checks. `variants` (default): every Voidling variant you unlock,
   294 checks, about 30 per species. `genes`: every gene you unlock, 1,042 checks (`gene_types` picks which kinds
-  count). `both` or `off`. These checks only ever hold filler, so something you can't get yet never blocks anyone
+  count) or `off`. These checks only ever hold filler, so something you can't get yet never blocks anyone
 - `death_link`
 
 ## Playing

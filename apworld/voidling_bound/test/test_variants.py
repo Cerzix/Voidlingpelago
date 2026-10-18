@@ -64,13 +64,3 @@ class TestGenesOnlyHasNoVariants(VariantTestBase):
 
     def test_no_variant_locations(self) -> None:
         self.assertEqual(self.variant_locations(), {})
-
-
-class TestBothCollections(VariantTestBase):
-    options = {"collection_checks": "both"}
-
-    def test_variants_and_genes(self) -> None:
-        from ..Genes import GENES
-        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
-        self.assertEqual(set(self.variant_locations()), {variant.name for variant in TEST_VARIANTS})
-        self.assertTrue(all(gene.name in names for gene in GENES))

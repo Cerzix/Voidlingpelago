@@ -48,18 +48,17 @@ class WranglerRankChecks(Range):
 
 class CollectionChecks(Choice):
     """
-    Which collection sends checks. These checks only ever hold filler, never progression or useful items, so a
-    variant or gene that's hard to get never blocks or holds back anyone's game.
+    Which collection sends checks, variants or genes. These checks only ever hold filler, never
+    progression or useful items, so a variant or gene that's hard to get never blocks or holds back
+    anyone's game.
     Variants: every Voidling variant you unlock (hatching or evolving), 294 checks, about 30 per species.
     Genes: every gene you unlock (colors, eyes, patterns, perks, ability variants, modules), 1,042 checks.
-    Both: variants and genes.
     Off: no collection checks.
     """
     display_name = "Collection Checks"
     option_off = 0
     option_variants = 1
     option_genes = 2
-    option_both = 3
     default = 1
 
 

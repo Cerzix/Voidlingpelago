@@ -16,8 +16,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Changed
 - **Breaking for YAMLs:** the `gene_checks` toggle is replaced by `collection_checks`, which picks the collection
-  that sends checks: `variants` (default, 294 checks), `genes` (1,042 checks, as `gene_checks` did), `both` or
-  `off`. `gene_types` still picks the gene kinds
+  that sends checks: `variants` (default, 294 checks), `genes` (1,042 checks, as `gene_checks` did) or `off`. `gene_types` still picks the gene kinds
 
 ## [2.3.1] - 2026-10-17
 

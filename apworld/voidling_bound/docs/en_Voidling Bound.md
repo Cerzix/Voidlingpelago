@@ -9,8 +9,8 @@ you get back are planet unlocks, DNA Catalyzers, golden and species eggs, resear
 Missions on a planet you haven't unlocked yet show a Wrangler level requirement of 99. The real requirement
 comes back as soon as the planet's access item arrives.
 
-Depending on the Collection Checks option, every Voidling variant you unlock (294, about 30 per species), every gene
-you unlock (1,042) or both are checks too. These only ever hold filler, so a variant or gene that refuses to hatch
+Depending on the Collection Checks option, every Voidling variant you unlock (294, about 30 per species), or every gene
+you unlock (1,042) are checks too. These only ever hold filler, so a variant or gene that refuses to hatch
 never blocks anyone.
 
 ## What is the goal?

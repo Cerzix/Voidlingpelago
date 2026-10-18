@@ -114,16 +114,15 @@ Voidling Bound:
     random-range-0-20: 0 # random value between 0 and 20
 
   collection_checks:
-    # Which collection sends checks. These checks only ever hold filler, never progression or useful items, so a
-    # variant or gene that's hard to get never blocks or holds back anyone's game.
+    # Which collection sends checks, variants or genes. These checks only ever hold filler, never
+    # progression or useful items, so a variant or gene that's hard to get never blocks or holds back
+    # anyone's game.
     # Variants: every Voidling variant you unlock (hatching or evolving), 294 checks, about 30 per species.
     # Genes: every gene you unlock (colors, eyes, patterns, perks, ability variants, modules), 1,042 checks.
-    # Both: variants and genes.
     # Off: no collection checks.
     'off': 0
     variants: 50
     genes: 0
-    both: 0
 
   gene_types:
     # Which kinds of genes send checks when Collection Checks includes genes. Modules are the cosmetic body parts
