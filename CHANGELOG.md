@@ -193,7 +193,7 @@ and the UE4SS type dump of the demo.
 - The in-game hooks in `game_hooks.lua` are stubs: missions, ranks, Abyss depth, planet gating, resource
   rewards and DeathLink kills aren't connected to the game yet, so the mod doesn't send or apply anything in game
 
-[2.4.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.4.0-beta.1
+[2.4.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.4.0-beta.2
 [2.3.1]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.1
 [2.3.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.3.0-beta.1
 [2.2.0]: https://github.com/Cerzix/Voidlingpelago/releases/tag/v2.2.0
