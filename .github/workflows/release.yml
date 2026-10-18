@@ -39,7 +39,17 @@ jobs:
 
       - name: Run world and generic tests
         working-directory: Archipelago
-        run: python -m pytest -q worlds/voidling_bound/test test/general
+        run: |
+          set -o pipefail
+          python -m pytest -q -rf worlds/voidling_bound/test test/general 2>&1 | tee pytest.log
+
+      # Job logs need a GitHub login, annotations don't: put the failures where anyone can read them.
+      - name: Report failed tests
+        if: failure()
+        working-directory: Archipelago
+        run: |
+          grep -E "^(FAILED|ERROR) " pytest.log | head -20 | sed 's/^/::error::/' || true
+          grep -E "^E  " pytest.log | head -30 | sed 's/^/::error::/' || true
 
   mod-test:
     runs-on: ubuntu-latest
