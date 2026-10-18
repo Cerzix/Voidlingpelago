@@ -184,9 +184,33 @@ instances.EyeGeneDataAsset = { gene_object(G .. "Eyes/DA_Gene_Eye_RL01_00.DA_Gen
 instances.ColorGeneDataAsset = { gene_object(G .. "Colors/DA_Gene_Color_RL01_03.DA_Gene_Color_RL01_03", "ColorGeneDataAsset", "Crimson") }
 instances.SizeGeneDataAsset = { gene_object(G .. "Sizes/DA_Gene_Size_RL01_02.DA_Gene_Size_RL01_02", "SizeGeneDataAsset", "Huge") }
 local species_path = "/Game/Data/Creatures/RL01/DA_Species_RL01.DA_Species_RL01"
+local species_asset = object("DA_Species_RL01", {
+    SpeciesName = fname("Kwipeck"),
+    IsClass = function() return false end,
+    IsA = function(self, class_path) return class_path == "/Script/VoidlingWrangler.SpeciesDataAsset" end,
+    GetCreatureName = function(self, evolution)
+        local name = evolution.EvolutionName:ToString()
+        return fname(name == "Base" and "Kwipeck" or name .. " Kwipeck")
+    end,
+})
+local EV = "/Game/Data/Creatures/RL01/Evolutions/"
+local function evolution_object(asset_name, evolution_name)
+    local evolution = object(asset_name, {
+        EvolutionName = fname(evolution_name),
+        ParentSpecies = species_asset,
+        Rarity = 1,
+        Cost = 5,
+        IsClass = function() return false end,
+        IsA = function(self, class_path) return class_path == "/Script/VoidlingWrangler.EvolutionDataAsset" end,
+    })
+    evolution.GetFullName = function() return "EvolutionDataAsset " .. EV .. asset_name .. "." .. asset_name end
+    return evolution
+end
+instances.EvolutionDataAsset = { evolution_object("DA_Evolution_RL01_Qwebek", "Qwebek") }
+local base_evolution_path = EV .. "DA_Evolution_RL01_Base.DA_Evolution_RL01_Base"
 local registry = {
     GetAssetsByPath = function(self, path, out, recursive, on_disk_only)
-        local all = { species_path, not_a_gene_path,
+        local all = { species_path, not_a_gene_path, base_evolution_path,
                       G .. "AbilityVariants/DA_AV_RL01_A1.DA_AV_RL01_A1" }
         for gene_path in pairs(gene_files) do all[#all + 1] = gene_path end
         for _, full in ipairs(all) do
@@ -205,6 +229,7 @@ function StaticFindObject(path)
     if path == "/Script/AssetRegistry.Default__AssetRegistryHelpers" then return registry_helpers end
     if gene_files[path] and loaded_assets[path] then return gene_object(path, gene_files[path][1], gene_files[path][2]) end
     if path == not_a_gene_path then return not_a_gene end
+    if path == base_evolution_path and loaded_assets[path] then return evolution_object("DA_Evolution_RL01_Base", "Base") end
     if path:find("DA_AV_RL01_A1", 1, true) then gene_call_on_wrong_object = true end
     if path == species_path and loaded_assets[path] then return object("DA_Species_RL01", { SpeciesName = fname("Kwipeck") }) end
     return nil
@@ -422,12 +447,26 @@ poll()
 check("newly unlocked gene reported, old one not again",
       (read("events.txt") or "").splitlines() == ["gene DA_Gene_Eye_RL01_00", "gene DA_Gene_Color_RL01_03"])
 
+# Variants: unlocked variants (evolutions) are reported once, like genes
+lua.execute('unlocked_genes["DA_Evolution_RL01_Qwebek"] = true')
+lua.execute("local base = os.time; os.time = function() return base() + 10 end")
+write("events.txt", "")
+poll()
+check("unlocked variant reported by asset name", (read("events.txt") or "").splitlines() == ["variant DA_Evolution_RL01_Qwebek"])
+lua.execute("local base = os.time; os.time = function() return base() + 10 end")
+poll()
+check("variant not reported twice", (read("events.txt") or "").splitlines() == ["variant DA_Evolution_RL01_Qwebek"])
+
 # Gene dump (F5)
 lua.globals().keybinds[116]()
 dump = read("genes.txt") or ""
 check("gene dump has registry genes, loaded genes and species names",
       "/Game/Data/Creatures/RL01/Genes/Perks/DA_Gene_Perk_RL01_01.DA_Gene_Perk_RL01_01\tPerkGeneDataAsset\tThick Skin\tRL01\tKwipeck\ttrue" in dump
       and "DA_Gene_Size_RL01_02\tSizeGeneDataAsset\tHuge\tRL01\tKwipeck\tfalse" in dump)
+variants_dump = read("variants.txt") or ""
+check("variant dump has loaded and registry variants with the game's creature names",
+      "DA_Evolution_RL01_Qwebek\tQwebek\tQwebek Kwipeck\tRL01\tKwipeck\t1\t5" in variants_dump
+      and "DA_Evolution_RL01_Base\tBase\tKwipeck\tRL01\tKwipeck" in variants_dump)
 check("gene dump never calls gene functions on non-gene objects", not lua.globals().gene_call_on_wrong_object)
 check("gene dump lists every gene once", sum(1 for line in dump.splitlines() if not line.startswith("#")) == 4)
 
