@@ -53,10 +53,20 @@ class TestMinimalLocations(VoidlingBoundTestBase):
 
 class TestAllGenes(VoidlingBoundTestBase):
     """The real gene list: over a thousand filler-only locations must still fill."""
-    options = {"gene_checks": True}
+    options = {"collection_checks": "genes"}
 
     def test_every_collectible_gene_is_a_location(self) -> None:
         from ..Genes import GENES
         names = {loc.name for loc in self.multiworld.get_locations(self.player)}
         self.assertTrue(GENES)
         self.assertTrue(all(gene.name in names for gene in GENES))
+
+
+class TestAllVariants(VoidlingBoundTestBase):
+    """The real variant list, on by default: every variant is a filler-only location."""
+
+    def test_every_variant_is_a_location(self) -> None:
+        from ..Variants import VARIANTS
+        names = {loc.name for loc in self.multiworld.get_locations(self.player)}
+        self.assertEqual(len(VARIANTS), 294)
+        self.assertTrue(all(variant.name in names for variant in VARIANTS))

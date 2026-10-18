@@ -1,1 +1,2060 @@
-[]
+[
+ {
+  "id": 847001,
+  "name": "Variant: Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Base",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Base.DA_Evolution_BB01_Base"
+ },
+ {
+  "id": 847002,
+  "name": "Variant: Loaded Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_01",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_01.DA_Evolution_BB01_Exotic_01"
+ },
+ {
+  "id": 847003,
+  "name": "Variant: Ensnaring Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_02",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_02.DA_Evolution_BB01_Exotic_02"
+ },
+ {
+  "id": 847004,
+  "name": "Variant: Paralyzing Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_03",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_03.DA_Evolution_BB01_Exotic_03"
+ },
+ {
+  "id": 847005,
+  "name": "Variant: Colonizing Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_04",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_04.DA_Evolution_BB01_Exotic_04"
+ },
+ {
+  "id": 847006,
+  "name": "Variant: Cuirassed Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_05",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_05.DA_Evolution_BB01_Exotic_05"
+ },
+ {
+  "id": 847007,
+  "name": "Variant: Leeching Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_06",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_06.DA_Evolution_BB01_Exotic_06"
+ },
+ {
+  "id": 847008,
+  "name": "Variant: Bloated Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_07",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_07.DA_Evolution_BB01_Exotic_07"
+ },
+ {
+  "id": 847009,
+  "name": "Variant: Psionic Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Exotic_08",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Exotic_08.DA_Evolution_BB01_Exotic_08"
+ },
+ {
+  "id": 847010,
+  "name": "Variant: Lurking Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_01",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_01.DA_Evolution_BB01_Mutated_01"
+ },
+ {
+  "id": 847011,
+  "name": "Variant: Slinging Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_02",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_02.DA_Evolution_BB01_Mutated_02"
+ },
+ {
+  "id": 847012,
+  "name": "Variant: Dream Eater Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_03",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_03.DA_Evolution_BB01_Mutated_03"
+ },
+ {
+  "id": 847013,
+  "name": "Variant: Concussing Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_04",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_04.DA_Evolution_BB01_Mutated_04"
+ },
+ {
+  "id": 847014,
+  "name": "Variant: Syrup Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_05",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_05.DA_Evolution_BB01_Mutated_05"
+ },
+ {
+  "id": 847015,
+  "name": "Variant: Rooted Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_06",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_06.DA_Evolution_BB01_Mutated_06"
+ },
+ {
+  "id": 847016,
+  "name": "Variant: Chrysalid Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_07",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_07.DA_Evolution_BB01_Mutated_07"
+ },
+ {
+  "id": 847017,
+  "name": "Variant: Hive Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_08",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_08.DA_Evolution_BB01_Mutated_08"
+ },
+ {
+  "id": 847018,
+  "name": "Variant: Spiked Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_09",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_09.DA_Evolution_BB01_Mutated_09"
+ },
+ {
+  "id": 847019,
+  "name": "Variant: Callused Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_10",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_10.DA_Evolution_BB01_Mutated_10"
+ },
+ {
+  "id": 847020,
+  "name": "Variant: Draining Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_11",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_11.DA_Evolution_BB01_Mutated_11"
+ },
+ {
+  "id": 847021,
+  "name": "Variant: Infesting Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_12",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_12.DA_Evolution_BB01_Mutated_12"
+ },
+ {
+  "id": 847022,
+  "name": "Variant: Bursting Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_13",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_13.DA_Evolution_BB01_Mutated_13"
+ },
+ {
+  "id": 847023,
+  "name": "Variant: Husk Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_14",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_14.DA_Evolution_BB01_Mutated_14"
+ },
+ {
+  "id": 847024,
+  "name": "Variant: Vortex Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_15",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_15.DA_Evolution_BB01_Mutated_15"
+ },
+ {
+  "id": 847025,
+  "name": "Variant: Revealing Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Mutated_16",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Mutated_16.DA_Evolution_BB01_Mutated_16"
+ },
+ {
+  "id": 847026,
+  "name": "Variant: Host Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Rare_01",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Rare_01.DA_Evolution_BB01_Rare_01"
+ },
+ {
+  "id": 847027,
+  "name": "Variant: Parasite Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Rare_02",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Rare_02.DA_Evolution_BB01_Rare_02"
+ },
+ {
+  "id": 847028,
+  "name": "Variant: Mutualistic Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Superior_01",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Superior_01.DA_Evolution_BB01_Superior_01"
+ },
+ {
+  "id": 847029,
+  "name": "Variant: Symbiotic Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Superior_02",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Superior_02.DA_Evolution_BB01_Superior_02"
+ },
+ {
+  "id": 847030,
+  "name": "Variant: Dependent Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Superior_03",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Superior_03.DA_Evolution_BB01_Superior_03"
+ },
+ {
+  "id": 847031,
+  "name": "Variant: Exploitative Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Superior_04",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Superior_04.DA_Evolution_BB01_Superior_04"
+ },
+ {
+  "id": 847032,
+  "name": "Variant: Galvanic Ur-Sek",
+  "species": "Ur-Sek",
+  "asset": "DA_Evolution_BB01_Unique_01",
+  "path": "/Game/Data/Creatures/BB01/Evolutions/DA_Evolution_BB01_Unique_01.DA_Evolution_BB01_Unique_01"
+ },
+ {
+  "id": 847033,
+  "name": "Variant: Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Base",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Base.DA_Evolution_JS01_Base"
+ },
+ {
+  "id": 847034,
+  "name": "Variant: Moldy Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_01",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_01.DA_Evolution_JS01_Exotic_01"
+ },
+ {
+  "id": 847035,
+  "name": "Variant: Mossy Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_02",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_02.DA_Evolution_JS01_Exotic_02"
+ },
+ {
+  "id": 847036,
+  "name": "Variant: Spreading Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_03",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_03.DA_Evolution_JS01_Exotic_03"
+ },
+ {
+  "id": 847037,
+  "name": "Variant: Floating Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_04",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_04.DA_Evolution_JS01_Exotic_04"
+ },
+ {
+  "id": 847038,
+  "name": "Variant: Super Conductor Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_05",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_05.DA_Evolution_JS01_Exotic_05"
+ },
+ {
+  "id": 847039,
+  "name": "Variant: Coiled Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_06",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_06.DA_Evolution_JS01_Exotic_06"
+ },
+ {
+  "id": 847040,
+  "name": "Variant: Lightning Rod Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_07",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_07.DA_Evolution_JS01_Exotic_07"
+ },
+ {
+  "id": 847041,
+  "name": "Variant: Ionized Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Exotic_08",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Exotic_08.DA_Evolution_JS01_Exotic_08"
+ },
+ {
+  "id": 847042,
+  "name": "Variant: Networked Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_01",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_01.DA_Evolution_JS01_Mutated_01"
+ },
+ {
+  "id": 847043,
+  "name": "Variant: Pathogenic Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_02",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_02.DA_Evolution_JS01_Mutated_02"
+ },
+ {
+  "id": 847044,
+  "name": "Variant: Decomposer Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_03",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_03.DA_Evolution_JS01_Mutated_03"
+ },
+ {
+  "id": 847045,
+  "name": "Variant: Creeping Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_04",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_04.DA_Evolution_JS01_Mutated_04"
+ },
+ {
+  "id": 847046,
+  "name": "Variant: Parasitic Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_05",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_05.DA_Evolution_JS01_Mutated_05"
+ },
+ {
+  "id": 847047,
+  "name": "Variant: Mycotoxic Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_06",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_06.DA_Evolution_JS01_Mutated_06"
+ },
+ {
+  "id": 847048,
+  "name": "Variant: Sedative Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_07",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_07.DA_Evolution_JS01_Mutated_07"
+ },
+ {
+  "id": 847049,
+  "name": "Variant: Allergenic Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_08",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_08.DA_Evolution_JS01_Mutated_08"
+ },
+ {
+  "id": 847050,
+  "name": "Variant: Overcharged Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_09",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_09.DA_Evolution_JS01_Mutated_09"
+ },
+ {
+  "id": 847051,
+  "name": "Variant: Sparking Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_10",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_10.DA_Evolution_JS01_Mutated_10"
+ },
+ {
+  "id": 847052,
+  "name": "Variant: Electromagnetic Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_11",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_11.DA_Evolution_JS01_Mutated_11"
+ },
+ {
+  "id": 847053,
+  "name": "Variant: Inductor Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_12",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_12.DA_Evolution_JS01_Mutated_12"
+ },
+ {
+  "id": 847054,
+  "name": "Variant: Struck Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_13",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_13.DA_Evolution_JS01_Mutated_13"
+ },
+ {
+  "id": 847055,
+  "name": "Variant: Grounded Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_14",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_14.DA_Evolution_JS01_Mutated_14"
+ },
+ {
+  "id": 847056,
+  "name": "Variant: Positive Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_15",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_15.DA_Evolution_JS01_Mutated_15"
+ },
+ {
+  "id": 847057,
+  "name": "Variant: Negative Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Mutated_16",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Mutated_16.DA_Evolution_JS01_Mutated_16"
+ },
+ {
+  "id": 847058,
+  "name": "Variant: Damp Forest Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Rare_01",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Rare_01.DA_Evolution_JS01_Rare_01"
+ },
+ {
+  "id": 847059,
+  "name": "Variant: Mountain Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Rare_02",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Rare_02.DA_Evolution_JS01_Rare_02"
+ },
+ {
+  "id": 847060,
+  "name": "Variant: Rotten Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Superior_01",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Superior_01.DA_Evolution_JS01_Superior_01"
+ },
+ {
+  "id": 847061,
+  "name": "Variant: Blooming Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Superior_02",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Superior_02.DA_Evolution_JS01_Superior_02"
+ },
+ {
+  "id": 847062,
+  "name": "Variant: Conductor Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Superior_03",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Superior_03.DA_Evolution_JS01_Superior_03"
+ },
+ {
+  "id": 847063,
+  "name": "Variant: Static Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Superior_04",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Superior_04.DA_Evolution_JS01_Superior_04"
+ },
+ {
+  "id": 847064,
+  "name": "Variant: Argon Nimiod",
+  "species": "Nimiod",
+  "asset": "DA_Evolution_JS01_Unique_01",
+  "path": "/Game/Data/Creatures/JS01/Evolutions/DA_Evolution_JS01_Unique_01.DA_Evolution_JS01_Unique_01"
+ },
+ {
+  "id": 847065,
+  "name": "Variant: Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Base",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Base.DA_Evolution_LB01_Base"
+ },
+ {
+  "id": 847066,
+  "name": "Variant: Scourge Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_01",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_01.DA_Evolution_LB01_Exotic_01"
+ },
+ {
+  "id": 847067,
+  "name": "Variant: Alluring Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_02",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_02.DA_Evolution_LB01_Exotic_02"
+ },
+ {
+  "id": 847068,
+  "name": "Variant: Cocooning Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_03",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_03.DA_Evolution_LB01_Exotic_03"
+ },
+ {
+  "id": 847069,
+  "name": "Variant: Exiled Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_04",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_04.DA_Evolution_LB01_Exotic_04"
+ },
+ {
+  "id": 847070,
+  "name": "Variant: Night Light Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_05",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_05.DA_Evolution_LB01_Exotic_05"
+ },
+ {
+  "id": 847071,
+  "name": "Variant: Electro Magnet Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_06",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_06.DA_Evolution_LB01_Exotic_06"
+ },
+ {
+  "id": 847072,
+  "name": "Variant: Drained Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_07",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_07.DA_Evolution_LB01_Exotic_07"
+ },
+ {
+  "id": 847073,
+  "name": "Variant: Shorted Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Exotic_08",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Exotic_08.DA_Evolution_LB01_Exotic_08"
+ },
+ {
+  "id": 847074,
+  "name": "Variant: Feasting Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_01",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_01.DA_Evolution_LB01_Mutated_01"
+ },
+ {
+  "id": 847075,
+  "name": "Variant: Hatching Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_02",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_02.DA_Evolution_LB01_Mutated_02"
+ },
+ {
+  "id": 847076,
+  "name": "Variant: Powdered Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_03",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_03.DA_Evolution_LB01_Mutated_03"
+ },
+ {
+  "id": 847077,
+  "name": "Variant: Bed Bug Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_04",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_04.DA_Evolution_LB01_Mutated_04"
+ },
+ {
+  "id": 847078,
+  "name": "Variant: Encased Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_05",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_05.DA_Evolution_LB01_Mutated_05"
+ },
+ {
+  "id": 847079,
+  "name": "Variant: Ascended Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_06",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_06.DA_Evolution_LB01_Mutated_06"
+ },
+ {
+  "id": 847080,
+  "name": "Variant: Vanished Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_07",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_07.DA_Evolution_LB01_Mutated_07"
+ },
+ {
+  "id": 847081,
+  "name": "Variant: Forsaken Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_08",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_08.DA_Evolution_LB01_Mutated_08"
+ },
+ {
+  "id": 847082,
+  "name": "Variant: Flocking Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_09",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_09.DA_Evolution_LB01_Mutated_09"
+ },
+ {
+  "id": 847083,
+  "name": "Variant: Shocking Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_10",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_10.DA_Evolution_LB01_Mutated_10"
+ },
+ {
+  "id": 847084,
+  "name": "Variant: Repulsor Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_11",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_11.DA_Evolution_LB01_Mutated_11"
+ },
+ {
+  "id": 847085,
+  "name": "Variant: Tractor Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_12",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_12.DA_Evolution_LB01_Mutated_12"
+ },
+ {
+  "id": 847086,
+  "name": "Variant: Vaporized Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_13",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_13.DA_Evolution_LB01_Mutated_13"
+ },
+ {
+  "id": 847087,
+  "name": "Variant: Flickering Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_14",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_14.DA_Evolution_LB01_Mutated_14"
+ },
+ {
+  "id": 847088,
+  "name": "Variant: Firefly Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_15",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_15.DA_Evolution_LB01_Mutated_15"
+ },
+ {
+  "id": 847089,
+  "name": "Variant: Dripping Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Mutated_16",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Mutated_16.DA_Evolution_LB01_Mutated_16"
+ },
+ {
+  "id": 847090,
+  "name": "Variant: Voidborn Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Rare_01",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Rare_01.DA_Evolution_LB01_Rare_01"
+ },
+ {
+  "id": 847091,
+  "name": "Variant: Shockspawn Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Rare_02",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Rare_02.DA_Evolution_LB01_Rare_02"
+ },
+ {
+  "id": 847092,
+  "name": "Variant: Clustered Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Superior_01",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Superior_01.DA_Evolution_LB01_Superior_01"
+ },
+ {
+  "id": 847093,
+  "name": "Variant: Isolated Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Superior_02",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Superior_02.DA_Evolution_LB01_Superior_02"
+ },
+ {
+  "id": 847094,
+  "name": "Variant: Powered Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Superior_03",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Superior_03.DA_Evolution_LB01_Superior_03"
+ },
+ {
+  "id": 847095,
+  "name": "Variant: Discharged Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Superior_04",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Superior_04.DA_Evolution_LB01_Superior_04"
+ },
+ {
+  "id": 847096,
+  "name": "Variant: Hellfire Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Unique_01",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Unique_01.DA_Evolution_LB01_Unique_01"
+ },
+ {
+  "id": 847097,
+  "name": "Variant: Heavenly Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Unique_02",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Unique_02.DA_Evolution_LB01_Unique_02"
+ },
+ {
+  "id": 847098,
+  "name": "Variant: Locust Packuran",
+  "species": "Packuran",
+  "asset": "DA_Evolution_LB01_Unique_03",
+  "path": "/Game/Data/Creatures/LB01/Evolutions/DA_Evolution_LB01_Unique_03.DA_Evolution_LB01_Unique_03"
+ },
+ {
+  "id": 847099,
+  "name": "Variant: Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Base",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Base.DA_Evolution_PK01_Base"
+ },
+ {
+  "id": 847100,
+  "name": "Variant: Hardened Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_01",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_01.DA_Evolution_PK01_Exotic_01"
+ },
+ {
+  "id": 847101,
+  "name": "Variant: Molten Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_02",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_02.DA_Evolution_PK01_Exotic_02"
+ },
+ {
+  "id": 847102,
+  "name": "Variant: Burning Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_03",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_03.DA_Evolution_PK01_Exotic_03"
+ },
+ {
+  "id": 847103,
+  "name": "Variant: Blazing Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_04",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_04.DA_Evolution_PK01_Exotic_04"
+ },
+ {
+  "id": 847104,
+  "name": "Variant: Poisonous Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_05",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_05.DA_Evolution_PK01_Exotic_05"
+ },
+ {
+  "id": 847105,
+  "name": "Variant: Gorged Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_06",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_06.DA_Evolution_PK01_Exotic_06"
+ },
+ {
+  "id": 847106,
+  "name": "Variant: Forager Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_07",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_07.DA_Evolution_PK01_Exotic_07"
+ },
+ {
+  "id": 847107,
+  "name": "Variant: Shouting Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Exotic_08",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Exotic_08.DA_Evolution_PK01_Exotic_08"
+ },
+ {
+  "id": 847108,
+  "name": "Variant: Obsidian Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_01",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_01.DA_Evolution_PK01_Mutated_01"
+ },
+ {
+  "id": 847109,
+  "name": "Variant: Shelled Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_02",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_02.DA_Evolution_PK01_Mutated_02"
+ },
+ {
+  "id": 847110,
+  "name": "Variant: Erupting Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_03",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_03.DA_Evolution_PK01_Mutated_03"
+ },
+ {
+  "id": 847111,
+  "name": "Variant: Seared Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_04",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_04.DA_Evolution_PK01_Mutated_04"
+ },
+ {
+  "id": 847112,
+  "name": "Variant: Explosive Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_05",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_05.DA_Evolution_PK01_Mutated_05"
+ },
+ {
+  "id": 847113,
+  "name": "Variant: Incendiary Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_06",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_06.DA_Evolution_PK01_Mutated_06"
+ },
+ {
+  "id": 847114,
+  "name": "Variant: Blazestride Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_07",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_07.DA_Evolution_PK01_Mutated_07"
+ },
+ {
+  "id": 847115,
+  "name": "Variant: Fuming Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_08",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_08.DA_Evolution_PK01_Mutated_08"
+ },
+ {
+  "id": 847116,
+  "name": "Variant: Contagious Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_09",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_09.DA_Evolution_PK01_Mutated_09"
+ },
+ {
+  "id": 847117,
+  "name": "Variant: Infectious Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_10",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_10.DA_Evolution_PK01_Mutated_10"
+ },
+ {
+  "id": 847118,
+  "name": "Variant: Refreshed Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_11",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_11.DA_Evolution_PK01_Mutated_11"
+ },
+ {
+  "id": 847119,
+  "name": "Variant: Migrator Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_12",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_12.DA_Evolution_PK01_Mutated_12"
+ },
+ {
+  "id": 847120,
+  "name": "Variant: Toxic Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_13",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_13.DA_Evolution_PK01_Mutated_13"
+ },
+ {
+  "id": 847121,
+  "name": "Variant: Thorned Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_14",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_14.DA_Evolution_PK01_Mutated_14"
+ },
+ {
+  "id": 847122,
+  "name": "Variant: Flying Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_15",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_15.DA_Evolution_PK01_Mutated_15"
+ },
+ {
+  "id": 847123,
+  "name": "Variant: Chameleon Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Mutated_16",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Mutated_16.DA_Evolution_PK01_Mutated_16"
+ },
+ {
+  "id": 847124,
+  "name": "Variant: Desert Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Rare_01",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Rare_01.DA_Evolution_PK01_Rare_01"
+ },
+ {
+  "id": 847125,
+  "name": "Variant: Tropical Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Rare_02",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Rare_02.DA_Evolution_PK01_Rare_02"
+ },
+ {
+  "id": 847126,
+  "name": "Variant: Volcano Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Superior_01",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Superior_01.DA_Evolution_PK01_Superior_01"
+ },
+ {
+  "id": 847127,
+  "name": "Variant: Scorchedfield Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Superior_02",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Superior_02.DA_Evolution_PK01_Superior_02"
+ },
+ {
+  "id": 847128,
+  "name": "Variant: Oasis Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Superior_03",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Superior_03.DA_Evolution_PK01_Superior_03"
+ },
+ {
+  "id": 847129,
+  "name": "Variant: Forest Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Superior_04",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Superior_04.DA_Evolution_PK01_Superior_04"
+ },
+ {
+  "id": 847130,
+  "name": "Variant: Qwebek Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Unique_01",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Unique_01.DA_Evolution_PK01_Unique_01"
+ },
+ {
+  "id": 847131,
+  "name": "Variant: Gold Nugget Kwipeck",
+  "species": "Kwipeck",
+  "asset": "DA_Evolution_PK01_Unique_02",
+  "path": "/Game/Data/Creatures/PK01/Evolutions/DA_Evolution_PK01_Unique_02.DA_Evolution_PK01_Unique_02"
+ },
+ {
+  "id": 847132,
+  "name": "Variant: Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Base",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Base.DA_Evolution_RF01_Base"
+ },
+ {
+  "id": 847133,
+  "name": "Variant: Piercing Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_01",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_01.DA_Evolution_RF01_Exotic_01"
+ },
+ {
+  "id": 847134,
+  "name": "Variant: Stunning Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_02",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_02.DA_Evolution_RF01_Exotic_02"
+ },
+ {
+  "id": 847135,
+  "name": "Variant: Thawing Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_03",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_03.DA_Evolution_RF01_Exotic_03"
+ },
+ {
+  "id": 847136,
+  "name": "Variant: Ice Breeze Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_04",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_04.DA_Evolution_RF01_Exotic_04"
+ },
+ {
+  "id": 847137,
+  "name": "Variant: Peaking Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_05",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_05.DA_Evolution_RF01_Exotic_05"
+ },
+ {
+  "id": 847138,
+  "name": "Variant: Clouded Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_06",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_06.DA_Evolution_RF01_Exotic_06"
+ },
+ {
+  "id": 847139,
+  "name": "Variant: Crystalized Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_07",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_07.DA_Evolution_RF01_Exotic_07"
+ },
+ {
+  "id": 847140,
+  "name": "Variant: Refined Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Exotic_08",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Exotic_08.DA_Evolution_RF01_Exotic_08"
+ },
+ {
+  "id": 847141,
+  "name": "Variant: Eternal Night Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_01",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_01.DA_Evolution_RF01_Mutated_01"
+ },
+ {
+  "id": 847142,
+  "name": "Variant: Chilblains Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_02",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_02.DA_Evolution_RF01_Mutated_02"
+ },
+ {
+  "id": 847143,
+  "name": "Variant: Frostbite Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_03",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_03.DA_Evolution_RF01_Mutated_03"
+ },
+ {
+  "id": 847144,
+  "name": "Variant: Hypothermia Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_04",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_04.DA_Evolution_RF01_Mutated_04"
+ },
+ {
+  "id": 847145,
+  "name": "Variant: Windburn Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_05",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_05.DA_Evolution_RF01_Mutated_05"
+ },
+ {
+  "id": 847146,
+  "name": "Variant: Defrost Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_06",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_06.DA_Evolution_RF01_Mutated_06"
+ },
+ {
+  "id": 847147,
+  "name": "Variant: Ice Veil Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_07",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_07.DA_Evolution_RF01_Mutated_07"
+ },
+ {
+  "id": 847148,
+  "name": "Variant: Aurora Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_08",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_08.DA_Evolution_RF01_Mutated_08"
+ },
+ {
+  "id": 847149,
+  "name": "Variant: Zapping Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_09",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_09.DA_Evolution_RF01_Mutated_09"
+ },
+ {
+  "id": 847150,
+  "name": "Variant: Surge Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_10",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_10.DA_Evolution_RF01_Mutated_10"
+ },
+ {
+  "id": 847151,
+  "name": "Variant: Flash Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_11",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_11.DA_Evolution_RF01_Mutated_11"
+ },
+ {
+  "id": 847152,
+  "name": "Variant: Supercell Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_12",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_12.DA_Evolution_RF01_Mutated_12"
+ },
+ {
+  "id": 847153,
+  "name": "Variant: Quartized Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_13",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_13.DA_Evolution_RF01_Mutated_13"
+ },
+ {
+  "id": 847154,
+  "name": "Variant: Reactive Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_14",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_14.DA_Evolution_RF01_Mutated_14"
+ },
+ {
+  "id": 847155,
+  "name": "Variant: Oxidized Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_15",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_15.DA_Evolution_RF01_Mutated_15"
+ },
+ {
+  "id": 847156,
+  "name": "Variant: Electrified Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Mutated_16",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Mutated_16.DA_Evolution_RF01_Mutated_16"
+ },
+ {
+  "id": 847157,
+  "name": "Variant: Freezing Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Rare_01",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Rare_01.DA_Evolution_RF01_Rare_01"
+ },
+ {
+  "id": 847158,
+  "name": "Variant: Storm Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Rare_02",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Rare_02.DA_Evolution_RF01_Rare_02"
+ },
+ {
+  "id": 847159,
+  "name": "Variant: Fjord Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Superior_01",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Superior_01.DA_Evolution_RF01_Superior_01"
+ },
+ {
+  "id": 847160,
+  "name": "Variant: Polar Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Superior_02",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Superior_02.DA_Evolution_RF01_Superior_02"
+ },
+ {
+  "id": 847161,
+  "name": "Variant: Alpine Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Superior_03",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Superior_03.DA_Evolution_RF01_Superior_03"
+ },
+ {
+  "id": 847162,
+  "name": "Variant: Mineral Field Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Superior_04",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Superior_04.DA_Evolution_RF01_Superior_04"
+ },
+ {
+  "id": 847163,
+  "name": "Variant: Transcendent Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Unique_01",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Unique_01.DA_Evolution_RF01_Unique_01"
+ },
+ {
+  "id": 847164,
+  "name": "Variant: Lab Rat Anami",
+  "species": "Anami",
+  "asset": "DA_Evolution_RF01_Unique_02",
+  "path": "/Game/Data/Creatures/RF01/Evolutions/DA_Evolution_RF01_Unique_02.DA_Evolution_RF01_Unique_02"
+ },
+ {
+  "id": 847165,
+  "name": "Variant: Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Base",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Base.DA_Evolution_RL01_Base"
+ },
+ {
+  "id": 847166,
+  "name": "Variant: Plated Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_01",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_01.DA_Evolution_RL01_Exotic_01"
+ },
+ {
+  "id": 847167,
+  "name": "Variant: Trickster Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_02",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_02.DA_Evolution_RL01_Exotic_02"
+ },
+ {
+  "id": 847168,
+  "name": "Variant: Smoldering Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_03",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_03.DA_Evolution_RL01_Exotic_03"
+ },
+ {
+  "id": 847169,
+  "name": "Variant: Burnt-out Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_04",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_04.DA_Evolution_RL01_Exotic_04"
+ },
+ {
+  "id": 847170,
+  "name": "Variant: Deep Water Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_05",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_05.DA_Evolution_RL01_Exotic_05"
+ },
+ {
+  "id": 847171,
+  "name": "Variant: Riverbank Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_06",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_06.DA_Evolution_RL01_Exotic_06"
+ },
+ {
+  "id": 847172,
+  "name": "Variant: Glacier Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_07",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_07.DA_Evolution_RL01_Exotic_07"
+ },
+ {
+  "id": 847173,
+  "name": "Variant: Blizzard Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Exotic_08",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Exotic_08.DA_Evolution_RL01_Exotic_08"
+ },
+ {
+  "id": 847174,
+  "name": "Variant: Sandstorm Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_01",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_01.DA_Evolution_RL01_Mutated_01"
+ },
+ {
+  "id": 847175,
+  "name": "Variant: Aftershock Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_02",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_02.DA_Evolution_RL01_Mutated_02"
+ },
+ {
+  "id": 847176,
+  "name": "Variant: Mirage Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_03",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_03.DA_Evolution_RL01_Mutated_03"
+ },
+ {
+  "id": 847177,
+  "name": "Variant: Dune Runner Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_04",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_04.DA_Evolution_RL01_Mutated_04"
+ },
+ {
+  "id": 847178,
+  "name": "Variant: Inferno Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_05",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_05.DA_Evolution_RL01_Mutated_05"
+ },
+ {
+  "id": 847179,
+  "name": "Variant: Draconic Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_06",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_06.DA_Evolution_RL01_Mutated_06"
+ },
+ {
+  "id": 847180,
+  "name": "Variant: Exhausted Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_07",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_07.DA_Evolution_RL01_Mutated_07"
+ },
+ {
+  "id": 847181,
+  "name": "Variant: Blackened Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_08",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_08.DA_Evolution_RL01_Mutated_08"
+ },
+ {
+  "id": 847182,
+  "name": "Variant: Abyss Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_09",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_09.DA_Evolution_RL01_Mutated_09"
+ },
+ {
+  "id": 847183,
+  "name": "Variant: Leviathan Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_10",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_10.DA_Evolution_RL01_Mutated_10"
+ },
+ {
+  "id": 847184,
+  "name": "Variant: Soaked Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_11",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_11.DA_Evolution_RL01_Mutated_11"
+ },
+ {
+  "id": 847185,
+  "name": "Variant: Seeping Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_12",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_12.DA_Evolution_RL01_Mutated_12"
+ },
+ {
+  "id": 847186,
+  "name": "Variant: Frozen Solid Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_13",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_13.DA_Evolution_RL01_Mutated_13"
+ },
+ {
+  "id": 847187,
+  "name": "Variant: Ice Cold Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_14",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_14.DA_Evolution_RL01_Mutated_14"
+ },
+ {
+  "id": 847188,
+  "name": "Variant: Whiteout Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_15",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_15.DA_Evolution_RL01_Mutated_15"
+ },
+ {
+  "id": 847189,
+  "name": "Variant: Snowfall Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Mutated_16",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Mutated_16.DA_Evolution_RL01_Mutated_16"
+ },
+ {
+  "id": 847190,
+  "name": "Variant: Steppes Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Rare_01",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Rare_01.DA_Evolution_RL01_Rare_01"
+ },
+ {
+  "id": 847191,
+  "name": "Variant: Arctic Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Rare_02",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Rare_02.DA_Evolution_RL01_Rare_02"
+ },
+ {
+  "id": 847192,
+  "name": "Variant: Drylands Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Superior_01",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Superior_01.DA_Evolution_RL01_Superior_01"
+ },
+ {
+  "id": 847193,
+  "name": "Variant: Sunbathing Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Superior_02",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Superior_02.DA_Evolution_RL01_Superior_02"
+ },
+ {
+  "id": 847194,
+  "name": "Variant: Swamp Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Superior_03",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Superior_03.DA_Evolution_RL01_Superior_03"
+ },
+ {
+  "id": 847195,
+  "name": "Variant: Iceland Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Superior_04",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Superior_04.DA_Evolution_RL01_Superior_04"
+ },
+ {
+  "id": 847196,
+  "name": "Variant: Telluric Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Unique_01",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Unique_01.DA_Evolution_RL01_Unique_01"
+ },
+ {
+  "id": 847197,
+  "name": "Variant: Andromeda Gilick",
+  "species": "Gilick",
+  "asset": "DA_Evolution_RL01_Unique_02",
+  "path": "/Game/Data/Creatures/RL01/Evolutions/DA_Evolution_RL01_Unique_02.DA_Evolution_RL01_Unique_02"
+ },
+ {
+  "id": 847198,
+  "name": "Variant: Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Base",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Base.DA_Evolution_RS01_Base"
+ },
+ {
+  "id": 847199,
+  "name": "Variant: Herbalist Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_01",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_01.DA_Evolution_RS01_Exotic_01"
+ },
+ {
+  "id": 847200,
+  "name": "Variant: Venomous Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_02",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_02.DA_Evolution_RS01_Exotic_02"
+ },
+ {
+  "id": 847201,
+  "name": "Variant: Clay Back Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_03",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_03.DA_Evolution_RS01_Exotic_03"
+ },
+ {
+  "id": 847202,
+  "name": "Variant: Sewer Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_04",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_04.DA_Evolution_RS01_Exotic_04"
+ },
+ {
+  "id": 847203,
+  "name": "Variant: Dam Builder Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_05",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_05.DA_Evolution_RS01_Exotic_05"
+ },
+ {
+  "id": 847204,
+  "name": "Variant: Whirlpool Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_06",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_06.DA_Evolution_RS01_Exotic_06"
+ },
+ {
+  "id": 847205,
+  "name": "Variant: Melting Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_07",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_07.DA_Evolution_RS01_Exotic_07"
+ },
+ {
+  "id": 847206,
+  "name": "Variant: Igloo Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Exotic_08",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Exotic_08.DA_Evolution_RS01_Exotic_08"
+ },
+ {
+  "id": 847207,
+  "name": "Variant: Druidic Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_01",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_01.DA_Evolution_RS01_Mutated_01"
+ },
+ {
+  "id": 847208,
+  "name": "Variant: Soporific Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_02",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_02.DA_Evolution_RS01_Mutated_02"
+ },
+ {
+  "id": 847209,
+  "name": "Variant: Neurotoxin Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_03",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_03.DA_Evolution_RS01_Mutated_03"
+ },
+ {
+  "id": 847210,
+  "name": "Variant: Hemotoxic Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_04",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_04.DA_Evolution_RS01_Mutated_04"
+ },
+ {
+  "id": 847211,
+  "name": "Variant: Fractured Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_05",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_05.DA_Evolution_RS01_Mutated_05"
+ },
+ {
+  "id": 847212,
+  "name": "Variant: Solidified Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_06",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_06.DA_Evolution_RS01_Mutated_06"
+ },
+ {
+  "id": 847213,
+  "name": "Variant: Slimy Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_07",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_07.DA_Evolution_RS01_Mutated_07"
+ },
+ {
+  "id": 847214,
+  "name": "Variant: Radioactive Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_08",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_08.DA_Evolution_RS01_Mutated_08"
+ },
+ {
+  "id": 847215,
+  "name": "Variant: Reservoir Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_09",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_09.DA_Evolution_RS01_Mutated_09"
+ },
+ {
+  "id": 847216,
+  "name": "Variant: Overflow Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_10",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_10.DA_Evolution_RS01_Mutated_10"
+ },
+ {
+  "id": 847217,
+  "name": "Variant: Riptide Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_11",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_11.DA_Evolution_RS01_Mutated_11"
+ },
+ {
+  "id": 847218,
+  "name": "Variant: Monsoon Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_12",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_12.DA_Evolution_RS01_Mutated_12"
+ },
+ {
+  "id": 847219,
+  "name": "Variant: Slush Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_13",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_13.DA_Evolution_RS01_Mutated_13"
+ },
+ {
+  "id": 847220,
+  "name": "Variant: Steaming Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_14",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_14.DA_Evolution_RS01_Mutated_14"
+ },
+ {
+  "id": 847221,
+  "name": "Variant: Chill Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_15",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_15.DA_Evolution_RS01_Mutated_15"
+ },
+ {
+  "id": 847222,
+  "name": "Variant: Subzero Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Mutated_16",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Mutated_16.DA_Evolution_RS01_Mutated_16"
+ },
+ {
+  "id": 847223,
+  "name": "Variant: Woodland Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Rare_01",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Rare_01.DA_Evolution_RS01_Rare_01"
+ },
+ {
+  "id": 847224,
+  "name": "Variant: Amphibious Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Rare_02",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Rare_02.DA_Evolution_RS01_Rare_02"
+ },
+ {
+  "id": 847225,
+  "name": "Variant: Bushwack Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Superior_01",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Superior_01.DA_Evolution_RS01_Superior_01"
+ },
+ {
+  "id": 847226,
+  "name": "Variant: Mud Bath Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Superior_02",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Superior_02.DA_Evolution_RS01_Superior_02"
+ },
+ {
+  "id": 847227,
+  "name": "Variant: Stream Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Superior_03",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Superior_03.DA_Evolution_RS01_Superior_03"
+ },
+ {
+  "id": 847228,
+  "name": "Variant: Ice Caps Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Superior_04",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Superior_04.DA_Evolution_RS01_Superior_04"
+ },
+ {
+  "id": 847229,
+  "name": "Variant: Charcoal Kerapin",
+  "species": "Kerapin",
+  "asset": "DA_Evolution_RS01_Unique_01",
+  "path": "/Game/Data/Creatures/RS01/Evolutions/DA_Evolution_RS01_Unique_01.DA_Evolution_RS01_Unique_01"
+ },
+ {
+  "id": 847230,
+  "name": "Variant: Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Base",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Base.DA_Evolution_TG01_Base"
+ },
+ {
+  "id": 847231,
+  "name": "Variant: Tribal Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_01",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_01.DA_Evolution_TG01_Exotic_01"
+ },
+ {
+  "id": 847232,
+  "name": "Variant: Agrarian Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_02",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_02.DA_Evolution_TG01_Exotic_02"
+ },
+ {
+  "id": 847233,
+  "name": "Variant: Stinky Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_03",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_03.DA_Evolution_TG01_Exotic_03"
+ },
+ {
+  "id": 847234,
+  "name": "Variant: Kamikaze Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_04",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_04.DA_Evolution_TG01_Exotic_04"
+ },
+ {
+  "id": 847235,
+  "name": "Variant: Echo Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_05",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_05.DA_Evolution_TG01_Exotic_05"
+ },
+ {
+  "id": 847236,
+  "name": "Variant: Frenzied Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_06",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_06.DA_Evolution_TG01_Exotic_06"
+ },
+ {
+  "id": 847237,
+  "name": "Variant: Undying Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_07",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_07.DA_Evolution_TG01_Exotic_07"
+ },
+ {
+  "id": 847238,
+  "name": "Variant: Necromancer Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Exotic_08",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Exotic_08.DA_Evolution_TG01_Exotic_08"
+ },
+ {
+  "id": 847239,
+  "name": "Variant: Elder Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_01",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_01.DA_Evolution_TG01_Mutated_01"
+ },
+ {
+  "id": 847240,
+  "name": "Variant: Scout Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_02",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_02.DA_Evolution_TG01_Mutated_02"
+ },
+ {
+  "id": 847241,
+  "name": "Variant: Sowing Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_03",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_03.DA_Evolution_TG01_Mutated_03"
+ },
+ {
+  "id": 847242,
+  "name": "Variant: Reaping Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_04",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_04.DA_Evolution_TG01_Mutated_04"
+ },
+ {
+  "id": 847243,
+  "name": "Variant: Gaseous Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_05",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_05.DA_Evolution_TG01_Mutated_05"
+ },
+ {
+  "id": 847244,
+  "name": "Variant: Miasmatic Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_06",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_06.DA_Evolution_TG01_Mutated_06"
+ },
+ {
+  "id": 847245,
+  "name": "Variant: Self-Destruct Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_07",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_07.DA_Evolution_TG01_Mutated_07"
+ },
+ {
+  "id": 847246,
+  "name": "Variant: Zealous Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_08",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_08.DA_Evolution_TG01_Mutated_08"
+ },
+ {
+  "id": 847247,
+  "name": "Variant: Pulsar Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_09",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_09.DA_Evolution_TG01_Mutated_09"
+ },
+ {
+  "id": 847248,
+  "name": "Variant: Plane Shift Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_10",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_10.DA_Evolution_TG01_Mutated_10"
+ },
+ {
+  "id": 847249,
+  "name": "Variant: Canibal Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_11",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_11.DA_Evolution_TG01_Mutated_11"
+ },
+ {
+  "id": 847250,
+  "name": "Variant: Vampiric Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_12",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_12.DA_Evolution_TG01_Mutated_12"
+ },
+ {
+  "id": 847251,
+  "name": "Variant: Resurrecting Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_13",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_13.DA_Evolution_TG01_Mutated_13"
+ },
+ {
+  "id": 847252,
+  "name": "Variant: Decaying Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_14",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_14.DA_Evolution_TG01_Mutated_14"
+ },
+ {
+  "id": 847253,
+  "name": "Variant: Necrophage Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_15",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_15.DA_Evolution_TG01_Mutated_15"
+ },
+ {
+  "id": 847254,
+  "name": "Variant: Ossified Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Mutated_16",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Mutated_16.DA_Evolution_TG01_Mutated_16"
+ },
+ {
+  "id": 847255,
+  "name": "Variant: Arboreal Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Rare_01",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Rare_01.DA_Evolution_TG01_Rare_01"
+ },
+ {
+  "id": 847256,
+  "name": "Variant: Nocturnal Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Rare_02",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Rare_02.DA_Evolution_TG01_Rare_02"
+ },
+ {
+  "id": 847257,
+  "name": "Variant: Sapiens Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Superior_01",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Superior_01.DA_Evolution_TG01_Superior_01"
+ },
+ {
+  "id": 847258,
+  "name": "Variant: Swarming Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Superior_02",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Superior_02.DA_Evolution_TG01_Superior_02"
+ },
+ {
+  "id": 847259,
+  "name": "Variant: Moonlight Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Superior_03",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Superior_03.DA_Evolution_TG01_Superior_03"
+ },
+ {
+  "id": 847260,
+  "name": "Variant: Necrotic Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Superior_04",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Superior_04.DA_Evolution_TG01_Superior_04"
+ },
+ {
+  "id": 847261,
+  "name": "Variant: Arching Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Unique_01",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Unique_01.DA_Evolution_TG01_Unique_01"
+ },
+ {
+  "id": 847262,
+  "name": "Variant: Experimental Gwigoon",
+  "species": "Gwigoon",
+  "asset": "DA_Evolution_TG01_Unique_02",
+  "path": "/Game/Data/Creatures/TG01/Evolutions/DA_Evolution_TG01_Unique_02.DA_Evolution_TG01_Unique_02"
+ },
+ {
+  "id": 847263,
+  "name": "Variant: Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Base",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Base.DA_Evolution_UB01_Base"
+ },
+ {
+  "id": 847264,
+  "name": "Variant: Torched Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_01",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_01.DA_Evolution_UB01_Exotic_01"
+ },
+ {
+  "id": 847265,
+  "name": "Variant: Windblown Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_02",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_02.DA_Evolution_UB01_Exotic_02"
+ },
+ {
+  "id": 847266,
+  "name": "Variant: Blood Thirsty Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_03",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_03.DA_Evolution_UB01_Exotic_03"
+ },
+ {
+  "id": 847267,
+  "name": "Variant: Inner Core Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_04",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_04.DA_Evolution_UB01_Exotic_04"
+ },
+ {
+  "id": 847268,
+  "name": "Variant: Comet Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_05",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_05.DA_Evolution_UB01_Exotic_05"
+ },
+ {
+  "id": 847269,
+  "name": "Variant: Gravitron Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_06",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_06.DA_Evolution_UB01_Exotic_06"
+ },
+ {
+  "id": 847270,
+  "name": "Variant: Shade-step Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_07",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_07.DA_Evolution_UB01_Exotic_07"
+ },
+ {
+  "id": 847271,
+  "name": "Variant: Eldritch Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Exotic_08",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Exotic_08.DA_Evolution_UB01_Exotic_08"
+ },
+ {
+  "id": 847272,
+  "name": "Variant: Pyromane Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_01",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_01.DA_Evolution_UB01_Mutated_01"
+ },
+ {
+  "id": 847273,
+  "name": "Variant: 3rd degree Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_02",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_02.DA_Evolution_UB01_Mutated_02"
+ },
+ {
+  "id": 847274,
+  "name": "Variant: Ember Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_03",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_03.DA_Evolution_UB01_Mutated_03"
+ },
+ {
+  "id": 847275,
+  "name": "Variant: Fueled up Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_04",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_04.DA_Evolution_UB01_Mutated_04"
+ },
+ {
+  "id": 847276,
+  "name": "Variant: Transfusion Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_05",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_05.DA_Evolution_UB01_Mutated_05"
+ },
+ {
+  "id": 847277,
+  "name": "Variant: Executioner Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_06",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_06.DA_Evolution_UB01_Mutated_06"
+ },
+ {
+  "id": 847278,
+  "name": "Variant: Calcified Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_07",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_07.DA_Evolution_UB01_Mutated_07"
+ },
+ {
+  "id": 847279,
+  "name": "Variant: Pyroclastic Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_08",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_08.DA_Evolution_UB01_Mutated_08"
+ },
+ {
+  "id": 847280,
+  "name": "Variant: Crashing Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_09",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_09.DA_Evolution_UB01_Mutated_09"
+ },
+ {
+  "id": 847281,
+  "name": "Variant: Orbital Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_10",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_10.DA_Evolution_UB01_Mutated_10"
+ },
+ {
+  "id": 847282,
+  "name": "Variant: Black Hole Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_11",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_11.DA_Evolution_UB01_Mutated_11"
+ },
+ {
+  "id": 847283,
+  "name": "Variant: Supernova Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_12",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_12.DA_Evolution_UB01_Mutated_12"
+ },
+ {
+  "id": 847284,
+  "name": "Variant: Ghostly Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_13",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_13.DA_Evolution_UB01_Mutated_13"
+ },
+ {
+  "id": 847285,
+  "name": "Variant: Haunted Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_14",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_14.DA_Evolution_UB01_Mutated_14"
+ },
+ {
+  "id": 847286,
+  "name": "Variant: Doomed Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_15",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_15.DA_Evolution_UB01_Mutated_15"
+ },
+ {
+  "id": 847287,
+  "name": "Variant: Cursed Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Mutated_16",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Mutated_16.DA_Evolution_UB01_Mutated_16"
+ },
+ {
+  "id": 847288,
+  "name": "Variant: Savana Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Rare_01",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Rare_01.DA_Evolution_UB01_Rare_01"
+ },
+ {
+  "id": 847289,
+  "name": "Variant: Ethereal Plane Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Rare_02",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Rare_02.DA_Evolution_UB01_Rare_02"
+ },
+ {
+  "id": 847290,
+  "name": "Variant: Wildfire Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Superior_01",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Superior_01.DA_Evolution_UB01_Superior_01"
+ },
+ {
+  "id": 847291,
+  "name": "Variant: Tunnels Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Superior_02",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Superior_02.DA_Evolution_UB01_Superior_02"
+ },
+ {
+  "id": 847292,
+  "name": "Variant: Astral Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Superior_03",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Superior_03.DA_Evolution_UB01_Superior_03"
+ },
+ {
+  "id": 847293,
+  "name": "Variant: Nether Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Superior_04",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Superior_04.DA_Evolution_UB01_Superior_04"
+ },
+ {
+  "id": 847294,
+  "name": "Variant: Chthonian Morfang",
+  "species": "Morfang",
+  "asset": "DA_Evolution_UB01_Unique_01",
+  "path": "/Game/Data/Creatures/UB01/Evolutions/DA_Evolution_UB01_Unique_01.DA_Evolution_UB01_Unique_01"
+ }
+]
