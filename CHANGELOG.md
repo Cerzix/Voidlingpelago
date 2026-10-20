@@ -14,6 +14,12 @@ All notable changes to this project are documented here. The format follows
   `tools/import_variants.py` turns it into `data/variants.json` with stable IDs from 847001
 - Pre-releases include the developer tools (`discovery.lua`) for testers
 
+### Fixed
+- DeathLink never sent a death: the mod only hooked the mission failing, and UE4SS doesn't see that native call. It
+  now watches the creature the player controls (`PlayerController.Pawn`) and asks its ability system component
+  `IsAlive()` every poll, also catching a death right before the game swaps to the next creature. One death is sent
+  at most every 10 seconds, and the death a received DeathLink causes is never sent back
+
 ### Changed
 - **Breaking for YAMLs:** the `gene_checks` toggle is replaced by `collection_checks`, which picks the collection
   that sends checks: `variants` (default, 294 checks), `genes` (1,042 checks, as `gene_checks` did) or `off`. `gene_types` still picks the gene kinds

@@ -5,11 +5,12 @@
 --   gating       gating.lua locks missions on planets that aren't unlocked yet
 --   resources    UResourcesInventory:StoreResource(UResourceDataAsset, Quantity)
 --   eggs, DNA    rewards.lua, through UVWCheatManager (enabled by UE4SS's bundled CheatManagerEnablerMod)
---   DeathLink    UActivitySubsystem:TriggerActivityFailure() out, UVWCheatManager:KillPlayerCreature() in
+--   DeathLink    deathwatch.lua notices the player's creature dying, UVWCheatManager:KillPlayerCreature() in
 
 local tracker = require("tracker")
 local gating = require("gating")
 local rewards = require("rewards")
+local deathwatch = require("deathwatch")
 
 local M = {}
 local events, log
@@ -40,19 +41,10 @@ local RESOURCE_ITEMS = {
     [ITEMS.POLYCHROME] = { asset = "DA_Resource_Mutagen_Polychrome", amount = 1 },
 }
 
-local FAILURE_FUNCTION = "/Script/VoidlingWrangler.ActivitySubsystem:TriggerActivityFailure"
-
--- A DeathLink we apply fails the mission, which must not be sent back out as our own death.
-local ignore_failure_until = 0
-
 function M.init(event_api, logger)
     events, log = event_api, logger
 
-    local ok, err = pcall(RegisterHook, FAILURE_FUNCTION, function()
-        if os.time() >= ignore_failure_until then events.death() end
-    end)
-    if not ok then log("Could not hook mission failure, DeathLink won't send: " .. tostring(err)) end
-
+    deathwatch.init(events, log)
     gating.init(log)
     rewards.init(log)
 end
@@ -61,6 +53,7 @@ end
 function M.poll()
     tracker.poll(events)
     gating.poll()
+    deathwatch.poll()
 end
 
 function M.set_slot_data(data)
@@ -137,7 +130,7 @@ function M.apply_item(id, name)
 end
 
 function M.kill_player()
-    ignore_failure_until = os.time() + 10
+    deathwatch.ignore_for(10)
     cheat_manager():KillPlayerCreature()
 end
 

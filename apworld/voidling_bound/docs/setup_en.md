@@ -49,4 +49,4 @@ Besides the usual settings, Voidling Bound has these options:
   variants or genes (whichever `collection_checks` picks) all send checks.
 - Received research points and mutagens go straight into your inventory, eggs into your egg storage, DNA
   Catalyzers into your catalyzers.
-- With DeathLink, failing a mission sends a death, and a received death kills your active Voidling.
+- With DeathLink, your active Voidling dying sends a death, and a received death kills your active Voidling.

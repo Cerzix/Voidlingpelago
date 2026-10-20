@@ -63,7 +63,17 @@ function object(name, fields)
     return fields
 end
 completed, stars, wrangler_level, abyss_level = {}, {}, 0, 0
-instances.PlayerController = { object("PlayerController_1", {}) }
+-- The player's creatures: PlayerController.Pawn, alive according to its DamageableAbilitySystemComponent
+local asc_class = object("DamageableAbilitySystemComponent", {})
+function make_creature(name)
+    local creature = object(name, {})
+    creature.alive = true
+    local asc = object(name .. "_ASC", { IsAlive = function() return creature.alive end })
+    creature.GetComponentByClass = function(self, class) if class == asc_class then return asc end end
+    return creature
+end
+player_controller = object("PlayerController_1", {})
+instances.PlayerController = { player_controller }
 stored, eggs_added, kills = {}, 0, 0
 instances.ProgressionSubsystem = { object("Default__ProgressionSubsystem", {}), object("ProgressionSubsystem_1", {
     ActivitiesTimeCompletion = { ForEach = function(self, cb)
@@ -223,6 +233,7 @@ local registry_helpers = object("Default__AssetRegistryHelpers", { GetAssetRegis
 
 function StaticFindObject(path)
     if path == "/Script/VoidlingWrangler.EEggType" then return egg_enum end
+    if path == "/Script/VoidlingWrangler.DamageableAbilitySystemComponent" then return asc_class end
     if path == "/Script/VoidlingWrangler.EResourcesInventoryType" then return inventory_enum end
     if resource_by_path[path] then return resource_by_path[path] end
     if path == "/Script/VoidlingWrangler.Default__DNACatalyzerDefinition" then return catalyzer_cdo end
@@ -372,6 +383,37 @@ trace = read("trace.txt") or ""
 check("trace logs call with self and args", "OnMissionCompleted  self=/Game/Maps/Vireo.Vireo:Manager  args=(42)" in trace)
 check("trace logs map loads", "Map loaded: /Game/Maps/Vireo_01.Vireo_01" in trace)
 check("trace unhooks on stop", completed not in lua.globals().hooks)
+
+# DeathLink out: the controlled creature dying is noticed by polling IsAlive
+lua.execute("real_time2 = os.time; os.time = function() return real_time2() + 100 end")
+lua.execute('first_creature = make_creature("Creature_A"); player_controller.Pawn = first_creature')
+write("events.txt", "")
+poll()
+check("a living creature sends nothing", (read("events.txt") or "") == "")
+lua.execute("first_creature.alive = false")
+poll()
+check("the controlled creature dying sends a death", (read("events.txt") or "").splitlines() == ["death"])
+poll()
+check("one death is sent once", (read("events.txt") or "").splitlines() == ["death"])
+
+lua.execute("os.time = function() return real_time2() + 200 end")
+lua.execute('second = make_creature("Creature_B"); player_controller.Pawn = second')
+poll()
+lua.execute('second.alive = false; player_controller.Pawn = make_creature("Creature_C")')
+write("events.txt", "")
+poll()
+check("a death right before the swap to the next creature is noticed", (read("events.txt") or "").splitlines() == ["death"])
+
+lua.execute("os.time = function() return real_time2() + 300 end")
+lua.execute('third = make_creature("Creature_D"); player_controller.Pawn = third')
+poll()
+write("deathlink.txt", "Somebody")
+poll()
+lua.execute("third.alive = false")
+write("events.txt", "")
+poll()
+check("the death a received DeathLink causes isn't sent back", (read("events.txt") or "") == "")
+lua.execute("os.time = real_time2; player_controller.Pawn = nil")
 
 # Tracker: reads progress from the fake ProgressionSubsystem / AbyssSubsystem
 lua.execute('completed[1] = "DA_Activity_FaintSignal"; wrangler_level = 3; abyss_level = 7; require("tracker").reset()')
